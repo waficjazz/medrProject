@@ -1,3 +1,10 @@
+:root {
+  --main-blue: #003399;
+  --main-white: #ffffff;
+  --secondary-blue: #6699ff;
+  --third-blue: #3366cc;
+}
+
 body {
   margin: 0;
   padding: 0;
