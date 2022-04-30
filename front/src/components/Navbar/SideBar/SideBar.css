@@ -12,14 +12,24 @@
 }
 
 .MuiListItemButton-root {
-  color: var(--main-grey);
+  color: var(--main-blue);
   font-size: 1.25rem;
   padding-top: 15px;
   padding-bottom: 15px;
 }
 
 .MuiListItemButton-root:hover {
-  color: var(--main-white);
-  background-color: var(--third-blue);
+  color: var(--second-blue);
+  border-color: var(--second-blue);
+  border-left: 5px solid;
+  /* background-color: var(--third-blue); */
   box-shadow: 2px 2px 2px #888888;
+}
+
+.icon {
+  color: var(--main-blue);
+}
+
+.MuiListItemButton-root:hover .icon {
+  color: var(--second-blue);
 }

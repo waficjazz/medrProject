@@ -1,5 +1,5 @@
 .appbar {
-  background-color: var(--main-blue);
+  background-color: var(--main-white);
   width: 100%;
   height: 55px;
   display: flex;
@@ -10,20 +10,39 @@
 
 .search {
   background-color: var(--main-white);
+  border: 1px solid var(--main-blue);
   padding: 2px;
   border-radius: 3px;
   width: 40vw;
   display: flex;
   justify-content: left;
   align-items: center;
-  margin-left: 35%;
 }
 
 .searchIcon {
-  color: var(--main-grey);
+  color: var(--main-blue);
 }
 @media only screen and (hover: none) and (pointer: coarse) {
   .search {
     display: none;
   }
+}
+
+.badge {
+  bottom: 8px;
+  left: 20px;
+}
+
+.tools {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30%;
+  padding-right: 2%;
+}
+
+.toolsicon {
+  display: flex;
+  justify-content: space-between;
+  width: 80px;
 }

@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
+import BadgeIcon from "@mui/icons-material/Badge";
 import { StyledEngineProvider } from "@mui/material/styles";
 import "./SideBar.css";
 const SideBar = () => {
@@ -10,15 +10,15 @@ const SideBar = () => {
     <StyledEngineProvider injectFirst>
       <div className="drawer">
         <List>
-          <ListItemButton divider>
+          <ListItemButton>
             <ListItemIcon>
-              <PersonIcon sx={{ color: "var(--second-blue)" }} />
+              <BadgeIcon className="icon" />
             </ListItemIcon>
             Personal Info
           </ListItemButton>
-          <ListItemButton divider>
+          <ListItemButton>
             <ListItemIcon>
-              <VaccinesIcon sx={{ color: "var(--second-blue)" }} />
+              <VaccinesIcon className="icon" />
             </ListItemIcon>
             Vaccines
           </ListItemButton>

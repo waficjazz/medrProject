@@ -1,10 +1,10 @@
 :root {
-  --main-blue: #114084;
-  --main-white: #f1f1f1;
-  --second-blue: #3466aa;
-  --third-blue: #82b7dc;
+  --main-white: #f1f1ff;
+  --third-blue: #0038f1;
   --main-grey: #808080;
   --main-black: #1c1c1c;
+  --second-blue: #2859fc;
+  --main-blue: #334a77;
 }
 
 body {
@@ -21,5 +21,5 @@ body {
   height: 100%;
   display: flex;
   margin-top: 55px;
-  background-color: white;
+  background-color: var(--main-white);
 }
