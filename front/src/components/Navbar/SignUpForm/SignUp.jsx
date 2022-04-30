@@ -1,6 +1,6 @@
 import React from "react";
 import "./SignUp.css";
-import { Step, Stepper, StepLabel } from "@mui/material";
+import { Step, Stepper, StepLabel, StepIcon, StepButton } from "@mui/material";
 const SignUp = () => {
   return (
     <>
@@ -8,7 +8,7 @@ const SignUp = () => {
       <div className="mainForm">
         <Stepper>
           <Step>
-            <StepLabel></StepLabel>
+            <StepButton></StepButton>
           </Step>
           <Step>
             <StepLabel></StepLabel>
