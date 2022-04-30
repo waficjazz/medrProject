@@ -28,3 +28,14 @@
   position: absolute;
   z-index: 90;
 }
+
+.MuiStepLabel-iconContainer {
+  color: red;
+}
+
+.QontoStepIcon-circle {
+  width: 8px;
+  height: 8px;
+  border-radius: "50%";
+  background-color: red;
+}
