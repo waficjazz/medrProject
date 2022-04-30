@@ -1,11 +1,11 @@
 .mainForm {
   position: absolute;
-  border-radius: 2%;
+  border-radius: 1%;
   width: 50%;
   height: 70%;
   background-color: #fdfdfd;
   z-index: 10;
-  box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288);
+  /* box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288); */
 }
 
 @media only screen and (hover: none) and (pointer: coarse) {

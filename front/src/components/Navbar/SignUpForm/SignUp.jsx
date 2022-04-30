@@ -3,7 +3,7 @@ import "./SignUp.css";
 const SignUp = () => {
   return (
     <>
-      <div className="curtain">d</div>
+      <div className="curtain"></div>
       <div className="mainForm">dsgsdgsd</div>
     </>
   );
