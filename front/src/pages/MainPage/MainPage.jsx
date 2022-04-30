@@ -1,8 +1,12 @@
 import React from "react";
+import SignUp from "../../components/Navbar/SignUpForm/SignUp";
+import "./MainPage.css";
 const MainPage = () => {
   return (
     <>
-      <div>MainPage</div>
+      <div className="mainPage">
+        <SignUp />
+      </div>
     </>
   );
 };
