@@ -1,11 +1,14 @@
 .mainForm {
   position: absolute;
-  left: 25%;
-  top: 15%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   border-radius: 1%;
   width: 50%;
   height: 70%;
-  background-color: #fdfdfd;
+  background-color: var(--main-white);
+  padding: 2%;
+  box-sizing: border-box;
   z-index: 99;
   /* box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288); */
 }
