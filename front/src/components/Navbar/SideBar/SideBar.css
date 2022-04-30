@@ -1,7 +1,10 @@
 .drawer {
+  position: absolute;
   height: 100%;
-  width: 12vw;
-  background-color: red;
+  width: 14vw;
+  background-color: var(--main-white);
+  box-shadow: 3px 0px 8px #888888;
+  z-index: 10;
 }
 
 @media only screen and (hover: none) and (pointer: coarse) {

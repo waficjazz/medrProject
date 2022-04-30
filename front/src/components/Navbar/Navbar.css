@@ -1,8 +1,28 @@
-body {
-  margin: 0;
-  padding: 0;
+.appbar {
+  background-color: var(--main-blue);
+  width: 100%;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0px 3px 8px #888888;
 }
-div {
-  color: red;
-  background-color: black;
+
+.search {
+  background-color: var(--main-white);
+  padding: 2px;
+  border-radius: 3px;
+  width: 40vw;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-left: 35%;
+}
+
+.searchIcon {
+  color: rgb(0, 0, 0, 0.4);
+}
+@media only screen and (hover: none) and (pointer: coarse) {
+  .search {
+    display: none;
+  }
 }
