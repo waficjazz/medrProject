@@ -1,8 +1,10 @@
 :root {
-  --main-blue: #003399;
-  --main-white: #ffffff;
-  --secondary-blue: #6699ff;
-  --third-blue: #3366cc;
+  --main-blue: #114084;
+  --main-white: #f1f1f1;
+  --second-blue: #3466aa;
+  --third-blue: #82b7dc;
+  --main-grey: #808080;
+  --main-black: #1c1c1c;
 }
 
 body {
@@ -10,7 +12,7 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw;
-  background-color: white;
+  background-color: var(--main-white);
 }
 
 .mainPage {
@@ -18,7 +20,6 @@ body {
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--main-white);
+  margin-top: 55px;
+  background-color: white;
 }

@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   box-shadow: 0px 3px 8px #888888;
+  z-index: 80;
 }
 
 .search {
@@ -19,7 +20,7 @@
 }
 
 .searchIcon {
-  color: rgb(0, 0, 0, 0.4);
+  color: var(--main-grey);
 }
 @media only screen and (hover: none) and (pointer: coarse) {
   .search {

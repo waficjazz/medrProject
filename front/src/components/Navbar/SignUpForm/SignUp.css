@@ -1,10 +1,12 @@
 .mainForm {
   position: absolute;
+  left: 25%;
+  top: 15%;
   border-radius: 1%;
   width: 50%;
   height: 70%;
   background-color: #fdfdfd;
-  z-index: 10;
+  z-index: 99;
   /* box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288); */
 }
 
@@ -19,6 +21,7 @@
 .curtain {
   height: 100%;
   width: 100%;
-  background-color: rgb(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.7);
   position: absolute;
+  z-index: 90;
 }
