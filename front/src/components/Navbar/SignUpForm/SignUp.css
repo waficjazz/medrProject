@@ -31,7 +31,7 @@
     margin-bottom: 6%;
   }
   .signform {
-    flex-direction: column;
+    flex-direction: row;
   }
 }
 
@@ -63,19 +63,20 @@
   flex-wrap: wrap;
   justify-content: space-between;
   /* background-color: rgba(187, 104, 104, 0.7); */
-  margin-top: 5%;
-  width: 68%;
+  margin-top: 7%;
+  width: 62%;
   padding: 0;
 }
 
 .sm {
   width: 40%;
 }
-#step1 > .bg {
-  margin-bottom: 10px;
+.sm,
+.bg {
+  margin-bottom: 30px;
 }
 
-.MuiInputLabel-root,
-.Mui-focused {
-  color: var(--main-blue);
+.nextIcon {
+  margin-top: 120px;
+  width: 100px;
 }

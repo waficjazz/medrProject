@@ -1,20 +1,33 @@
 import React from "react";
+import { useState } from "react";
 import "./SignUp.css";
-import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, OutlinedInput } from "@mui/material";
+import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, Input, Box, IconButton, InputAdornment } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
-
-function testIcon() {
-  return <div className="QontoStepIcon-circle" />;
-}
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import SendIcon from "@mui/icons-material/Send";
+import { Button } from "@mui/material";
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleClickShowPassword = (event) => {
+    event.preventDefault();
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <StyledEngineProvider injectFirst>
         <div className="curtain"></div>
         <div className="mainForm">
           <div className="stepper">
-            <Stepper activeStep={3}>
+            <Stepper activeStep={activeStep}>
               <Step>
                 <StepLabel></StepLabel>
               </Step>
@@ -32,11 +45,48 @@ const SignUp = () => {
               </Step>
             </Stepper>
           </div>
-          <div className="signform">
-            <TextField className="sm" label="First Name" variant="standard" size="small" margin="normal" />
-            <TextField className="sm" label="Last Name" variant="standard" size="small" margin="normal" />
-            <TextField className="bg" label="Last Name" variant="standard" size="small" fullWidth margin="normal" />
-          </div>
+          <Box id="step1" className="signform" component="form" noValidate={false}>
+            <TextField className="sm" label="First Name" variant="standard" size="small" />
+            <TextField className="sm" label="Last Name" variant="standard" size="small" />
+            <TextField className="sm" label="Father Name" variant="standard" size="small" />
+            <TextField className="sm" label="Mother Name" variant="standard" size="small" />
+            <TextField type="email" className="bg" label="Email" variant="standard" size="small" fullWidth />
+            <FormControl className="sm" variant="standard">
+              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+              <Input
+                id="standard-adornment-password"
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <FormControl className="sm" variant="standard">
+              <InputLabel htmlFor="standard-adornment-password">Retype Password</InputLabel>
+              <Input
+                id="standard-adornment-password"
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <FormControl className="bg" variant="standard">
+              <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
+              <Input type="text" id="phone-number" startAdornment={<InputAdornment>+961</InputAdornment>} />
+            </FormControl>
+            <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={() => setActiveStep(activeStep + 1)}>
+              Next
+            </Button>
+          </Box>
         </div>
       </StyledEngineProvider>
     </>
