@@ -11,7 +11,8 @@ import { Button } from "@mui/material";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [swipe, setSwipe] = useState(false);
+  const [swipe, setSwipe] = useState([true, false, false]);
+  // const [fade, setFade] = useState({ step0: true, step1: false, step2: false });
   const handleClickShowPassword = (event) => {
     event.preventDefault();
     setShowPassword(!showPassword);
@@ -20,9 +21,14 @@ const SignUp = () => {
   const handleNext = (event) => {
     event.preventDefault();
     setActiveStep(activeStep + 1);
-    setSwipe(true);
+    const newarr = swipe.map((index, i) => {
+      if (i === activeStep + 1) {
+        return true;
+      }
+      return false;
+    });
+    setSwipe(newarr);
   };
-
   return (
     <>
       <StyledEngineProvider injectFirst>
@@ -47,7 +53,7 @@ const SignUp = () => {
               </Step>
             </Stepper>
           </div>
-          <Box id="step1" className={swipe ? "signform slide" : "signform "} component="form" noValidate={false}>
+          <Box id="step0" className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
             <TextField className="sm" label="First Name" variant="standard" size="small" />
             <TextField className="sm" label="Last Name" variant="standard" size="small" />
             <TextField className="sm" label="Father Name" variant="standard" size="small" />
@@ -88,6 +94,10 @@ const SignUp = () => {
             <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
               Next
             </Button>
+          </Box>
+          <Box id="step1" className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+            <TextField className="sm" label="First Name" variant="standard" size="small" />
+            <TextField className="sm" label="Last Name" variant="standard" size="small" />
           </Box>
         </div>
       </StyledEngineProvider>
