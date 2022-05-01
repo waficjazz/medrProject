@@ -50,17 +50,6 @@
   z-index: 90;
 }
 
-.MuiStepLabel-iconContainer {
-  color: red;
-}
-
-.QontoStepIcon-circle {
-  width: 8px;
-  height: 8px;
-  border-radius: "50%";
-  background-color: red;
-}
-
 .signform {
   position: absolute;
   display: flex;
@@ -82,10 +71,16 @@
 }
 
 .nextIcon {
-  margin-top: 120px;
+  position: absolute;
+  left: 85%;
+  top: 100%;
   width: 100px;
 }
-
+.previousIcon {
+  position: absolute;
+  top: 100%;
+  width: 100px;
+}
 @keyframes fade {
   0% {
     transform: scale(1);

@@ -29,6 +29,18 @@ const SignUp = () => {
     });
     setSwipe(newarr);
   };
+  const handlePrevious = (event) => {
+    event.preventDefault();
+    setActiveStep(activeStep - 1);
+    const newarr = swipe.map((index, i) => {
+      if (i === activeStep - 1) {
+        return true;
+      }
+      return false;
+    });
+    setSwipe(newarr);
+  };
+
   return (
     <>
       <StyledEngineProvider injectFirst>
@@ -98,6 +110,12 @@ const SignUp = () => {
           <Box id="step1" className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
             <TextField className="sm" label="First Name" variant="standard" size="small" />
             <TextField className="sm" label="Last Name" variant="standard" size="small" />
+            <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+              Next
+            </Button>
+            <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
+              Previous
+            </Button>
           </Box>
         </div>
       </StyledEngineProvider>
