@@ -11,14 +11,16 @@ import { Button } from "@mui/material";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-
+  const [swipe, setSwipe] = useState(false);
   const handleClickShowPassword = (event) => {
     event.preventDefault();
     setShowPassword(!showPassword);
   };
 
-  const handleMouseDownPassword = (event) => {
+  const handleNext = (event) => {
     event.preventDefault();
+    setActiveStep(activeStep + 1);
+    setSwipe(true);
   };
 
   return (
@@ -45,7 +47,7 @@ const SignUp = () => {
               </Step>
             </Stepper>
           </div>
-          <Box id="step1" className="signform" component="form" noValidate={false}>
+          <Box id="step1" className={swipe ? "signform slide" : "signform "} component="form" noValidate={false}>
             <TextField className="sm" label="First Name" variant="standard" size="small" />
             <TextField className="sm" label="Last Name" variant="standard" size="small" />
             <TextField className="sm" label="Father Name" variant="standard" size="small" />
@@ -83,7 +85,7 @@ const SignUp = () => {
               <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
               <Input type="text" id="phone-number" startAdornment={<InputAdornment>+961</InputAdornment>} />
             </FormControl>
-            <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={() => setActiveStep(activeStep + 1)}>
+            <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
               Next
             </Button>
           </Box>

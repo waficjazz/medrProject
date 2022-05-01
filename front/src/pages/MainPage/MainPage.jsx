@@ -10,8 +10,8 @@ const MainPage = () => {
         <SideBar />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<div>hello</div>} />
-            <Route path="/h" element={<div>hello11</div>} />
+            <Route path="/" element={<div></div>} />
+            <Route path="/h" element={<div></div>} />
           </Routes>
         </BrowserRouter>
       </div>

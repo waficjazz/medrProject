@@ -16,7 +16,11 @@
 
   /* box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288); */
 }
-
+@media screen and (max-width: 1000px) {
+  .signform {
+    width: 96%;
+  }
+}
 @media only screen and (hover: none) and (pointer: coarse) {
   .mainForm {
     width: 85%;
@@ -79,4 +83,22 @@
 .nextIcon {
   margin-top: 120px;
   width: 100px;
+}
+
+@keyframes slide {
+  0% {
+    /* transform: translateX(200%); */
+    opacity: 0;
+  }
+
+  100% {
+    /* transform: translateX(0); */
+    transform: scale(0);
+    display: none;
+    opacity: 1;
+  }
+}
+
+.signform.slide {
+  animation: slide 500ms ease-in-out forwards;
 }
