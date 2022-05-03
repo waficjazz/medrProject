@@ -101,14 +101,21 @@ const SignUp = () => {
             </FormControl>
             <FormControl className="bg" variant="standard">
               <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
-              <Input type="text" id="phone-number" startAdornment={<InputAdornment>+961</InputAdornment>} />
+              <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} />
             </FormControl>
             <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
               Next
             </Button>
           </Box>
           <Box id="step1" className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-            <TextField className="sm" label="First Name" variant="standard" size="small" />
+            <TextField
+              className="sm"
+              type="number"
+              label="First Name"
+              variant="standard"
+              size="small"
+              InputProps={{ startAdornment: <InputAdornment position="start">kg</InputAdornment> }}
+            />
             <TextField className="sm" label="Last Name" variant="standard" size="small" />
             <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
               Next
