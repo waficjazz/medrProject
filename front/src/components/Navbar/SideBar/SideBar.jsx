@@ -1,10 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Drawer, List, ListItemButton, ListItemIcon } from "@mui/material";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import BadgeIcon from "@mui/icons-material/Badge";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import LocalConvenienceStoreIcon from "@mui/icons-material/LocalConvenienceStore";
+import BiotechOutlinedIcon from "@mui/icons-material/BiotechOutlined";
+import DescriptionIcon from "@mui/icons-material/Description";
+import CropPortraitIcon from "@mui/icons-material/CropPortrait";
 import { StyledEngineProvider } from "@mui/material/styles";
 import "./SideBar.css";
 const SideBar = () => {
@@ -41,6 +44,24 @@ const SideBar = () => {
               <LocalConvenienceStoreIcon className="icon" />
             </ListItemIcon>
             Clinical Visits
+          </ListItemButton>
+          <ListItemButton selected={selectedIndex === 4} onClick={(e) => handleSelect(e, 4)}>
+            <ListItemIcon>
+              <DescriptionIcon className="icon" />
+            </ListItemIcon>
+            Prescriptions
+          </ListItemButton>
+          <ListItemButton selected={selectedIndex === 5} onClick={(e) => handleSelect(e, 5)}>
+            <ListItemIcon>
+              <BiotechOutlinedIcon className="icon" />
+            </ListItemIcon>
+            Lab Tests
+          </ListItemButton>
+          <ListItemButton selected={selectedIndex === 6} onClick={(e) => handleSelect(e, 6)}>
+            <ListItemIcon>
+              <CropPortraitIcon className="icon" />
+            </ListItemIcon>
+            Imaging
           </ListItemButton>
         </List>
       </div>

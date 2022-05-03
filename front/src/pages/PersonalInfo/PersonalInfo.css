@@ -1,0 +1,61 @@
+.personalPage {
+  width: 86%;
+  height: 100%;
+  padding: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.personalInfo {
+  width: 80%;
+  background-color: var(--main-white);
+  border-radius: 4px;
+  box-shadow: 3px 0px 8px #888888;
+  padding-inline: 40px;
+  padding-top: 10px;
+}
+@media screen and (max-width: 1670px) {
+  .personalInfo {
+    width: 98%;
+  }
+}
+.internalText {
+  color: var(--third-blue);
+  font-weight: bolder;
+  font-size: 1.1rem;
+  height: 10%;
+  float: left;
+  /* background-color: red; */
+  margin-right: 6px;
+  width: 24%;
+  margin-bottom: 10px;
+}
+.internalText.address {
+  width: 100%;
+}
+.personalInfoBody {
+  margin-top: 1%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+@media only screen and (hover: none) and (pointer: coarse) {
+  .internalText {
+    width: 100%;
+  }
+  .personalPage {
+    width: 100%;
+  }
+}
+.internalData {
+  font-size: 1.1rem;
+  color: var(--second-blue);
+  margin-left: 5px;
+  font-weight: 500;
+}
+
+.medicalInfo {
+  width: 80%;
+  background-color: rebeccapurple;
+  height: 30%;
+}
