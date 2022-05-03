@@ -40,7 +40,10 @@ const PersonalInfo = () => {
               </Typography>
             </div>
           </div>
-          <div className="medicalInfo"></div>
+          <div className="medicalInfo">
+            <Typography sx={{ fontWeight: "bold", fontSize: "1.35rem", color: "var(--main-blue)" }}>Medical Information</Typography>
+            <hr />
+          </div>
         </div>
       </StyledEngineProvider>
     </>

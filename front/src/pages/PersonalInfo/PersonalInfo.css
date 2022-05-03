@@ -13,6 +13,7 @@
   box-shadow: 3px 0px 8px #888888;
   padding-inline: 40px;
   padding-top: 10px;
+  padding-bottom: 10px;
 }
 @media screen and (max-width: 1670px) {
   .personalInfo {
@@ -49,13 +50,19 @@
 }
 .internalData {
   font-size: 1.1rem;
-  color: var(--second-blue);
+  color: var(--third-blue);
   margin-left: 5px;
   font-weight: 500;
 }
 
 .medicalInfo {
+  margin-top: 20px;
   width: 80%;
-  background-color: rebeccapurple;
-  height: 30%;
+  background-color: var(--main-white);
+  border-radius: 4px;
+  box-shadow: 3px 0px 8px #888888;
+  padding-inline: 40px;
+  padding-top: 10px;
+  padding-top: 10px;
+  height: 200px;
 }
