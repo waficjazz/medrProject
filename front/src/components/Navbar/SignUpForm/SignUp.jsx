@@ -11,9 +11,10 @@ import { Button } from "@mui/material";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [swipe, setSwipe] = useState([true, false, false]);
+  const [swipe, setSwipe] = useState([true, false, false, false]);
   const regions = ["Akkar", "Baalbeck - Hermel", "Beirut", "Bekaa", "Mount Lebanon", "North Lebanon", "Nabatiyeh", "South Lebanon"];
   const bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
+  const idType = ["National ID", "Passport"];
   // const [fade, setFade] = useState({ step0: true, step1: false, step2: false });
   const handleClickShowPassword = (event) => {
     event.preventDefault();
@@ -62,9 +63,6 @@ const SignUp = () => {
               <Step>
                 <StepLabel></StepLabel>
               </Step>
-              <Step>
-                <StepLabel></StepLabel>
-              </Step>
             </Stepper>
           </div>
           <Box id="step0" className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
@@ -88,7 +86,7 @@ const SignUp = () => {
               />
             </FormControl>
             <FormControl className="sm" variant="standard">
-              <InputLabel htmlFor="standard-adornment-password">Retype Password</InputLabel>
+              <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
               <Input
                 id="standard-adornment-password"
                 type={showPassword ? "text" : "password"}
@@ -110,12 +108,15 @@ const SignUp = () => {
             </Button>
           </Box>
           <Box id="step2" className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-            <FormControl className="bg" variant="standard" fullWidth>
+            <FormControl className="bg" fullWidth>
               {/* <InputLabel htmlFor="standard-adornment-password">Birth Date</InputLabel> */}
               <Input id="standard-adornment-password" type="date" />
             </FormControl>
             <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="region" />} />
             <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="City" />} />
+            <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} />
+            <Autocomplete className="sm" size="small" disablePortal id="idDocument" options={idType} renderInput={(params) => <TextField {...params} label="ID Document" />} />
+            <TextField className="bg" label="ID Number" size="small" />
             <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
               Next
             </Button>
@@ -123,7 +124,7 @@ const SignUp = () => {
               Previous
             </Button>
           </Box>
-          <Box id="step1" className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+          <Box id="step2" className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
             <TextField
               className="sm"
               type="number"
@@ -147,6 +148,9 @@ const SignUp = () => {
             <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
               Previous
             </Button>
+          </Box>
+          <Box id="step2" className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+            <TextField label="code" size="small" />
           </Box>
         </div>
       </StyledEngineProvider>
