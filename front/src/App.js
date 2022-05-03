@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <body>
-        <SignUp />
+        {/* <SignUp /> */}
         <Navbar />
         <MainPage />
       </body>

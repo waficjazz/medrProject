@@ -18,7 +18,8 @@
   padding-bottom: 15px;
 }
 
-.MuiListItemButton-root:hover {
+.MuiListItemButton-root:hover,
+.MuiListItemButton-root:focus {
   color: var(--second-blue);
   border-color: var(--second-blue);
   border-left: 5px solid;
@@ -30,6 +31,7 @@
   color: var(--main-blue);
 }
 
-.MuiListItemButton-root:hover .icon {
+.MuiListItemButton-root:hover .icon,
+.MuiListItemButton-root:focus .icon {
   color: var(--second-blue);
 }
