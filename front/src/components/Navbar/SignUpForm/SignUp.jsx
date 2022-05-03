@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import "./SignUp.css";
-import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, Input, Box, IconButton, InputAdornment } from "@mui/material";
+import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, Input, Box, IconButton, InputAdornment, Autocomplete } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -12,6 +12,8 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [swipe, setSwipe] = useState([true, false, false]);
+  const regions = ["Akkar", "Baalbeck - Hermel", "Beirut", "Bekaa", "Mount Lebanon", "North Lebanon", "Nabatiyeh", "South Lebanon"];
+  const bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   // const [fade, setFade] = useState({ step0: true, step1: false, step2: false });
   const handleClickShowPassword = (event) => {
     event.preventDefault();
@@ -107,16 +109,38 @@ const SignUp = () => {
               Next
             </Button>
           </Box>
-          <Box id="step1" className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+          <Box id="step2" className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+            <FormControl className="bg" variant="standard" fullWidth>
+              {/* <InputLabel htmlFor="standard-adornment-password">Birth Date</InputLabel> */}
+              <Input id="standard-adornment-password" type="date" />
+            </FormControl>
+            <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="region" />} />
+            <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="City" />} />
+            <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+              Next
+            </Button>
+            <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
+              Previous
+            </Button>
+          </Box>
+          <Box id="step1" className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
             <TextField
               className="sm"
               type="number"
-              label="First Name"
+              label="Weight"
               variant="standard"
               size="small"
               InputProps={{ startAdornment: <InputAdornment position="start">kg</InputAdornment> }}
             />
-            <TextField className="sm" label="Last Name" variant="standard" size="small" />
+            <TextField
+              className="sm"
+              label="Height"
+              variant="standard"
+              size="small"
+              type="number"
+              InputProps={{ startAdornment: <InputAdornment position="start">cm</InputAdornment> }}
+            />
+            <Autocomplete className="sm" size="small" disablePortal id="bloodType" options={bloodType} renderInput={(params) => <TextField {...params} label="Blood Type" />} />
             <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
               Next
             </Button>
