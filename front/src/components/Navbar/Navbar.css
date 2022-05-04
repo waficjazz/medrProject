@@ -26,6 +26,15 @@
   .search {
     display: none;
   }
+  .tools {
+    width: 100%;
+    display: block;
+    padding: 0;
+  }
+  .toolsicon {
+    position: relative;
+    left: 70%;
+  }
 }
 
 .badge {
@@ -43,6 +52,4 @@
 
 .toolsicon {
   display: flex;
-  justify-content: space-between;
-  width: 80px;
 }

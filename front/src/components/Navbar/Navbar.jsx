@@ -19,11 +19,11 @@ const Navbar = () => {
               </div>
               <div className="toolsicon">
                 <IconButton>
-                  <PersonIcon />
-                </IconButton>
-                <IconButton>
                   <Badge className="badge" badgeContent={1} color="error" overlap="circular" />
                   <NotificationsIcon />
+                </IconButton>
+                <IconButton>
+                  <PersonIcon />
                 </IconButton>
               </div>
             </div>

@@ -58,7 +58,28 @@ const PersonalInfo = () => {
               </Typography>
 
               <Typography className="internalText ">
+                Medications:
+                <span className="internalData">
+                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
+                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
+                </span>
+              </Typography>
+              <Typography className="internalText ">
                 Chronic Disease:
+                <span className="internalData">
+                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
+                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
+                </span>
+              </Typography>
+              <Typography className="internalText ">
+                Surgical History:
+                <span className="internalData">
+                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
+                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
+                </span>
+              </Typography>
+              <Typography className="internalText ">
+                Alleragies:
                 <span className="internalData">
                   <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
                   <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
