@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Checkbox, Typography, FormControlLabel, FormGroup } from "@mui/material";
 import React from "react";
 import "./PersonalInfo.css";
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -43,6 +43,28 @@ const PersonalInfo = () => {
           <div className="medicalInfo">
             <Typography sx={{ fontWeight: "bold", fontSize: "1.35rem", color: "var(--main-blue)" }}>Medical Information</Typography>
             <hr />
+            <div className="medicalInfoBody">
+              <Typography className="internalText ">
+                Weight:<span className="internalData">70kg</span>
+              </Typography>
+              <Typography className="internalText ">
+                Height:<span className="internalData">170cm</span>
+              </Typography>
+              <Typography className="internalText ">
+                Blood Group:<span className="internalData">AB+</span>
+              </Typography>
+              <Typography className="internalText ">
+                Birth Date:<span className="internalData">13 october 2001</span>
+              </Typography>
+
+              <Typography className="internalText ">
+                Chronic Disease:
+                <span className="internalData">
+                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
+                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
+                </span>
+              </Typography>
+            </div>
           </div>
         </div>
       </StyledEngineProvider>

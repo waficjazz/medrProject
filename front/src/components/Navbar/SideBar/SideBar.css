@@ -8,6 +8,14 @@
 @media only screen and (hover: none) and (pointer: coarse) {
   .drawer {
     width: 60vw;
+    transition: 800ms;
+    position: absolute;
+    transition: all 1s;
+    left: -200%;
+  }
+  .drawer.active {
+    transition: 1s;
+    left: 0;
   }
 }
 
@@ -34,4 +42,13 @@
 .MuiListItemButton-root:hover .icon,
 .MuiListItemButton-root:focus .icon {
   color: var(--second-blue);
+}
+
+#transButton {
+  position: absolute;
+  width: 100vh;
+  height: 100vh;
+  display: block;
+  background-color: transparent;
+  border: none;
 }

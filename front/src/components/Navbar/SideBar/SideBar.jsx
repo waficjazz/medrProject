@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Drawer, List, ListItemButton, ListItemIcon } from "@mui/material";
+import { Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import BadgeIcon from "@mui/icons-material/Badge";
 import ApartmentIcon from "@mui/icons-material/Apartment";
@@ -12,13 +12,20 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import "./SideBar.css";
 const SideBar = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [active, setActive] = useState(true);
   const handleSelect = (event, index) => {
     event.preventDefault();
     setSelectedIndex(index);
   };
   return (
     <StyledEngineProvider injectFirst>
-      <div className="drawer">
+      <button
+        id="transButton"
+        onClick={() => {
+          setActive(false);
+          console.log("pressed");
+        }}></button>
+      <div className={active ? "drawer active" : "drawer"}>
         <List>
           <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleSelect(e, 0)}>
             <ListItemIcon>

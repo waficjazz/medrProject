@@ -15,9 +15,20 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
-@media screen and (max-width: 1670px) {
-  .personalInfo {
-    width: 98%;
+.medicalInfo {
+  margin-top: 20px;
+  width: 80%;
+  background-color: var(--main-white);
+  border-radius: 4px;
+  box-shadow: 3px 0px 8px #888888;
+  padding-inline: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+@media screen and (max-width: 1670px) and (hover: hover) {
+  .personalInfo,
+  .medicalInfo {
+    width: 95%;
   }
 }
 .internalText {
@@ -29,12 +40,18 @@
   /* background-color: red; */
   margin-right: 6px;
   width: 24%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .internalText.address {
   width: 100%;
 }
 .personalInfoBody {
+  margin-top: 1%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.medicalInfoBody {
   margin-top: 1%;
   width: 100%;
   display: flex;
@@ -53,16 +70,4 @@
   color: var(--third-blue);
   margin-left: 5px;
   font-weight: 500;
-}
-
-.medicalInfo {
-  margin-top: 20px;
-  width: 80%;
-  background-color: var(--main-white);
-  border-radius: 4px;
-  box-shadow: 3px 0px 8px #888888;
-  padding-inline: 40px;
-  padding-top: 10px;
-  padding-top: 10px;
-  height: 200px;
 }
