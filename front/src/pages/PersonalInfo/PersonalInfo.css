@@ -12,7 +12,7 @@
   border-radius: 4px;
   box-shadow: 3px 0px 8px #888888;
   padding-inline: 40px;
-  padding-top: 10px;
+  padding-top: 20px;
   padding-bottom: 10px;
 }
 .medicalInfo {
@@ -22,7 +22,7 @@
   border-radius: 4px;
   box-shadow: 3px 0px 8px #888888;
   padding-inline: 40px;
-  padding-top: 10px;
+  padding-top: 20px;
   padding-bottom: 10px;
 }
 @media screen and (max-width: 1670px) and (hover: hover) {
@@ -64,10 +64,42 @@
   .personalPage {
     width: 100%;
   }
+  .medications {
+    width: 100% !important;
+  }
+  .smallParts {
+    width: 100% !important;
+  }
 }
 .internalData {
   font-size: 1.1rem;
   color: var(--third-blue);
   margin-left: 5px;
-  font-weight: 500;
+  font-weight: lighter;
+}
+
+.headers {
+  font-weight: bold;
+  font-size: 1.35rem;
+  color: var(--main-blue);
+}
+
+.smallParts {
+  width: 85%;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.medications {
+  margin-top: 20px;
+  width: 26.4%;
+  background-color: var(--main-white);
+  border-radius: 4px;
+  box-shadow: 3px 0px 8px #888888;
+  padding-inline: 40px;
+  padding-top: 20px;
+  padding-bottom: 10px;
 }

@@ -27,3 +27,8 @@ body {
   margin-top: 55px;
   background-color: var(--main-white);
 }
+@media only screen and (hover: none) and (pointer: coarse) {
+  .mainPage {
+    overflow-y: scroll;
+  }
+}

@@ -85,6 +85,30 @@ const PersonalInfo = () => {
                   <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
                 </span>
               </Typography>
+              <Typography className="internalText ">
+                Problems:
+                <span className="internalData">
+                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
+                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
+                </span>
+              </Typography>
+            </div>
+          </div>
+          <div className="smallParts">
+            <div className="medications">
+              <Typography className="headers">Medical Information</Typography>
+              <hr />
+              hekjafhsdk
+            </div>
+            <div className="medications">
+              <Typography className="headers">Medical Information</Typography>
+              <hr />
+              hekjafhsdk
+            </div>
+            <div className="medications">
+              <Typography className="headers">Medical Information</Typography>
+              <hr />
+              hekjafhsdk
             </div>
           </div>
         </div>
