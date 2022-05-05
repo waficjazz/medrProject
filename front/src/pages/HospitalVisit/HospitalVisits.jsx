@@ -12,7 +12,7 @@ const HospitalVisits = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <TableContainer component={Paper}>
+          <div className="tables">
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
@@ -57,7 +57,7 @@ const HospitalVisits = () => {
                 </TableRow>
               </TableBody>
             </Table>
-          </TableContainer>
+          </div>
         </div>
       </div>
     </StyledEngineProvider>

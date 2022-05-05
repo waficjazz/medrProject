@@ -19,15 +19,16 @@ const SideBar = () => {
     event.preventDefault();
     setSelectedIndex(index);
     navigate(path);
+    setActive(false);
   };
   return (
     <StyledEngineProvider injectFirst>
-      <button
+      {/* <button
         id="transButton"
         onClick={() => {
           setActive(false);
           console.log("pressed");
-        }}></button>
+        }}></button> */}
       <div className={active ? "drawer active" : "drawer"}>
         <List>
           <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleSelect(e, 0, "/")}>
