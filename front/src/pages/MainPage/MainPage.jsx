@@ -8,12 +8,13 @@ const MainPage = () => {
     <>
       <div className="mainPage">
         <SideBar />
-        <BrowserRouter>
+        <PersonalInfo />
+        {/* <BrowserRouter>
           <Routes>
             <Route path="/" element={<PersonalInfo />} />
             <Route path="/h" element={<div></div>} />
           </Routes>
-        </BrowserRouter>
+        </BrowserRouter> */}
       </div>
     </>
   );
