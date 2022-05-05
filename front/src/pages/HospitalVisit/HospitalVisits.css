@@ -1,0 +1,25 @@
+.hospitalVisits {
+  width: 86%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2%;
+  height: 100vh;
+}
+
+.main {
+  width: 90%;
+  background-color: var(--main-white);
+  border-radius: 4px;
+  box-shadow: 3px 0px 8px #888888;
+  padding-inline: 40px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  height: 90%;
+}
+
+.tableHeaders {
+  color: var(--main-blue);
+  font-size: large;
+  font-weight: bold;
+}

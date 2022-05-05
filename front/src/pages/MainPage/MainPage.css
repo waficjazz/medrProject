@@ -31,6 +31,7 @@ body {
   display: flex;
   margin-top: 55px;
   background-color: var(--main-white);
+  overflow-x: hidden;
 }
 @media only screen and (hover: none) and (pointer: coarse) {
   .mainPage {

@@ -5,17 +5,20 @@ import VaccinesIcon from "@mui/icons-material/Vaccines";
 import BadgeIcon from "@mui/icons-material/Badge";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import LocalConvenienceStoreIcon from "@mui/icons-material/LocalConvenienceStore";
+import { useNavigate } from "react-router-dom";
 import BiotechOutlinedIcon from "@mui/icons-material/BiotechOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CropPortraitIcon from "@mui/icons-material/CropPortrait";
 import { StyledEngineProvider } from "@mui/material/styles";
 import "./SideBar.css";
 const SideBar = () => {
+  const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [active, setActive] = useState(true);
-  const handleSelect = (event, index) => {
+  const handleSelect = (event, index, path) => {
     event.preventDefault();
     setSelectedIndex(index);
+    navigate(path);
   };
   return (
     <StyledEngineProvider injectFirst>
@@ -27,7 +30,7 @@ const SideBar = () => {
         }}></button>
       <div className={active ? "drawer active" : "drawer"}>
         <List>
-          <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleSelect(e, 0)}>
+          <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleSelect(e, 0, "/")}>
             <ListItemIcon>
               <BadgeIcon className="icon" />
             </ListItemIcon>
@@ -39,8 +42,7 @@ const SideBar = () => {
             </ListItemIcon>
             Vaccines
           </ListItemButton>
-
-          <ListItemButton selected={selectedIndex === 2} onClick={(e) => handleSelect(e, 2)}>
+          <ListItemButton selected={selectedIndex === 2} onClick={(e) => handleSelect(e, 2, "/hospital")}>
             <ListItemIcon>
               <ApartmentIcon className="icon" />
             </ListItemIcon>
