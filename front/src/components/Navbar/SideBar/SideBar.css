@@ -17,6 +17,9 @@
     transition: 1s;
     left: 0;
   }
+  #transButton {
+    display: block !important;
+  }
 }
 
 .MuiListItemButton-root {
@@ -48,7 +51,7 @@
   position: absolute;
   width: 100vh;
   height: 100vh;
-  display: block;
+  display: none;
   background-color: transparent;
   border: none;
 }

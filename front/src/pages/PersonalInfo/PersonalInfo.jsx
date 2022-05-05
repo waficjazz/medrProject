@@ -1,9 +1,13 @@
-import { Checkbox, Typography, FormControlLabel, FormGroup } from "@mui/material";
 import React from "react";
+import { useState } from "react";
+import { Checkbox, Typography, FormControlLabel, FormGroup } from "@mui/material";
 import "./PersonalInfo.css";
 import { StyledEngineProvider } from "@mui/material/styles";
 import BarChartIcon from "@mui/icons-material/BarChart";
 const PersonalInfo = () => {
+  const boolArr = ["Medications:", "Chronic Disease:", "Allergies:", "Surgical History:", "Problems:"];
+  const [boolArrExist, setBoolArrExist] = useState([true, false, false, false, false]);
+  const diseases = ["dinoma ", "insuline", "sdfsdf", "dinoma ", "insuline", "sdfsdf"];
   return (
     <>
       <StyledEngineProvider injectFirst>
@@ -46,6 +50,9 @@ const PersonalInfo = () => {
             <hr />
             <div className="medicalInfoBody">
               <Typography className="internalText ">
+                Gender:<span className="internalData">Male</span>
+              </Typography>
+              <Typography className="internalText ">
                 Weight:<span className="internalData">70kg</span>
               </Typography>
               <Typography className="internalText ">
@@ -57,71 +64,40 @@ const PersonalInfo = () => {
               <Typography className="internalText ">
                 Birth Date:<span className="internalData">13 october 2001</span>
               </Typography>
-
-              <Typography className="internalText ">
-                Medications:
-                <span className="internalData">
-                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
-                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
-                </span>
-              </Typography>
-              <Typography className="internalText ">
-                Chronic Disease:
-                <span className="internalData">
-                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
-                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
-                </span>
-              </Typography>
-              <Typography className="internalText ">
-                Surgical History:
-                <span className="internalData">
-                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
-                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
-                </span>
-              </Typography>
-              <Typography className="internalText ">
-                Alleragies:
-                <span className="internalData">
-                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
-                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
-                </span>
-              </Typography>
-              <Typography className="internalText ">
-                Problems:
-                <span className="internalData">
-                  <FormControlLabel control={<Checkbox defaultChecked size="small" disabled sx={{ padding: 0 }} />} label="Yes" sx={{ marginX: "2px" }} />
-                  <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
-                </span>
-              </Typography>
+              {boolArr.map((item, index) => {
+                return (
+                  <Typography className="internalText " key={index}>
+                    {item}
+                    <span className="internalData">
+                      <FormControlLabel control={<Checkbox defaultChecked size="small" sx={{ padding: 0 }} disabled />} label="Yes" sx={{ marginX: "2px" }} />
+                      <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
+                    </span>
+                  </Typography>
+                );
+              })}
             </div>
           </div>
           <div className="smallParts">
-            <div className="medications">
-              <Typography className="smheaders">Medications</Typography>
-
-              <div className="medicationsBody">
-                <BarChartIcon sx={{ fontSize: "50px" }} />
-              </div>
-            </div>
-            <div className="medications">
-              <Typography className="headers">Medical Information</Typography>
-              hekjafhsdk
-            </div>
-            <div className="medications ">
-              <Typography className="headers">Medical Information</Typography>
-              <hr />
-              hekjafhsdk
-            </div>
-            <div className="medications dchild">
-              <Typography className="headers">span Information</Typography>
-              <hr />
-              hekjafhsdk
-            </div>
-            <div className="medications">
-              <Typography className="headers">Medical Information</Typography>
-              <hr />
-              hekjafhsdk
-            </div>
+            {boolArr.map((item, index) => {
+              return (
+                <div className="medications" key={index}>
+                  <Typography className="smheaders">{item}</Typography>
+                  <div className={boolArrExist[index] ? "medicationsBody " : "medicationsBody empty"}>
+                    {boolArrExist[index] && (
+                      <>
+                        <ul>
+                          {diseases.map((item, index) => {
+                            return <li key={index}>{item}</li>;
+                          })}
+                        </ul>
+                      </>
+                    )}
+                    <BarChartIcon sx={{ fontSize: "50px", color: "var(--third-blue)" }} />
+                    <Typography className="internalData">No data</Typography>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </StyledEngineProvider>
