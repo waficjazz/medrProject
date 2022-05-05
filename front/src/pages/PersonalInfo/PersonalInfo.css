@@ -29,7 +29,10 @@
   .personalInfo,
   .medicalInfo,
   .smallParts {
-    width: 95% !important;
+    width: 100% !important;
+  }
+  .personalPage {
+    padding: 1%;
   }
 }
 .internalText {

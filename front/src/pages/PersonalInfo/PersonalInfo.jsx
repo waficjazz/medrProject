@@ -92,8 +92,12 @@ const PersonalInfo = () => {
                         </ul>
                       </>
                     )}
-                    <BarChartIcon sx={{ fontSize: "50px", color: "var(--third-blue)" }} />
-                    <Typography className="internalData">No data</Typography>
+                    {!boolArrExist[index] && (
+                      <>
+                        <BarChartIcon sx={{ fontSize: "50px", color: "var(--third-blue)" }} />
+                        <Typography className="internalData">No data</Typography>
+                      </>
+                    )}
                   </div>
                 </div>
               );
