@@ -7,7 +7,7 @@
   align-items: center;
 }
 .personalInfo {
-  width: 80%;
+  width: 90%;
   background-color: var(--main-white);
   border-radius: 4px;
   box-shadow: 3px 0px 8px #888888;
@@ -17,7 +17,7 @@
 }
 .medicalInfo {
   margin-top: 20px;
-  width: 80%;
+  width: 90%;
   background-color: var(--main-white);
   border-radius: 4px;
   box-shadow: 3px 0px 8px #888888;
@@ -27,8 +27,9 @@
 }
 @media screen and (max-width: 1670px) and (hover: hover) {
   .personalInfo,
-  .medicalInfo {
-    width: 95%;
+  .medicalInfo,
+  .smallParts {
+    width: 95% !important;
   }
 }
 .internalText {
@@ -85,21 +86,43 @@
 }
 
 .smallParts {
-  width: 85%;
-  padding-bottom: 10px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  width: 90%;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-auto-rows: 1fr;
+  height: 40%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  row-gap: 10px;
+  column-gap: 10px;
+}
+
+.dchild {
+  grid-row-start: 1;
+  grid-row-end: 3;
+  grid-column-start: 3;
 }
 
 .medications {
-  margin-top: 20px;
-  width: 26.4%;
   background-color: var(--main-white);
   border-radius: 4px;
   box-shadow: 3px 0px 8px #888888;
   padding-inline: 40px;
-  padding-top: 20px;
+  padding-top: 8px;
   padding-bottom: 10px;
+}
+
+.medicationsBody {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+}
+.smheaders {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: var(--main-blue);
+  margin-bottom: 5px;
 }

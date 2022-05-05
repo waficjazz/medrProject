@@ -2,6 +2,7 @@ import { Checkbox, Typography, FormControlLabel, FormGroup } from "@mui/material
 import React from "react";
 import "./PersonalInfo.css";
 import { StyledEngineProvider } from "@mui/material/styles";
+import BarChartIcon from "@mui/icons-material/BarChart";
 const PersonalInfo = () => {
   return (
     <>
@@ -96,12 +97,23 @@ const PersonalInfo = () => {
           </div>
           <div className="smallParts">
             <div className="medications">
+              <Typography className="smheaders">Medications</Typography>
+
+              <div className="medicationsBody">
+                <BarChartIcon sx={{ fontSize: "50px" }} />
+              </div>
+            </div>
+            <div className="medications">
+              <Typography className="headers">Medical Information</Typography>
+              hekjafhsdk
+            </div>
+            <div className="medications ">
               <Typography className="headers">Medical Information</Typography>
               <hr />
               hekjafhsdk
             </div>
-            <div className="medications">
-              <Typography className="headers">Medical Information</Typography>
+            <div className="medications dchild">
+              <Typography className="headers">span Information</Typography>
               <hr />
               hekjafhsdk
             </div>
