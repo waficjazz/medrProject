@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/medrProject/static/css/main.d5cce4ca.css",
-    "main.js": "/medrProject/static/js/main.19230ec7.js",
+    "main.js": "/medrProject/static/js/main.a4782472.js",
     "index.html": "/medrProject/index.html",
     "main.d5cce4ca.css.map": "/medrProject/static/css/main.d5cce4ca.css.map",
-    "main.19230ec7.js.map": "/medrProject/static/js/main.19230ec7.js.map"
+    "main.a4782472.js.map": "/medrProject/static/js/main.a4782472.js.map"
   },
   "entrypoints": [
     "static/css/main.d5cce4ca.css",
-    "static/js/main.19230ec7.js"
+    "static/js/main.a4782472.js"
   ]
 }
