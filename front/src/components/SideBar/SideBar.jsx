@@ -30,6 +30,7 @@ const SideBar = () => {
           setActive(false);
           console.log("pressed");
         }}></button> */}
+
       <div className={active ? "drawer active" : "drawer"}>
         <List>
           <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleSelect(e, 0, "/")}>

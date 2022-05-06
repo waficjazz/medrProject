@@ -33,6 +33,11 @@
     flex-direction: row !important;
     justify-content: flex-end !important;
   }
+  .menuButton {
+    display: block !important;
+    color: var(--third-blue) !important;
+    margin-top: 5px;
+  }
 }
 
 .badge {
@@ -57,7 +62,12 @@
   color: var(--third-blue);
   font-size: large;
   font-weight: bold;
+  margin-top: 2px;
 }
 /* .id > span {
   color: var(--third-blue);
 } */
+
+.menuButton {
+  display: none;
+}

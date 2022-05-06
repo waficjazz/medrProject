@@ -5,6 +5,7 @@ import { AppBar, Toolbar, InputBase, IconButton, Badge, Typography } from "@mui/
 import { StyledEngineProvider } from "@mui/material/styles";
 import PersonIcon from "@mui/icons-material/Person";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Navbar = () => {
   return (
@@ -12,6 +13,9 @@ const Navbar = () => {
       <StyledEngineProvider injectFirst>
         <AppBar className="appbar" position="absolute">
           <Toolbar>
+            <IconButton className="menuButton">
+              <MenuIcon />
+            </IconButton>
             <Typography className="id">
               ID:<span>19238372</span>
             </Typography>
