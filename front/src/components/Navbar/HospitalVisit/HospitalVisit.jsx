@@ -1,13 +1,13 @@
 import React from "react";
 import "./HospitalVisit.css";
 import { StyledEngineProvider } from "@mui/material/styles";
-import { Typography } from "@mui/material";
+import { Typography, Checkbox, FormControlLabel, Link as MuiLink } from "@mui/material";
 
 const HospitalVisit = () => {
   return (
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisit">
-        <Typography className="smheaders">Hopital Information</Typography>
+        <Typography className="smheaders">Hospital Information</Typography>
         <hr />
         <div className="hospitalInfo">
           <div>
@@ -34,6 +34,10 @@ const HospitalVisit = () => {
         <div className="hospitalInfo">
           <div>
             <Typography className="internalText">
+              Cause:
+              <span className="internalData">Headache</span>
+            </Typography>
+            <Typography className="internalText">
               Entry Date:
               <span className="internalData">7 october 2003</span>
             </Typography>
@@ -41,6 +45,26 @@ const HospitalVisit = () => {
               Time Spent:
               <span className="internalData">7 days</span>
             </Typography>
+            <Typography className="internalText address">
+              Description:
+              <span className="internalData">asdf asdf asdfa dsgadfhfgjsf jdfghj rfg sdsfgds</span>
+            </Typography>
+            <Typography className="internalText address">
+              Doctors:
+              <span className="internalData">doctor1 , doctor2 </span>
+            </Typography>
+            <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
+              Prescriptions
+            </MuiLink>
+            <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
+              Echos
+            </MuiLink>
+            <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
+              Radioliges
+            </MuiLink>
+            <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
+              Surgeries
+            </MuiLink>
           </div>
         </div>
       </div>

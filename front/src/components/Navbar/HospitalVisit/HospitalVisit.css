@@ -24,7 +24,8 @@
   /* background-color: red; */
 }
 
-.internalText {
+.internalText,
+.internalLink {
   color: var(--third-blue);
   font-weight: bolder;
   font-size: 1.1rem;
@@ -45,4 +46,9 @@
 
 .internalText.address {
   width: 100%;
+}
+
+.internalLink:hover {
+  color: var(--second-blue);
+  cursor: pointer;
 }

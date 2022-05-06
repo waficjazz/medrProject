@@ -56,10 +56,10 @@ const HospitalVisits = () => {
                     <Typography className="tableHeaders">Hospital Name</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography className="tableHeaders">Entry Date</Typography>
+                    <Typography className="tableHeaders">Cause</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography className="tableHeaders">Cause</Typography>
+                    <Typography className="tableHeaders">Entry Date</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography className="tableHeaders">Time Spent</Typography>
