@@ -24,6 +24,11 @@
   font-weight: bold;
 }
 
+.tableContents {
+  color: var(--third-blue);
+  font-size: 1rem;
+  font-weight: 600;
+}
 @media only screen and (hover: none) and (pointer: coarse) {
   .hospitalVisits {
     width: 100% !important;
@@ -35,4 +40,25 @@
   .tables {
     overflow-x: scroll !important;
   }
+}
+
+@media screen and (max-width: 1670px) and (hover: hover) {
+  .main {
+    width: 100% !important;
+  }
+  .hospitalVisits {
+    padding: 1%;
+  }
+}
+
+.moreData {
+  padding: 0;
+}
+
+.dataRow:hover .tableContents {
+  color: var(--second-blue);
+}
+.dataRow:hover {
+  border-color: var(--second-blue);
+  box-shadow: 2px 2px 2px #888888;
 }

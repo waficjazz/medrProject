@@ -1,13 +1,49 @@
 import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
 import HospitalVisit from "../../components/Navbar/HospitalVisit/HospitalVisit";
 import React from "react";
 import "./HospitalVisits.css";
-const HospitalVisits = () => {
-  const [open, setOpen] = React.useState(false);
 
+const DataModel = (props) => {
+  const [open, setOpen] = React.useState(false);
+  const { row } = props;
+  return (
+    <StyledEngineProvider injectFirst>
+      <TableRow className="dataRow">
+        <TableCell scope="row" style={{ paddingBottom: 2, paddingTop: 2 }}>
+          <Typography className="tableContents">
+            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+            ss
+          </Typography>
+        </TableCell>
+        <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+          <Typography className="tableContents">{row.name}</Typography>
+        </TableCell>
+        <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+          <Typography className="tableContents">{row.name}</Typography>
+        </TableCell>
+        <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+          <Typography className="tableContents">{row.name}</Typography>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className="moreData" colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <HospitalVisit />
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </StyledEngineProvider>
+  );
+};
+
+const HospitalVisits = () => {
+  const [visits, setVisits] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
   return (
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
@@ -31,30 +67,9 @@ const HospitalVisits = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
-                  <TableCell scope="row">
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                      {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                    Brownie
-                  </TableCell>
-                  <TableCell>
-                    <Typography>12/12/2020</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography>test</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography>2 days</Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                      <HospitalVisit />
-                    </Collapse>
-                  </TableCell>
-                </TableRow>
+                {visits.map((item) => {
+                  return <DataModel row={item} />;
+                })}
               </TableBody>
             </Table>
           </div>
