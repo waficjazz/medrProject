@@ -48,6 +48,7 @@ const HospitalVisits = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
+          <h1 className="headTitle">Hospital Visits</h1>
           <div className="tables">
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
@@ -67,8 +68,8 @@ const HospitalVisits = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {visits.map((item) => {
-                  return <DataModel row={item} />;
+                {visits.map((item, index) => {
+                  return <DataModel key={index} row={item} />;
                 })}
               </TableBody>
             </Table>
