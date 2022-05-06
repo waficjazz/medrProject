@@ -15,7 +15,8 @@
   padding-inline: 40px;
   padding-top: 20px;
   padding-bottom: 10px;
-  height: 90%;
+  min-height: 90%;
+  overflow-y: scroll;
 }
 
 .tableHeaders {
