@@ -18,6 +18,7 @@ const SideBar = () => {
   const handleSelect = (event, index, path) => {
     event.preventDefault();
     setSelectedIndex(index);
+
     navigate(path);
     setActive(false);
   };
@@ -49,7 +50,7 @@ const SideBar = () => {
             </ListItemIcon>
             Hospital Visits
           </ListItemButton>
-          <ListItemButton selected={selectedIndex === 3} onClick={(e) => handleSelect(e, 3)}>
+          <ListItemButton selected={selectedIndex === 3} onClick={(e) => handleSelect(e, 3, "/clinic")}>
             <ListItemIcon>
               <LocalConvenienceStoreIcon className="icon" />
             </ListItemIcon>

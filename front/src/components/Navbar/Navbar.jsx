@@ -1,7 +1,7 @@
 import React from "react";
 import "./Navbar.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { AppBar, Toolbar, InputBase, IconButton, Badge } from "@mui/material";
+import { AppBar, Toolbar, InputBase, IconButton, Badge, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import PersonIcon from "@mui/icons-material/Person";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -12,6 +12,9 @@ const Navbar = () => {
       <StyledEngineProvider injectFirst>
         <AppBar className="appbar" position="absolute">
           <Toolbar>
+            <Typography className="id">
+              ID:<span>19238372</span>
+            </Typography>
             <div className="tools">
               <div className="search">
                 <SearchIcon fontSize="small" className="searchIcon" sx={{ marginLeft: "10px" }} />

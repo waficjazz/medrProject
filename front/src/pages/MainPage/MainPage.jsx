@@ -15,7 +15,7 @@ const MainPage = () => {
         <Routes>
           <Route path="/" element={<PersonalInfo />} />
           <Route path="/hospital" element={<HospitalVisits />} />
-          <Route path="/hospital" element={<ClinicalVisits />} />
+          <Route path="/clinic" element={<ClinicalVisits />} />
         </Routes>
       </div>
     </>

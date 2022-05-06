@@ -7,12 +7,12 @@ const ClinicalVisit = () => {
   return (
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisit">
-        <Typography className="smheaders">Hospital Information</Typography>
+        <Typography className="smheaders">Doctor Information</Typography>
         <hr />
         <div className="hospitalInfo">
           <div>
             <Typography className="internalText">
-              Name:
+              Doctor's Name:
               <span className="internalData">hamooud</span>
             </Typography>
             <Typography className="internalText">
@@ -24,7 +24,7 @@ const ClinicalVisit = () => {
               <span className="internalData">hamooud@gmail.com</span>
             </Typography>
             <Typography className="internalText address">
-              Address:
+              Clinic Address:
               <span className="internalData">hamooud</span>
             </Typography>
           </div>
@@ -38,7 +38,7 @@ const ClinicalVisit = () => {
               <span className="internalData">Headache</span>
             </Typography>
             <Typography className="internalText">
-              Entry Date:
+              Date:
               <span className="internalData">7 october 2003</span>
             </Typography>
             <Typography className="internalText">
@@ -48,10 +48,6 @@ const ClinicalVisit = () => {
             <Typography className="internalText address">
               Description:
               <span className="internalData">asdf asdf asdfa dsgadfhfgjsf jdfghj rfg sdsfgds</span>
-            </Typography>
-            <Typography className="internalText address">
-              Doctors:
-              <span className="internalData">doctor1 , doctor2 </span>
             </Typography>
             <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
               Prescriptions
@@ -63,7 +59,7 @@ const ClinicalVisit = () => {
               Radioliges
             </MuiLink>
             <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
-              Surgeries
+              Lab Tests
             </MuiLink>
           </div>
         </div>

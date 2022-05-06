@@ -12,7 +12,7 @@ const DataModel = (props) => {
   const { row } = props;
   return (
     <StyledEngineProvider injectFirst>
-      <TableRow className="dataRow">
+      <TableRow className="dataRow" onClick={() => setOpen(!open)}>
         <TableCell scope="row" style={{ paddingBottom: 2, paddingTop: 2 }}>
           <Typography className="tableContents">
             <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -20,9 +20,6 @@ const DataModel = (props) => {
             </IconButton>
             ss
           </Typography>
-        </TableCell>
-        <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-          <Typography className="tableContents">{row.name}</Typography>
         </TableCell>
         <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
           <Typography className="tableContents">{row.name}</Typography>
@@ -48,22 +45,19 @@ const ClinicalVisits = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <h1 className="headTitle">Hospital Visits</h1>
+          <h1 className="headTitle">Clinical Visits</h1>
           <div className="tables">
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <Table sx={{ minWidth: "100%" }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <TableCell>
-                    <Typography className="tableHeaders">Hospital Name</Typography>
+                  <TableCell align="left" sx={{ width: "30%" }}>
+                    <Typography className="tableHeaders">Visit Id</Typography>
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="left" sx={{ width: "30%" }}>
+                    <Typography className="tableHeaders">Visit Date</Typography>
+                  </TableCell>
+                  <TableCell align="left" sx={{ width: "50%" }}>
                     <Typography className="tableHeaders">Cause</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography className="tableHeaders">Entry Date</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography className="tableHeaders">Time Spent</Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>

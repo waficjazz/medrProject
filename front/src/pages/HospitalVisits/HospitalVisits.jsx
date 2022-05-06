@@ -12,7 +12,7 @@ const DataModel = (props) => {
   const { row } = props;
   return (
     <StyledEngineProvider injectFirst>
-      <TableRow className="dataRow">
+      <TableRow className="dataRow" onClick={() => setOpen(!open)}>
         <TableCell scope="row" style={{ paddingBottom: 2, paddingTop: 2 }}>
           <Typography className="tableContents">
             <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -53,17 +53,17 @@ const HospitalVisits = () => {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <TableCell>
+                  <TableCell align="left" sx={{ width: "25%" }}>
                     <Typography className="tableHeaders">Hospital Name</Typography>
+                  </TableCell>
+                  <TableCell align="left" sx={{ width: "22%" }}>
+                    <Typography className="tableHeaders">Entry Date</Typography>
+                  </TableCell>
+                  <TableCell align="left" sx={{ width: "22%" }}>
+                    <Typography className="tableHeaders">Time Spent</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography className="tableHeaders">Cause</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography className="tableHeaders">Entry Date</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography className="tableHeaders">Time Spent</Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>
