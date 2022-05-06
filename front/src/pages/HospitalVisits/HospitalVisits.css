@@ -1,0 +1,70 @@
+.hospitalVisits {
+  width: 86%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2%;
+  height: 100vh;
+}
+
+.main {
+  width: 90%;
+  background-color: var(--main-white);
+  border-radius: 4px;
+  box-shadow: 3px 0px 8px #888888;
+  padding-inline: 40px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  min-height: 90%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+.headTitle {
+  align-self: center;
+  color: var(--third-blue);
+}
+.tableHeaders {
+  color: var(--main-blue);
+  font-size: large;
+  font-weight: bold;
+}
+
+.tableContents {
+  color: var(--third-blue);
+  font-size: 1rem;
+  font-weight: 600;
+}
+@media only screen and (hover: none) and (pointer: coarse) {
+  .hospitalVisits {
+    width: 100% !important;
+  }
+  .main {
+    width: 100% !important;
+    padding-inline: 2px !important;
+  }
+  .tables {
+    overflow-x: scroll !important;
+  }
+}
+
+@media screen and (max-width: 1670px) and (hover: hover) {
+  .main {
+    width: 100% !important;
+  }
+  .hospitalVisits {
+    padding: 1%;
+  }
+}
+
+.moreData {
+  padding: 0;
+}
+
+.dataRow:hover .tableContents {
+  color: var(--second-blue);
+}
+.dataRow:hover {
+  border-color: var(--second-blue);
+  box-shadow: 2px 2px 2px #888888;
+}

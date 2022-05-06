@@ -3,7 +3,7 @@ import { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
-import HospitalVisit from "../../components/Navbar/HospitalVisit/HospitalVisit";
+import HospitalVisit from "../../components/HospitalVisit/HospitalVisit";
 import React from "react";
 import "./HospitalVisits.css";
 

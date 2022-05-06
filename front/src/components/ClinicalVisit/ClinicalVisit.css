@@ -1,0 +1,54 @@
+.hospitalVisit {
+  width: 100%;
+  background-color: rgb(0, 0, 0, 0.2);
+
+  box-shadow: 3px 0px 8px #888888;
+  padding: 1%;
+  height: 100%;
+}
+
+.smheaders {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--main-blue);
+  margin-bottom: 5px;
+}
+
+.hospitalInfo {
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: center; */
+  /* background-color: red; */
+}
+
+.internalText,
+.internalLink {
+  color: var(--third-blue);
+  font-weight: bolder;
+  font-size: 1.1rem;
+  height: 10%;
+  float: left;
+  /* background-color: red; */
+  margin-right: 6px;
+  width: 24%;
+  margin-bottom: 15px;
+}
+
+.internalData {
+  font-size: 1.1rem;
+  color: var(--third-blue);
+  margin-left: 5px;
+  font-weight: lighter;
+}
+
+.internalText.address {
+  width: 100%;
+}
+
+.internalLink:hover {
+  color: var(--second-blue);
+  cursor: pointer;
+}

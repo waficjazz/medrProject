@@ -1,8 +1,9 @@
 import React from "react";
 import { useEffect } from "react";
-import SideBar from "../../components/Navbar/SideBar/SideBar";
+import SideBar from "../../components/SideBar/SideBar";
 import PersonalInfo from "../PersonalInfo/PersonalInfo";
-import HospitalVisits from "../HospitalVisit/HospitalVisits";
+import ClinicalVisits from "../ClinicalVisits/ClinicalVisits";
+import HospitalVisits from "../HospitalVisits/HospitalVisits";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./MainPage.css";
 // import { useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ const MainPage = () => {
         <Routes>
           <Route path="/" element={<PersonalInfo />} />
           <Route path="/hospital" element={<HospitalVisits />} />
+          <Route path="/hospital" element={<ClinicalVisits />} />
         </Routes>
       </div>
     </>
