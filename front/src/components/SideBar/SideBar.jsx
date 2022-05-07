@@ -64,7 +64,7 @@ const SideBar = () => {
             </ListItemIcon>
             Prescriptions
           </ListItemButton>
-          <ListItemButton selected={selectedIndex === 5} onClick={(e) => handleSelect(e, 5)}>
+          <ListItemButton selected={selectedIndex === 5} onClick={(e) => handleSelect(e, 5, "/lab")}>
             <ListItemIcon>
               <BiotechOutlinedIcon className="icon" />
             </ListItemIcon>

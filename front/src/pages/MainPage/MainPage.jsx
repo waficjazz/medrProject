@@ -4,6 +4,7 @@ import SideBar from "../../components/SideBar/SideBar";
 import PersonalInfo from "../PersonalInfo/PersonalInfo";
 import ClinicalVisits from "../ClinicalVisits/ClinicalVisits";
 import HospitalVisits from "../HospitalVisits/HospitalVisits";
+import LabTests from "../LabTests/LabTests";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./MainPage.css";
 // import { useNavigate } from "react-router-dom";
@@ -16,6 +17,7 @@ const MainPage = () => {
           <Route path="/" element={<PersonalInfo />} />
           <Route path="/hospital" element={<HospitalVisits />} />
           <Route path="/clinic" element={<ClinicalVisits />} />
+          <Route path="/lab" element={<LabTests />} />
         </Routes>
       </div>
     </>

@@ -1,13 +1,7 @@
+import React, { useState } from "react";
 import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
-import { useState } from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
-import HospitalVisit from "../../components/HospitalVisit/HospitalVisit";
-import React from "react";
 import EmptyData from "../../components/EmpyData/EmptyData";
-import "./HospitalVisits.css";
-
 const DataModel = (props) => {
   const [open, setOpen] = useState(false);
 
@@ -15,37 +9,22 @@ const DataModel = (props) => {
   return (
     <StyledEngineProvider injectFirst>
       <TableRow className="dataRow" onClick={() => setOpen(!open)}>
-        <TableCell scope="row" style={{ paddingBottom: 2, paddingTop: 2 }}>
-          <Typography className="tableContents">
-            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-            ss
-          </Typography>
+        <TableCell scope="row" style={{ paddingBottom: 8, paddingTop: 8 }}>
+          <Typography className="tableContents">ss</Typography>
         </TableCell>
         <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
           <Typography className="tableContents">{row.name}</Typography>
         </TableCell>
         <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
           <Typography className="tableContents">{row.name}</Typography>
-        </TableCell>
-        <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-          <Typography className="tableContents">{row.name}</Typography>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell className="moreData" colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <HospitalVisit />
-          </Collapse>
         </TableCell>
       </TableRow>
     </StyledEngineProvider>
   );
 };
 
-const HospitalVisits = () => {
-  const [visits, setVisits] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
+const LabTests = () => {
+  const [labTests, setLabTests] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
   const [empty, setEmpty] = useState(false);
   return (
     <StyledEngineProvider injectFirst>
@@ -55,27 +34,24 @@ const HospitalVisits = () => {
             <EmptyData txt="No hospital visits yet" />
           ) : (
             <>
-              <h1 className="headTitle">Hospital Visits</h1>
+              <h1 className="headTitle">Lab Tests</h1>
               <div className="tables">
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "25%" }}>
-                        <Typography className="tableHeaders">Hospital Name</Typography>
+                        <Typography className="tableHeaders">Name</Typography>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "22%" }}>
-                        <Typography className="tableHeaders">Entry Date</Typography>
+                        <Typography className="tableHeaders">Date</Typography>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "22%" }}>
-                        <Typography className="tableHeaders">Time Spent</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography className="tableHeaders">Cause</Typography>
+                        <Typography className="tableHeaders">Location</Typography>
                       </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {visits.map((item, index) => {
+                    {labTests.map((item, index) => {
                       return <DataModel key={index} row={item} />;
                     })}
                   </TableBody>
@@ -89,4 +65,4 @@ const HospitalVisits = () => {
   );
 };
 
-export default HospitalVisits;
+export default LabTests;

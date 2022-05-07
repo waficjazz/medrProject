@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./HospitalVisit.css";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Typography, Checkbox, FormControlLabel, Link as MuiLink } from "@mui/material";

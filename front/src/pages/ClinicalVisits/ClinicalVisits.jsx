@@ -5,6 +5,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
 import ClinicalVisit from "../../components/ClinicalVisit/ClinicalVisit";
 import React from "react";
+import EmptyData from "../../components/EmpyData/EmptyData";
 import "./ClinicalVisits.css";
 
 const DataModel = (props) => {
@@ -41,33 +42,41 @@ const DataModel = (props) => {
 
 const ClinicalVisits = () => {
   const [visits, setVisits] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
+  const [empty, setEmpty] = useState(false);
+
   return (
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <h1 className="headTitle">Clinical Visits</h1>
-          <div className="tables">
-            <Table sx={{ minWidth: "100%" }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left" sx={{ width: "30%" }}>
-                    <Typography className="tableHeaders">Visit Id</Typography>
-                  </TableCell>
-                  <TableCell align="left" sx={{ width: "30%" }}>
-                    <Typography className="tableHeaders">Visit Date</Typography>
-                  </TableCell>
-                  <TableCell align="left" sx={{ width: "50%" }}>
-                    <Typography className="tableHeaders">Cause</Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {visits.map((item, index) => {
-                  return <DataModel key={index} row={item} />;
-                })}
-              </TableBody>
-            </Table>
-          </div>
+          {empty ? (
+            <EmptyData txt="No Clinical visits yet" />
+          ) : (
+            <>
+              <h1 className="headTitle">Clinical Visits</h1>
+              <div className="tables">
+                <Table sx={{ minWidth: "100%" }} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="left" sx={{ width: "30%" }}>
+                        <Typography className="tableHeaders">Visit Id</Typography>
+                      </TableCell>
+                      <TableCell align="left" sx={{ width: "30%" }}>
+                        <Typography className="tableHeaders">Visit Date</Typography>
+                      </TableCell>
+                      <TableCell align="left" sx={{ width: "50%" }}>
+                        <Typography className="tableHeaders">Cause</Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {visits.map((item, index) => {
+                      return <DataModel key={index} row={item} />;
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </StyledEngineProvider>
