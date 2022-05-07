@@ -33,10 +33,17 @@
   }
 } */
 @media only screen and (hover: none) and (pointer: coarse) {
+  .nextIcon {
+    left: 70% !important;
+    margin-bottom: 4px !important;
+  }
+  .previousIcon {
+    right: 70% !important;
+    margin-bottom: 4px !important;
+  }
   .mainForm {
-    width: 85%;
-    height: 60%;
-    bottom: 30%;
+    width: 90%;
+    top: 40% !important;
   }
   .stepper {
     display: none;
@@ -45,6 +52,11 @@
     /* background-color: rebeccapurple; */
     width: 100%;
     margin: 0;
+  }
+  .sm,
+  .bg {
+    width: 94% !important;
+    margin-left: 4px !important;
   }
 }
 
@@ -58,7 +70,12 @@
   position: absolute;
   z-index: 90;
 }
-
+.hidef {
+  display: none !important;
+}
+.hidef {
+  display: none !important;
+}
 .sm {
   width: 40%;
 }
@@ -108,4 +125,8 @@
 
 .signform.fade {
   animation: fade 500ms ease-in-out forwards;
+}
+
+.close {
+  z-index: 100;
 }

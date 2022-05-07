@@ -11,7 +11,7 @@ import { Button } from "@mui/material";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [swipe, setSwipe] = useState([true, false, false, false]);
+  const [swipe, setSwipe] = useState([false, true, false, false]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [fatherName, setFatherName] = useState("");
@@ -21,9 +21,20 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState("dsafasdfasd123");
   const [phoneNumber, setPhoneNumber] = useState("6223223");
   const [address, setAddress] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [region, setRegion] = useState("asdf");
+  const [city, setCity] = useState("");
+  const [idType, setIdType] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [bloodType, setBloodType] = useState("");
+  const [gender, setGender] = useState("");
+  const [weight, setWeight] = useState(10);
+  const [height, setHeight] = useState(100);
   const validEmail = useRef(true);
   const validPassword = useRef(true);
   const validPhone = useRef(true);
+
+  const [hide, setHide] = useState(false);
   useEffect(() => {
     validPassword.current = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
   }, [password]);
@@ -37,8 +48,8 @@ const SignUp = () => {
   }, [email]);
 
   const regions = ["Akkar", "Baalbeck - Hermel", "Beirut", "Bekaa", "Mount Lebanon", "North Lebanon", "Nabatiyeh", "South Lebanon"];
-  const bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
-  const idType = ["National ID", "Passport"];
+  const bloodTypes = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
+  const idTypes = ["National ID", "Passport"];
   // const [fade, setFade] = useState({ step0: true, step1: false, step2: false });
   const handleClickShowPassword = (event) => {
     event.preventDefault();
@@ -71,8 +82,16 @@ const SignUp = () => {
   return (
     <>
       <StyledEngineProvider injectFirst>
-        <div className="curtain"></div>
-        <div className="mainForm">
+        <div className={hide ? " hidef" : "curtain"}></div>
+        <div className={hide ? "hidef" : "mainForm"}>
+          <button
+            className="close"
+            onClick={() => {
+              setHide(true);
+              console.log(hide);
+            }}>
+            close
+          </button>
           <div className="stepper">
             <Stepper activeStep={activeStep}>
               <Step>
@@ -89,7 +108,7 @@ const SignUp = () => {
               </Step>
             </Stepper>
           </div>
-          <Box id="step0" className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate>
+          <Box className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate>
             <TextField className="sm" label="First Name" variant="standard" size="small" required onChange={(e) => setFirstName(e.target.value)} />
             <TextField className="sm" label="Last Name" variant="standard" size="small" required onChange={(e) => setLastName(e.target.value)} />
             <TextField className="sm" label="Father Name" variant="standard" size="small" required onChange={(e) => setFatherName(e.target.value)} />
@@ -111,10 +130,10 @@ const SignUp = () => {
               />
             </FormControl>
             <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
-              <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
+              <InputLabel htmlFor="standard-adornment-confirmpassword">Confirm Password</InputLabel>
               <Input
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                id="standard-adornment-password"
+                id="standard-adornment-confirmpassword"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
@@ -147,16 +166,39 @@ const SignUp = () => {
               Next
             </Button>
           </Box>
-          <Box id="step2" className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+          <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+            <InputLabel htmlFor="bd">Birth Date</InputLabel>
             <FormControl className="bg" fullWidth>
-              {/* <InputLabel htmlFor="standard-adornment-password">Birth Date</InputLabel> */}
-              <Input id="standard-adornment-password" type="date" />
+              <Input
+                id="bd"
+                type="date"
+                onChange={(e) => {
+                  setBirthDate(e.target.value);
+                }}
+              />
             </FormControl>
-            <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="region" />} />
-            <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="City" />} />
-            <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} />
-            <Autocomplete className="sm" size="small" disablePortal id="idDocument" options={idType} renderInput={(params) => <TextField {...params} label="ID Document" />} />
-            <TextField className="bg" label="ID Number" size="small" />
+            <Autocomplete
+              className="sm"
+              size="small"
+              disablePortal
+              id="region"
+              options={regions}
+              onChange={(e, newValue) => setRegion(newValue)}
+              renderInput={(params) => <TextField {...params} label="region" />}
+            />
+            <TextField className="sm" label="City" variant="standard" size="small" required onChange={(e) => setCity(e.target.value)} />
+            {/* <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="City" />} /> */}
+            <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
+            <Autocomplete
+              className="sm"
+              size="small"
+              disablePortal
+              id="idDocument"
+              options={idTypes}
+              onChange={(e, evalue) => setIdType(evalue)}
+              renderInput={(params) => <TextField {...params} label="ID Document" />}
+            />
+            <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
             <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
               Next
             </Button>
@@ -164,13 +206,15 @@ const SignUp = () => {
               Previous
             </Button>
           </Box>
-          <Box id="step2" className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+          <Box className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
             <TextField
               className="sm"
               type="number"
               label="Weight"
               variant="standard"
               size="small"
+              error={weight < 10 || weight > 200}
+              onChange={(e) => setWeight(e.target.value)}
               InputProps={{ startAdornment: <InputAdornment position="start">kg</InputAdornment> }}
             />
             <TextField
@@ -179,17 +223,41 @@ const SignUp = () => {
               variant="standard"
               size="small"
               type="number"
+              error={height < 90 || height > 220}
+              onChange={(e) => setHeight(e.target.value)}
               InputProps={{ startAdornment: <InputAdornment position="start">cm</InputAdornment> }}
             />
-            <Autocomplete className="sm" size="small" disablePortal id="bloodType" options={bloodType} renderInput={(params) => <TextField {...params} label="Blood Type" />} />
-            <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+            <Autocomplete
+              className="sm"
+              size="small"
+              disablePortal
+              id="bloodType"
+              onChange={(e, val) => setBloodType(val)}
+              options={bloodTypes}
+              renderInput={(params) => <TextField {...params} label="Blood Type" />}
+            />
+            <Autocomplete
+              className="sm"
+              size="small"
+              disablePortal
+              id="gender"
+              onChange={(e, val) => setGender(val)}
+              options={["Male", "Female"]}
+              renderInput={(params) => <TextField {...params} label="Gender" />}
+            />
+            <Button
+              className="nextIcon"
+              variant="contained"
+              endIcon={<SendIcon fontSize="large" />}
+              onClick={handleNext}
+              disabled={weight > 250 || weight < 20 || height > 220 || height < 90 || gender === "" || bloodType === ""}>
               Next
             </Button>
             <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
               Previous
             </Button>
           </Box>
-          <Box id="step2" className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+          <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
             <TextField label="code" size="small" />
           </Box>
         </div>
