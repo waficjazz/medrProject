@@ -55,7 +55,11 @@
   position: absolute;
   width: 100vh;
   height: 100vh;
-  display: none;
+  display: none !important;
   background-color: transparent;
   border: none;
+}
+
+.hide {
+  display: none;
 }
