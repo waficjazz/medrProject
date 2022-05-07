@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useRef, useEffect } from "react";
 import "./SignUp.css";
-import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, Input, Box, IconButton, InputAdornment, Autocomplete } from "@mui/material";
+import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, Input, Box, IconButton, InputAdornment, Autocomplete, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -9,9 +9,10 @@ import SendIcon from "@mui/icons-material/Send";
 import { Button } from "@mui/material";
 
 const SignUp = () => {
+  const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [swipe, setSwipe] = useState([false, true, false, false]);
+  const [swipe, setSwipe] = useState([true, false, false, false]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [fatherName, setFatherName] = useState("");
@@ -84,182 +85,208 @@ const SignUp = () => {
       <StyledEngineProvider injectFirst>
         <div className={hide ? " hidef" : "curtain"}></div>
         <div className={hide ? "hidef" : "mainForm"}>
-          <button
+          {/* <button
             className="close"
             onClick={() => {
               setHide(true);
               console.log(hide);
             }}>
             close
-          </button>
-          <div className="stepper">
-            <Stepper activeStep={activeStep}>
-              <Step>
-                <StepLabel></StepLabel>
-              </Step>
-              <Step>
-                <StepLabel></StepLabel>
-              </Step>
-              <Step>
-                <StepLabel></StepLabel>
-              </Step>
-              <Step>
-                <StepLabel></StepLabel>
-              </Step>
-            </Stepper>
-          </div>
-          <Box className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate>
-            <TextField className="sm" label="First Name" variant="standard" size="small" required onChange={(e) => setFirstName(e.target.value)} />
-            <TextField className="sm" label="Last Name" variant="standard" size="small" required onChange={(e) => setLastName(e.target.value)} />
-            <TextField className="sm" label="Father Name" variant="standard" size="small" required onChange={(e) => setFatherName(e.target.value)} />
-            <TextField className="sm" label="Mother Name" variant="standard" size="small" onChange={(e) => setMotherName(e.target.value)} required />
-            <TextField type="email" className="bg" label="Email" variant="standard" size="small" fullWidth error={!validEmail.current} onChange={(e) => setEmail(e.target.value)} />
-            <FormControl className="sm" variant="standard" error={!validPassword.current}>
-              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-              <Input
-                id="standard-adornment-password"
-                type={showPassword ? "text" : "password"}
-                onChange={(a) => setPassword(a.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
-                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-            <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
-              <InputLabel htmlFor="standard-adornment-confirmpassword">Confirm Password</InputLabel>
-              <Input
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                id="standard-adornment-confirmpassword"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
-                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-            <FormControl className="bg" variant="standard" error={!validPhone.current}>
-              <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
-              <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} onChange={(e) => setPhoneNumber(e.target.value)} />
-            </FormControl>
-            <Button
-              className="nextIcon"
-              variant="contained"
-              endIcon={<SendIcon fontSize="large" />}
-              onClick={handleNext}
-              disabled={
-                !validEmail.current ||
-                !validPassword ||
-                !validPhone ||
-                password !== confirmPassword ||
-                firstName.length < 2 ||
-                lastName.length < 2 ||
-                motherName.length < 2 ||
-                fatherName.length < 2
-              }>
-              Next
-            </Button>
-          </Box>
-          <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-            <InputLabel htmlFor="bd">Birth Date</InputLabel>
-            <FormControl className="bg" fullWidth>
-              <Input
-                id="bd"
-                type="date"
-                onChange={(e) => {
-                  setBirthDate(e.target.value);
-                }}
-              />
-            </FormControl>
-            <Autocomplete
-              className="sm"
-              size="small"
-              disablePortal
-              id="region"
-              options={regions}
-              onChange={(e, newValue) => setRegion(newValue)}
-              renderInput={(params) => <TextField {...params} label="region" />}
-            />
-            <TextField className="sm" label="City" variant="standard" size="small" required onChange={(e) => setCity(e.target.value)} />
-            {/* <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="City" />} /> */}
-            <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
-            <Autocomplete
-              className="sm"
-              size="small"
-              disablePortal
-              id="idDocument"
-              options={idTypes}
-              onChange={(e, evalue) => setIdType(evalue)}
-              renderInput={(params) => <TextField {...params} label="ID Document" />}
-            />
-            <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
-            <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
-              Next
-            </Button>
-            <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
-              Previous
-            </Button>
-          </Box>
-          <Box className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-            <TextField
-              className="sm"
-              type="number"
-              label="Weight"
-              variant="standard"
-              size="small"
-              error={weight < 10 || weight > 200}
-              onChange={(e) => setWeight(e.target.value)}
-              InputProps={{ startAdornment: <InputAdornment position="start">kg</InputAdornment> }}
-            />
-            <TextField
-              className="sm"
-              label="Height"
-              variant="standard"
-              size="small"
-              type="number"
-              error={height < 90 || height > 220}
-              onChange={(e) => setHeight(e.target.value)}
-              InputProps={{ startAdornment: <InputAdornment position="start">cm</InputAdornment> }}
-            />
-            <Autocomplete
-              className="sm"
-              size="small"
-              disablePortal
-              id="bloodType"
-              onChange={(e, val) => setBloodType(val)}
-              options={bloodTypes}
-              renderInput={(params) => <TextField {...params} label="Blood Type" />}
-            />
-            <Autocomplete
-              className="sm"
-              size="small"
-              disablePortal
-              id="gender"
-              onChange={(e, val) => setGender(val)}
-              options={["Male", "Female"]}
-              renderInput={(params) => <TextField {...params} label="Gender" />}
-            />
-            <Button
-              className="nextIcon"
-              variant="contained"
-              endIcon={<SendIcon fontSize="large" />}
-              onClick={handleNext}
-              disabled={weight > 250 || weight < 20 || height > 220 || height < 90 || gender === "" || bloodType === ""}>
-              Next
-            </Button>
-            <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
-              Previous
-            </Button>
-          </Box>
-          <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-            <TextField label="code" size="small" />
-          </Box>
+          </button> */}
+          {role === "unset" && (
+            <div className="selectRole">
+              <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>SIGN UP AS</Typography>
+              <div className="roles">
+                <div onClick={() => setRole("patient")}></div>
+                <div onClick={() => setRole("hopital")}></div>
+                <div onClick={() => setRole("doctor")}></div>
+              </div>
+            </div>
+          )}
+          {role === "patient" && (
+            <>
+              <div className="stepper">
+                <Stepper activeStep={activeStep}>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                </Stepper>
+              </div>
+              <Box className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate>
+                <TextField className="sm" label="First Name" variant="standard" size="small" required onChange={(e) => setFirstName(e.target.value)} />
+                <TextField className="sm" label="Last Name" variant="standard" size="small" required onChange={(e) => setLastName(e.target.value)} />
+                <TextField className="sm" label="Father Name" variant="standard" size="small" required onChange={(e) => setFatherName(e.target.value)} />
+                <TextField className="sm" label="Mother Name" variant="standard" size="small" onChange={(e) => setMotherName(e.target.value)} required />
+                <TextField
+                  type="email"
+                  className="bg"
+                  label="Email"
+                  variant="standard"
+                  size="small"
+                  fullWidth
+                  error={!validEmail.current}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <FormControl className="sm" variant="standard" error={!validPassword.current}>
+                  <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+                  <Input
+                    id="standard-adornment-password"
+                    type={showPassword ? "text" : "password"}
+                    onChange={(a) => setPassword(a.target.value)}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
+                  <InputLabel htmlFor="standard-adornment-confirmpassword">Confirm Password</InputLabel>
+                  <Input
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    id="standard-adornment-confirmpassword"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl className="bg" variant="standard" error={!validPhone.current}>
+                  <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
+                  <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} onChange={(e) => setPhoneNumber(e.target.value)} />
+                </FormControl>
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  endIcon={<SendIcon fontSize="large" />}
+                  onClick={handleNext}
+                  disabled={
+                    !validEmail.current ||
+                    !validPassword ||
+                    !validPhone ||
+                    password !== confirmPassword ||
+                    firstName.length < 2 ||
+                    lastName.length < 2 ||
+                    motherName.length < 2 ||
+                    fatherName.length < 2
+                  }>
+                  Next
+                </Button>
+              </Box>
+              <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <InputLabel htmlFor="bd">Birth Date</InputLabel>
+                <FormControl className="bg" fullWidth>
+                  <Input
+                    id="bd"
+                    type="date"
+                    onChange={(e) => {
+                      setBirthDate(e.target.value);
+                    }}
+                  />
+                </FormControl>
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="region"
+                  options={regions}
+                  onChange={(e, newValue) => setRegion(newValue)}
+                  renderInput={(params) => <TextField {...params} label="region" />}
+                />
+                <TextField className="sm" label="City" variant="standard" size="small" required onChange={(e) => setCity(e.target.value)} />
+                {/* <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="City" />} /> */}
+                <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="idDocument"
+                  options={idTypes}
+                  onChange={(e, evalue) => setIdType(evalue)}
+                  renderInput={(params) => <TextField {...params} label="ID Document" />}
+                />
+                <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
+                <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+                  Next
+                </Button>
+                <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
+                  Previous
+                </Button>
+              </Box>
+              <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <TextField
+                  className="sm"
+                  type="number"
+                  label="Weight"
+                  variant="standard"
+                  size="small"
+                  error={weight < 10 || weight > 200}
+                  onChange={(e) => setWeight(e.target.value)}
+                  InputProps={{ startAdornment: <InputAdornment position="start">kg</InputAdornment> }}
+                />
+                <TextField
+                  className="sm"
+                  label="Height"
+                  variant="standard"
+                  size="small"
+                  type="number"
+                  error={height < 90 || height > 220}
+                  onChange={(e) => setHeight(e.target.value)}
+                  InputProps={{ startAdornment: <InputAdornment position="start">cm</InputAdornment> }}
+                />
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="bloodType"
+                  onChange={(e, val) => setBloodType(val)}
+                  options={bloodTypes}
+                  renderInput={(params) => <TextField {...params} label="Blood Type" />}
+                />
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="gender"
+                  onChange={(e, val) => setGender(val)}
+                  options={["Male", "Female"]}
+                  renderInput={(params) => <TextField {...params} label="Gender" />}
+                />
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  endIcon={<SendIcon fontSize="large" />}
+                  onClick={handleNext}
+                  disabled={weight > 250 || weight < 20 || height > 220 || height < 90 || gender === "" || bloodType === ""}>
+                  Next
+                </Button>
+                <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
+                  Previous
+                </Button>
+              </Box>
+              <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <TextField label="code" size="small" />
+              </Box>
+            </>
+          )}
         </div>
       </StyledEngineProvider>
     </>
