@@ -57,9 +57,6 @@ const HospitalVisit = () => {
               Prescriptions
             </MuiLink>
             <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
-              Echos
-            </MuiLink>
-            <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
               Radioliges
             </MuiLink>
             <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>

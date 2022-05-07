@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./SignUp.css";
 import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, Input, Box, IconButton, InputAdornment, Autocomplete } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -12,6 +12,30 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [swipe, setSwipe] = useState([true, false, false, false]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [fatherName, setFatherName] = useState("");
+  const [motherName, setMotherName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("dsafasdfasd123");
+  const [confirmPassword, setConfirmPassword] = useState("dsafasdfasd123");
+  const [phoneNumber, setPhoneNumber] = useState("6223223");
+  const [address, setAddress] = useState("");
+  const validEmail = useRef(true);
+  const validPassword = useRef(true);
+  const validPhone = useRef(true);
+  useEffect(() => {
+    validPassword.current = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
+  }, [password]);
+
+  useEffect(() => {
+    validPhone.current = /^[0-9]{7}$/.test(phoneNumber);
+  }, [phoneNumber]);
+
+  useEffect(() => {
+    validEmail.current = /^\S+@\S+\.\S+$/.test(email);
+  }, [email]);
+
   const regions = ["Akkar", "Baalbeck - Hermel", "Beirut", "Bekaa", "Mount Lebanon", "North Lebanon", "Nabatiyeh", "South Lebanon"];
   const bloodType = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   const idType = ["National ID", "Passport"];
@@ -65,17 +89,18 @@ const SignUp = () => {
               </Step>
             </Stepper>
           </div>
-          <Box id="step0" className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-            <TextField className="sm" label="First Name" variant="standard" size="small" />
-            <TextField className="sm" label="Last Name" variant="standard" size="small" />
-            <TextField className="sm" label="Father Name" variant="standard" size="small" />
-            <TextField className="sm" label="Mother Name" variant="standard" size="small" />
-            <TextField type="email" className="bg" label="Email" variant="standard" size="small" fullWidth />
-            <FormControl className="sm" variant="standard">
+          <Box id="step0" className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate>
+            <TextField className="sm" label="First Name" variant="standard" size="small" required onChange={(e) => setFirstName(e.target.value)} />
+            <TextField className="sm" label="Last Name" variant="standard" size="small" required onChange={(e) => setLastName(e.target.value)} />
+            <TextField className="sm" label="Father Name" variant="standard" size="small" required onChange={(e) => setFatherName(e.target.value)} />
+            <TextField className="sm" label="Mother Name" variant="standard" size="small" onChange={(e) => setMotherName(e.target.value)} required />
+            <TextField type="email" className="bg" label="Email" variant="standard" size="small" fullWidth error={!validEmail.current} onChange={(e) => setEmail(e.target.value)} />
+            <FormControl className="sm" variant="standard" error={!validPassword.current}>
               <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
               <Input
                 id="standard-adornment-password"
                 type={showPassword ? "text" : "password"}
+                onChange={(a) => setPassword(a.target.value)}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
@@ -85,9 +110,10 @@ const SignUp = () => {
                 }
               />
             </FormControl>
-            <FormControl className="sm" variant="standard">
+            <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
               <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
               <Input
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 id="standard-adornment-password"
                 type={showPassword ? "text" : "password"}
                 endAdornment={
@@ -99,11 +125,25 @@ const SignUp = () => {
                 }
               />
             </FormControl>
-            <FormControl className="bg" variant="standard">
+            <FormControl className="bg" variant="standard" error={!validPhone.current}>
               <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
-              <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} />
+              <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} onChange={(e) => setPhoneNumber(e.target.value)} />
             </FormControl>
-            <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+            <Button
+              className="nextIcon"
+              variant="contained"
+              endIcon={<SendIcon fontSize="large" />}
+              onClick={handleNext}
+              disabled={
+                !validEmail.current ||
+                !validPassword ||
+                !validPhone ||
+                password !== confirmPassword ||
+                firstName.length < 2 ||
+                lastName.length < 2 ||
+                motherName.length < 2 ||
+                fatherName.length < 2
+              }>
               Next
             </Button>
           </Box>

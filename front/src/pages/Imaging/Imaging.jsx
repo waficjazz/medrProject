@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { Table, TableHead, TableCell, TableRow, TableBody, Typography } from "@mui/material";
+import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
-import "./LabTests.css";
-import CustomPaper from "../../components/Paper/CustomPaper";
-const LabTests = () => {
+const Imaging = () => {
   const [open, setOpen] = useState(false);
   const [labTests, setLabTests] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
   const [empty, setEmpty] = useState(false);
@@ -12,7 +10,7 @@ const LabTests = () => {
     const { row } = props;
     return (
       <StyledEngineProvider injectFirst>
-        <TableRow className="dataRow" onClick={() => setOpen(!open)}>
+        <TableRow className="dataRow">
           <TableCell scope="row" style={{ paddingBottom: 8, paddingTop: 8 }}>
             <Typography className="tableContents">ss</Typography>
           </TableCell>
@@ -22,6 +20,16 @@ const LabTests = () => {
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.name}</Typography>
           </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <a href="http://www.africau.edu/images/default/sample.pdf" target="__blank">
+              <Typography className="tableContents">{row.name}</Typography>
+            </a>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <a href="http://www.africau.edu/images/default/sample.pdf" target="__blank">
+              <Typography className="tableContents">{row.name}</Typography>
+            </a>
+          </TableCell>
         </TableRow>
       </StyledEngineProvider>
     );
@@ -29,13 +37,12 @@ const LabTests = () => {
   return (
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
-        {open && <CustomPaper />}
         <div className="main">
           {empty ? (
-            <EmptyData txt="No hospital visits yet" />
+            <EmptyData txt="No Images yet" />
           ) : (
             <>
-              <h1 className="headTitle">Lab Tests</h1>
+              <h1 className="headTitle">Imaging</h1>
               <div className="tables">
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
@@ -48,6 +55,12 @@ const LabTests = () => {
                       </TableCell>
                       <TableCell align="left" sx={{ width: "22%" }}>
                         <Typography className="tableHeaders">Location</Typography>
+                      </TableCell>
+                      <TableCell align="left" sx={{ width: "22%" }}>
+                        <Typography className="tableHeaders">Report</Typography>
+                      </TableCell>
+                      <TableCell align="left" sx={{ width: "22%" }}>
+                        <Typography className="tableHeaders">Image</Typography>
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -65,5 +78,4 @@ const LabTests = () => {
     </StyledEngineProvider>
   );
 };
-
-export default LabTests;
+export default Imaging;
