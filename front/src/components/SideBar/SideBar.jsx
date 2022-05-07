@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -10,28 +10,29 @@ import BiotechOutlinedIcon from "@mui/icons-material/BiotechOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CropPortraitIcon from "@mui/icons-material/CropPortrait";
 import { StyledEngineProvider } from "@mui/material/styles";
+import { ShowContext } from "../../context";
 import "./SideBar.css";
 const SideBar = () => {
   const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [active, setActive] = useState(true);
+  const { show, setShow } = useContext(ShowContext);
   const handleSelect = (event, index, path) => {
     event.preventDefault();
     setSelectedIndex(index);
 
     navigate(path);
-    setActive(false);
+    setShow(false);
   };
   return (
     <StyledEngineProvider injectFirst>
-      {/* <button
-        id="transButton"
+      <button
+        className={!show ? "hide" : "transButton"}
         onClick={() => {
-          setActive(false);
-          console.log("pressed");
-        }}></button> */}
+          setShow(false);
+          console.log(show);
+        }}></button>
 
-      <div className={active ? "drawer active" : "drawer"}>
+      <div className={show ? "drawer active" : "drawer"}>
         <List>
           <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleSelect(e, 0, "/")}>
             <ListItemIcon>

@@ -18,8 +18,11 @@
     transition: 1s;
     left: 0;
   }
-  #transButton {
+  .transButton {
     display: block !important;
+  }
+  .hide {
+    display: none !important;
   }
 }
 
@@ -48,7 +51,7 @@
   color: var(--second-blue);
 }
 
-#transButton {
+.transButton {
   position: absolute;
   width: 100vh;
   height: 100vh;
