@@ -19,8 +19,10 @@ const DataModel = (props) => {
             <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
-            ss
           </Typography>
+        </TableCell>
+        <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+          <Typography className="tableContents">{row.name}</Typography>
         </TableCell>
         <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
           <Typography className="tableContents">{row.name}</Typography>
@@ -57,6 +59,7 @@ const ClinicalVisits = () => {
                 <Table sx={{ minWidth: "100%" }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
+                      <TableCell align="left" sx={{ width: "5px" }}></TableCell>
                       <TableCell align="left" sx={{ width: "30%" }}>
                         <Typography className="tableHeaders">Visit Id</Typography>
                       </TableCell>

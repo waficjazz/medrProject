@@ -9,7 +9,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { Button } from "@mui/material";
 
 const SignUp = () => {
-  const [role, setRole] = useState("unset");
+  const [role, setRole] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [swipe, setSwipe] = useState([true, false, false, false]);
@@ -17,7 +17,7 @@ const SignUp = () => {
   const [lastName, setLastName] = useState("");
   const [fatherName, setFatherName] = useState("");
   const [motherName, setMotherName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("wafic@gmail.com");
   const [password, setPassword] = useState("dsafasdfasd123");
   const [confirmPassword, setConfirmPassword] = useState("dsafasdfasd123");
   const [phoneNumber, setPhoneNumber] = useState("6223223");
@@ -97,9 +97,9 @@ const SignUp = () => {
             <div className="selectRole">
               <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>SIGN UP AS</Typography>
               <div className="roles">
-                <div onClick={() => setRole("patient")}></div>
-                <div onClick={() => setRole("hopital")}></div>
-                <div onClick={() => setRole("doctor")}></div>
+                <div onClick={() => setRole("patient")}>Patient</div>
+                <div onClick={() => setRole("hopital")}>Hospital</div>
+                <div onClick={() => setRole("doctor")}>Doctor</div>
               </div>
             </div>
           )}

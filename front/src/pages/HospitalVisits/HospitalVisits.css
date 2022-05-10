@@ -9,6 +9,7 @@
 
 .main {
   width: 90%;
+  position: relative;
   background-color: var(--main-white);
   border-radius: 4px;
   box-shadow: 3px 0px 8px #888888;
@@ -16,7 +17,7 @@
   padding-top: 20px;
   padding-bottom: 10px;
   min-height: 90%;
-  overflow-y: scroll;
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
 }
