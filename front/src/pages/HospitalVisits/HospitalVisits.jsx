@@ -65,7 +65,7 @@ const HospitalVisits = () => {
                 <AddIcon fontSize="large" onClick={() => setOpenForm(true)} />
               </IconButton>
               <div className="tables">
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "5px" }}></TableCell>

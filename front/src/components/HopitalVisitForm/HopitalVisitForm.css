@@ -31,6 +31,7 @@
 }
 label.Mui-focused {
   color: var(--third-blue) !important;
+  font-size: 1.28rem !important;
 }
 label {
   font-weight: 700 !important;
@@ -46,8 +47,8 @@ label {
 }
 
 .MuiTab-textColorPrimary.Mui-selected {
-  color: red !important;
+  color: var(--third-blue) !important;
 }
 .MuiTab-textColorPrimary {
-  color: blue !important;
+  font-weight: bold;
 }
