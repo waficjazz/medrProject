@@ -56,6 +56,9 @@
   width: 30%;
   aspect-ratio: 1/1;
   transition: all ease-in-out 400ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .roles > div:hover {
   transform: scale(1.15);

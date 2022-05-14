@@ -7,9 +7,11 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import SendIcon from "@mui/icons-material/Send";
 import { Button } from "@mui/material";
-
+import mySvg from "./hospital.svg";
+import doctorSvg from "./stethoscope.svg";
+import patientSvg from "./patient.svg";
 const SignUp = () => {
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [swipe, setSwipe] = useState([true, false, false, false]);
@@ -97,9 +99,15 @@ const SignUp = () => {
             <div className="selectRole">
               <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>SIGN UP AS</Typography>
               <div className="roles">
-                <div onClick={() => setRole("patient")}>Patient</div>
-                <div onClick={() => setRole("hopital")}>Hospital</div>
-                <div onClick={() => setRole("doctor")}>Doctor</div>
+                <div onClick={() => setRole("patient")}>
+                  <img src={patientSvg} alt="logo" style={{ width: "50%" }} />
+                </div>
+                <div onClick={() => setRole("hopital")}>
+                  <img src={mySvg} alt="logo" style={{ width: "40%" }} />
+                </div>
+                <div onClick={() => setRole("doctor")}>
+                  <img src={doctorSvg} alt="logo" style={{ width: "40%" }} />
+                </div>
               </div>
             </div>
           )}

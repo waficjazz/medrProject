@@ -9,7 +9,7 @@ function App() {
   return (
     <ShowContext.Provider value={{ show, setShow }}>
       <BrowserRouter>
-        {/* <SignUp /> */}
+        <SignUp />
         <Navbar />
         <MainPage />
       </BrowserRouter>
