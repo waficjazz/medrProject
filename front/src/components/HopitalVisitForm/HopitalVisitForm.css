@@ -58,3 +58,9 @@ label {
 .MuiTab-textColorPrimary {
   font-weight: bold;
 }
+.submitHospital:hover {
+  background-color: var(--second-blue);
+}
+.submitHospital {
+  margin-top: 1%;
+}

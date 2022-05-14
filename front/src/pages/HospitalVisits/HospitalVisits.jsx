@@ -61,7 +61,7 @@ const HospitalVisits = () => {
           ) : (
             <>
               <h1 className="headTitle">Hospital Visits</h1>
-              <IconButton sx={{ marginLeft: "90%", width: "5px", height: "5px" }}>
+              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }}>
                 <AddIcon fontSize="large" onClick={() => setOpenForm(true)} />
               </IconButton>
               <div className="tables">

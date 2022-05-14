@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import "./HopitalVisitForm.css";
+import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
-const HospitalVisitForm = (props) => {
+const ClinicalVisitForm = (props) => {
   const [tabValue, setTabValue] = useState("0");
-  const [hopitalName, setHopitalName] = useState("");
+  const [doctorName, setDoctorName] = useState("");
   const [hopitalAddress, setHopitalAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [hospitalId, setHospitalId] = useState("");
+  const [doctorId, setDoctorlId] = useState("");
   const [visitDate, setVisitDate] = useState("");
   const [visitTime, setVisitTime] = useState("");
   const [visitCause, setVisitCause] = useState("");
@@ -32,10 +32,10 @@ const HospitalVisitForm = (props) => {
           <div className="hopitalForm">
             {tabValue === "1" && (
               <>
-                <TextField size="small" label="Hospital Name" variant="standard" className="hospitalInputs" onChange={(e) => setHopitalName(e.target.value)} />
+                <TextField size="small" label="Doctor's Name" variant="standard" className="hospitalInputs" onChange={(e) => setDoctorName(e.target.value)} />
                 <TextField size="small" label="Phone number" variant="standard" className="hospitalInputs" />
                 <TextField size="small" label="Email" variant="standard" className="hospitalInputs" />
-                <TextField size="small" label="Address" variant="standard" fullWidth />
+                <TextField size="small" label="Clinic Address" variant="standard" fullWidth />
               </>
             )}
             {tabValue === "0" && (
@@ -47,7 +47,7 @@ const HospitalVisitForm = (props) => {
                   sx={{ marginTop: "10px" }}
                   id="bloodType"
                   options={["hammoud", "labib"]}
-                  renderInput={(params) => <TextField {...params} label="Hospitals" variant="standard" />}
+                  renderInput={(params) => <TextField {...params} label="Clinics" variant="standard" />}
                 />
               </>
             )}
@@ -79,4 +79,4 @@ const HospitalVisitForm = (props) => {
   );
 };
 
-export default HospitalVisitForm;
+export default ClinicalVisitForm;

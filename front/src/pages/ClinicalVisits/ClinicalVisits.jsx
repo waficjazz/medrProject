@@ -7,6 +7,8 @@ import ClinicalVisit from "../../components/ClinicalVisit/ClinicalVisit";
 import React from "react";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import "./ClinicalVisits.css";
+import AddIcon from "@mui/icons-material/Add";
+import ClinicalVisitForm from "../../components/ClinicalVisitForm/ClinicalVisitForm";
 
 const DataModel = (props) => {
   const [open, setOpen] = React.useState(false);
@@ -45,16 +47,20 @@ const DataModel = (props) => {
 const ClinicalVisits = () => {
   const [visits, setVisits] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
   const [empty, setEmpty] = useState(false);
-
+  const [openForm, setOpenForm] = useState(false);
   return (
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
+          <ClinicalVisitForm isOpen={openForm} close={() => setOpenForm(false)} />
           {empty ? (
             <EmptyData txt="No Clinical visits yet" />
           ) : (
             <>
               <h1 className="headTitle">Clinical Visits</h1>
+              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }}>
+                <AddIcon fontSize="large" onClick={() => setOpenForm(true)} />
+              </IconButton>
               <div className="tables">
                 <Table sx={{ minWidth: "100%" }} aria-label="customized table">
                   <TableHead>
