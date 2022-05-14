@@ -9,6 +9,10 @@
   z-index: 100;
   /* box-shadow: 3px 0px 8px #888888; */
 }
+.notOpen {
+  display: none;
+}
+
 .inside {
   border-radius: 5px;
   width: 100%;

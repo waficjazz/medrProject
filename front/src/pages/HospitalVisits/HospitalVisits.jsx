@@ -55,7 +55,7 @@ const HospitalVisits = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          {openForm && <HospitalVisitForm />}
+          <HospitalVisitForm isOpen={openForm} close={() => setOpenForm(false)} />
           {empty ? (
             <EmptyData txt="No hospital visits yet" />
           ) : (

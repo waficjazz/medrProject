@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./HopitalVisitForm.css";
+import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
-import { Tab, Tabs, TextField, Input, Autocomplete, InputAdornment } from "@mui/material";
-const HospitalVisitForm = () => {
+import { Tab, Tabs, TextField, Input, Autocomplete, InputAdornment, IconButton } from "@mui/material";
+const HospitalVisitForm = (props) => {
   const [tabValue, setTabValue] = useState("0");
   const [hopitalName, setHopitalName] = useState("");
   const [hopitalAddress, setHopitalAddress] = useState("");
@@ -17,8 +18,11 @@ const HospitalVisitForm = () => {
   };
   return (
     <StyledEngineProvider injectFirst>
-      <div className="hVisitForm">
+      <div className={props.isOpen ? "hVisitForm" : "notOpen"}>
         <div className="inside">
+          <IconButton sx={{ marginLeft: "95%" }} onClick={props.close}>
+            <CloseIcon fontSize="medium" />
+          </IconButton>
           <div>
             <Tabs onChange={handleChange} value={tabValue} sx={{ marginBottom: "10px" }} TabIndicatorProps={{ sx: { background: "var(--third-blue)" } }}>
               <Tab value="0" label="Choose A Hospital" />
@@ -28,14 +32,7 @@ const HospitalVisitForm = () => {
           <div className="hopitalForm">
             {tabValue === "1" && (
               <>
-                <TextField
-                  size="small"
-                  label="Hospital Name"
-                  variant="standard"
-                  className="hospitalInputs"
-                  focused={hopitalName !== ""}
-                  onChange={(e) => setHopitalName(e.target.value)}
-                />
+                <TextField size="small" label="Hospital Name" variant="standard" className="hospitalInputs" onChange={(e) => setHopitalName(e.target.value)} />
                 <TextField size="small" label="Phone number" variant="standard" className="hospitalInputs" />
                 <TextField size="small" label="Email" variant="standard" className="hospitalInputs" />
                 <TextField size="small" label="Address" variant="standard" fullWidth />
