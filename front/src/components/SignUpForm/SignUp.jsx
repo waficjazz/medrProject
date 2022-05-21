@@ -121,6 +121,7 @@ const SignUp = () => {
           {role === "unset" && (
             <div className="selectRole">
               <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>SIGN UP AS</Typography>
+              <Typography className="signInLink">SignIn</Typography>
               <div className="roles">
                 <div onClick={() => setRole("patient")}>
                   <img src={patientSvg} alt="logo" style={{ width: "50%" }} />
@@ -288,7 +289,7 @@ const SignUp = () => {
                   size="small"
                   disablePortal
                   id="bloodGroup"
-                  onChange={(e, val) => setbloodGroup(val)}
+                  onChange={(e, val) => setBloodGroup(val)}
                   options={bloodGroups}
                   renderInput={(params) => <TextField {...params} label="Blood Type" />}
                 />

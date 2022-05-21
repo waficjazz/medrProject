@@ -1,7 +1,8 @@
 const Patient = require("../models/patient");
 
 const signup = async (req, res, next) => {
-  const { firstName, lastName, fatherName, motherName, birthDate, bloodGroup, email, adddress, phoneNumber, region, city } = req.body;
+  const { firstName, lastName, fatherName, motherName, birthDate, bloodGroup, email, address, city, region, password, phoneNumber, idType, idNumber, gender, weight, height } =
+    req.body;
   const createdUser = new Patient({
     firstName,
     lastName,
@@ -10,16 +11,24 @@ const signup = async (req, res, next) => {
     birthDate,
     bloodGroup,
     email,
-    adddress,
+    address,
+    city,
+    region,
+    password,
     phoneNumber,
+    idType,
+    idNumber,
+    gender,
+    weight,
+    height,
     createdAt: new Date(),
   });
-
+  console;
   try {
     await createdUser.save();
   } catch (err) {
-    const error = new HttpError("Signing up failed, please try again.", 500);
-    return next(error);
+    console.log(err);
+    return next(err);
   }
   res.status(201).json(createdUser);
 };

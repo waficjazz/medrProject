@@ -40,7 +40,7 @@
   padding: 0;
 }
 .roles {
-  margin-top: 10%;
+  margin-top: 8%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -63,6 +63,17 @@
 .roles > div:hover {
   transform: scale(1.15);
   cursor: pointer;
+}
+
+.signInLink {
+  margin-left: 80%;
+  color: var(--third-blue);
+  font-weight: bold;
+  font-size: large;
+}
+.signInLink:hover {
+  cursor: pointer;
+  color: var(--second-blue);
 }
 /* @media screen and (max-width: 1000px) {
   .signform {
