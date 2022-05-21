@@ -4,6 +4,7 @@ const patientController = require("../controllers/patient-controller");
 
 const router = express.Router();
 
-router.post("/", patientController.signup);
+router.get("/info/:id", patientController.patientInfo);
+router.post("/signup", patientController.signup);
 
 module.exports = router;

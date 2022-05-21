@@ -1,13 +1,31 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Checkbox, Typography, FormControlLabel, FormGroup } from "@mui/material";
 import "./PersonalInfo.css";
 import { StyledEngineProvider } from "@mui/material/styles";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { addInfo } from "../../reducers/patientReducer";
 const PersonalInfo = () => {
+  const dispatch = useDispatch();
+  const patient = useSelector((state) => state.patient.value);
   const boolArr = ["Medications:", "Chronic Disease:", "Allergies:", "Surgical History:", "Problems:"];
   const [boolArrExist, setBoolArrExist] = useState([true, false, false, false, false]);
   const diseases = ["dinoma ", "insuline", "sdfsdf", "dinoma ", "insuline", "sdfsdf"];
+
+  useEffect(() => {
+    const getPatientInfo = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/patient/info/6288751aaa211e70072bd262");
+        console.log(response.data);
+        dispatch(addInfo(response.data));
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    getPatientInfo();
+  }, []);
   return (
     <>
       <StyledEngineProvider injectFirst>
@@ -17,7 +35,7 @@ const PersonalInfo = () => {
             <hr />
             <div className="personalInfoBody">
               <Typography className="internalText">
-                First Name:<span className="internalData">wafic</span>
+                First Name:<span className="internalData">{patient.firstName}</span>
               </Typography>
               <Typography className="internalText">
                 Last Name:<span className="internalData">wafic</span>
