@@ -55,7 +55,7 @@
   box-shadow: 3px 0px 8px #888888;
   width: 30%;
   aspect-ratio: 1/1;
-  transition: all ease-in-out 400ms;
+  transition: all ease-in-out 200ms;
   display: flex;
   justify-content: center;
   align-items: center;

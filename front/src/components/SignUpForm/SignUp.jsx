@@ -10,6 +10,7 @@ import { Button } from "@mui/material";
 import mySvg from "./hospital.svg";
 import doctorSvg from "./stethoscope.svg";
 import patientSvg from "./patient.svg";
+import axios from "axios";
 const SignUp = () => {
   const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +30,7 @@ const SignUp = () => {
   const [city, setCity] = useState("");
   const [idType, setIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");
-  const [bloodType, setBloodType] = useState("");
+  const [bloodGroup, setBloodGroup] = useState("");
   const [gender, setGender] = useState("");
   const [weight, setWeight] = useState(10);
   const [height, setHeight] = useState(100);
@@ -51,7 +52,7 @@ const SignUp = () => {
   }, [email]);
 
   const regions = ["Akkar", "Baalbeck - Hermel", "Beirut", "Bekaa", "Mount Lebanon", "North Lebanon", "Nabatiyeh", "South Lebanon"];
-  const bloodTypes = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
+  const bloodGroups = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   const idTypes = ["National ID", "Passport"];
   // const [fade, setFade] = useState({ step0: true, step1: false, step2: false });
   const handleClickShowPassword = (event) => {
@@ -82,6 +83,28 @@ const SignUp = () => {
     setSwipe(newarr);
   };
 
+  const submit = async () => {
+    let data = {
+      firstName,
+      lastName,
+      fatherName,
+      motherName,
+      birthDate,
+      bloodGroup,
+      email,
+      address,
+      city,
+      region,
+      password,
+      phoneNumber,
+      idType,
+      idNumber,
+      gender,
+      weight,
+      height,
+    };
+    const res = await axios.post("http://localhost:5000/api/patient/", data);
+  };
   return (
     <>
       <StyledEngineProvider injectFirst>
@@ -239,7 +262,7 @@ const SignUp = () => {
                   Previous
                 </Button>
               </Box>
-              <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+              <Box className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
                 <TextField
                   className="sm"
                   type="number"
@@ -264,9 +287,9 @@ const SignUp = () => {
                   className="sm"
                   size="small"
                   disablePortal
-                  id="bloodType"
-                  onChange={(e, val) => setBloodType(val)}
-                  options={bloodTypes}
+                  id="bloodGroup"
+                  onChange={(e, val) => setbloodGroup(val)}
+                  options={bloodGroups}
                   renderInput={(params) => <TextField {...params} label="Blood Type" />}
                 />
                 <Autocomplete
@@ -282,8 +305,8 @@ const SignUp = () => {
                   className="nextIcon"
                   variant="contained"
                   endIcon={<SendIcon fontSize="large" />}
-                  onClick={handleNext}
-                  disabled={weight > 250 || weight < 20 || height > 220 || height < 90 || gender === "" || bloodType === ""}>
+                  onClick={submit}
+                  disabled={weight > 250 || weight < 20 || height > 220 || height < 90 || gender === "" || bloodGroup === ""}>
                   Next
                 </Button>
                 <Button className="previousIcon" variant="contained" onClick={handlePrevious}>

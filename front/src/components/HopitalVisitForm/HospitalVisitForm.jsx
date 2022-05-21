@@ -45,7 +45,7 @@ const HospitalVisitForm = (props) => {
                   size="small"
                   disablePortal
                   sx={{ marginTop: "10px" }}
-                  id="bloodType"
+                  id="bloodGroup"
                   options={["hammoud", "labib"]}
                   renderInput={(params) => <TextField {...params} label="Hospitals" variant="standard" />}
                 />
