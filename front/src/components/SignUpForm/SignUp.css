@@ -27,6 +27,17 @@
   width: 62%;
   padding: 0;
 }
+.signInform {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* background-color: rgba(187, 104, 104, 0.7); */
+  margin-top: 2%;
+  width: 62%;
+  padding: 0;
+}
 .selectRole {
   position: absolute;
   display: flex;
@@ -140,14 +151,15 @@
 
 .nextIcon {
   position: absolute;
-  left: 85%;
+  left: 75%;
   top: 100%;
-  width: 100px;
+  width: 25%;
 }
 .previousIcon {
   position: absolute;
   top: 100%;
-  width: 100px;
+  right: 75%;
+  width: 25%;
 }
 @keyframes fade {
   0% {
@@ -183,4 +195,10 @@
 
 .close {
   z-index: 100;
+}
+
+.signInInputs {
+  display: flex;
+  flex-direction: column;
+  row-gap: 25px;
 }

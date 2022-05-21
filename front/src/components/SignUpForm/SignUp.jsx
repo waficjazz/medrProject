@@ -12,6 +12,7 @@ import doctorSvg from "./stethoscope.svg";
 import patientSvg from "./patient.svg";
 import axios from "axios";
 const SignUp = () => {
+  const [userType, setUserType] = useState("patient");
   const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
@@ -54,6 +55,7 @@ const SignUp = () => {
   const regions = ["Akkar", "Baalbeck - Hermel", "Beirut", "Bekaa", "Mount Lebanon", "North Lebanon", "Nabatiyeh", "South Lebanon"];
   const bloodGroups = ["AB+", "AB-", "A+", "A-", "B+", "B-", "O+", "O-"];
   const idTypes = ["National ID", "Passport"];
+  const userTypes = ["patient", "doctor", "hospital"];
   // const [fade, setFade] = useState({ step0: true, step1: false, step2: false });
   const handleClickShowPassword = (event) => {
     event.preventDefault();
@@ -82,7 +84,10 @@ const SignUp = () => {
     });
     setSwipe(newarr);
   };
-
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    console.log("signed in");
+  };
   const submit = async () => {
     let data = {
       firstName,
@@ -121,7 +126,9 @@ const SignUp = () => {
           {role === "unset" && (
             <div className="selectRole">
               <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>SIGN UP AS</Typography>
-              <Typography className="signInLink">SignIn</Typography>
+              <Typography className="signInLink" onClick={() => setRole("singIn")}>
+                SignIn
+              </Typography>
               <div className="roles">
                 <div onClick={() => setRole("patient")}>
                   <img src={patientSvg} alt="logo" style={{ width: "50%" }} />
@@ -135,6 +142,32 @@ const SignUp = () => {
               </div>
             </div>
           )}
+          {role === "singIn" && (
+            <>
+              <div className="signInform">
+                <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>SIGN IN</Typography>
+                <hr style={{ width: "100%", marginBottom: "30px" }} />
+                <div className="signInInputs">
+                  <TextField className="bg " label="Email" variant="standard" size="small" required fullWidth onChange={(e) => setEmail(e.target.value)} />
+                  <TextField className="bg " label="Password" variant="standard" size="small" fullWidth required onChange={(e) => setPassword(e.target.value)} />
+                  <Autocomplete
+                    fullWidth
+                    className="bg "
+                    size="small"
+                    disablePortal
+                    id="singInAs"
+                    options={userTypes}
+                    onChange={(e, newValue) => setUserType(newValue)}
+                    renderInput={(params) => <TextField {...params} label="Sign As" />}
+                  />
+                  <Button variant="contained" sx={{ width: "30%", left: "70%" }} onclick={handleSignIn}>
+                    Sign In
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+
           {role === "patient" && (
             <>
               <div className="stepper">
