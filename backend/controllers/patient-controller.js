@@ -46,7 +46,7 @@ const patientInfo = async (req, res, next) => {
   }
 
   if (!info || info.length === 0) {
-    return next(new HttpError("Could not find items", 404));
+    return next(new HttpError("Could not find patient", 404));
   }
 
   res.json(info);
