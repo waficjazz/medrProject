@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const uniqueValidtor = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
 
 const patientSchema = new Schema({
@@ -9,7 +9,7 @@ const patientSchema = new Schema({
   motherName: { type: String, required: true },
   birthDate: { type: Date, required: false },
   bloodGroup: { type: String, required: false },
-  email: { type: String, required: false },
+  email: { type: String, required: false, unique: true },
   password: { type: String, required: false },
   adddress: { type: String, required: false },
   city: { type: String, required: false },
@@ -22,5 +22,7 @@ const patientSchema = new Schema({
   height: { type: Number, required: false },
   createdAt: Date,
 });
+
+patientSchema.plugin(uniqueValidtor);
 
 module.exports = mongoose.model("Patient", patientSchema);
