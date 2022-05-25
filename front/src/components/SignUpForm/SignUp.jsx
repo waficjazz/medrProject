@@ -108,7 +108,11 @@ const SignUp = () => {
       weight,
       height,
     };
-    const res = await axios.post("http://localhost:5000/api/patient/", data);
+    try {
+      const res = await axios.post("http://localhost:5000/api/patient/", data);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
   return (
     <>

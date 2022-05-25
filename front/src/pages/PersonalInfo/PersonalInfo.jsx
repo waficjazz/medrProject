@@ -11,14 +11,14 @@ const PersonalInfo = () => {
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient.value);
   const boolArr = ["Medications:", "Chronic Disease:", "Allergies:", "Surgical History:", "Problems:"];
-  const [boolArrExist, setBoolArrExist] = useState([true, false, false, false, false]);
+  const [boolArrExist, setBoolArrExist] = useState(["permanentMeds", "permanentMeds", "permanentMeds", "permanentMeds", "permanentMeds"]);
   const diseases = ["dinoma ", "insuline", "sdfsdf", "dinoma ", "insuline", "sdfsdf"];
 
   useEffect(() => {
     const getPatientInfo = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/patient/info/6288751aaa211e70072bd262");
-        console.log(response.data);
+
         dispatch(addInfo(response.data));
       } catch (err) {
         console.log(err.message);
@@ -38,28 +38,28 @@ const PersonalInfo = () => {
                 First Name:<span className="internalData">{patient.firstName}</span>
               </Typography>
               <Typography className="internalText">
-                Last Name:<span className="internalData">wafic</span>
+                Last Name:<span className="internalData">{patient.lastName}</span>
               </Typography>
               <Typography className="internalText">
-                Father's Name:<span className="internalData">wafic</span>
+                Father's Name:<span className="internalData">{patient.fatherName}</span>
               </Typography>
               <Typography className="internalText">
-                Mother's Name:<span className="internalData">wafic</span>
+                Mother's Name:<span className="internalData">{patient.motherName}</span>
               </Typography>
               <Typography className="internalText">
-                Email:<span className="internalData">waficojazzaro@gmail.com</span>
+                Email:<span className="internalData">{patient.email}</span>
               </Typography>
               <Typography className="internalText">
-                Phone Number:<span className="internalData">76099876</span>
+                Phone Number:<span className="internalData">{patient.phoneNumber}</span>
               </Typography>
               <Typography className="internalText">
-                Governate:<span className="internalData">Mount-Lebanon</span>
+                Governate:<span className="internalData">{patient.region}</span>
               </Typography>
               <Typography className="internalText">
-                City:<span className="internalData">Daraya</span>
+                City:<span className="internalData">{patient.city}</span>
               </Typography>
               <Typography className="internalText address">
-                Address:<span className="internalData">Daraya Main street 1st floor</span>
+                Address:<span className="internalData">{patient.address}</span>
               </Typography>
             </div>
           </div>
@@ -68,19 +68,19 @@ const PersonalInfo = () => {
             <hr />
             <div className="medicalInfoBody">
               <Typography className="internalText ">
-                Gender:<span className="internalData">Male</span>
+                Gender:<span className="internalData">{patient.gender}</span>
               </Typography>
               <Typography className="internalText ">
-                Weight:<span className="internalData">70kg</span>
+                Weight:<span className="internalData">{patient.weight}kg</span>
               </Typography>
               <Typography className="internalText ">
-                Height:<span className="internalData">170cm</span>
+                Height:<span className="internalData">{patient.height}cm</span>
               </Typography>
               <Typography className="internalText ">
-                Blood Group:<span className="internalData">AB+</span>
+                Blood Group:<span className="internalData">{patient.bloodGroup}</span>
               </Typography>
               <Typography className="internalText ">
-                Birth Date:<span className="internalData">13 october 2001</span>
+                Birth Date:<span className="internalData">{patient.birthDate?.toString().slice(0, 10)}</span>
               </Typography>
               {boolArr.map((item, index) => {
                 return (
@@ -97,28 +97,31 @@ const PersonalInfo = () => {
           </div>
           <div className="smallParts">
             {boolArr.map((item, index) => {
-              return (
-                <div className="medications" key={index}>
-                  <Typography className="smheaders">{item}</Typography>
-                  <div className={boolArrExist[index] ? "medicationsBody " : "medicationsBody empty"}>
-                    {boolArrExist[index] && (
-                      <>
-                        <ul>
-                          {diseases.map((item, index) => {
-                            return <li key={index}>{item}</li>;
-                          })}
-                        </ul>
-                      </>
-                    )}
-                    {!boolArrExist[index] && (
-                      <>
-                        <BarChartIcon sx={{ fontSize: "50px", color: "var(--third-blue)" }} />
-                        <Typography className="internalData">No data</Typography>
-                      </>
-                    )}
+              if (Object.keys(patient).length !== 0) {
+                // console.log(patient[boolArrExist[0]].length);
+                return (
+                  <div className="medications" key={index}>
+                    <Typography className="smheaders">{item}</Typography>
+                    <div className={patient[boolArrExist[0]].length > 0 ? "medicationsBody " : "medicationsBody empty"}>
+                      {boolArrExist[index] && (
+                        <>
+                          <ul>
+                            {patient[boolArrExist[0]].map((item, index) => {
+                              return <li key={index}>{item}</li>;
+                            })}
+                          </ul>
+                        </>
+                      )}
+                      {patient[boolArrExist[0]].length === 0 && (
+                        <>
+                          <BarChartIcon sx={{ fontSize: "50px", color: "var(--third-blue)" }} />
+                          <Typography className="internalData">No data</Typography>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
+                );
+              }
             })}
           </div>
         </div>
