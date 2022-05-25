@@ -11,7 +11,7 @@ const PersonalInfo = () => {
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient.value);
   const boolArr = ["Medications:", "Chronic Disease:", "Allergies:", "Surgical History:", "Problems:"];
-  const [boolArrExist, setBoolArrExist] = useState(["permanentMeds", "permanentMeds", "permanentMeds", "permanentMeds", "permanentMeds"]);
+  const [boolArrExist, setBoolArrExist] = useState(["permanentMeds", "permanentMeds", "permanentMeds", "allergies", "permanentMeds"]);
   const diseases = ["dinoma ", "insuline", "sdfsdf", "dinoma ", "insuline", "sdfsdf"];
 
   useEffect(() => {
@@ -102,17 +102,17 @@ const PersonalInfo = () => {
                 return (
                   <div className="medications" key={index}>
                     <Typography className="smheaders">{item}</Typography>
-                    <div className={patient[boolArrExist[0]].length > 0 ? "medicationsBody " : "medicationsBody empty"}>
+                    <div className={patient[boolArrExist[index]].length > 0 ? "medicationsBody " : "medicationsBody empty"}>
                       {boolArrExist[index] && (
                         <>
                           <ul>
-                            {patient[boolArrExist[0]].map((item, index) => {
+                            {patient[boolArrExist[index]].map((item, index) => {
                               return <li key={index}>{item}</li>;
                             })}
                           </ul>
                         </>
                       )}
-                      {patient[boolArrExist[0]].length === 0 && (
+                      {patient[boolArrExist[index]].length === 0 && (
                         <>
                           <BarChartIcon sx={{ fontSize: "50px", color: "var(--third-blue)" }} />
                           <Typography className="internalData">No data</Typography>
