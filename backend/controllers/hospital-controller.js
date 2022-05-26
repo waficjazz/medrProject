@@ -9,12 +9,12 @@ const gethospitalVisits = async (req, res, next) => {
     info = await HospitalVisit.findById($regex);
     console.log(info);
   } catch (err) {
-    const error = new HttpError("Fetching hopital visits info failed, please try again later", 500);
+    const error = new HttpError("Fetching hospital visits info failed, please try again later", 500);
     return next(error);
   }
 
   if (!info || info.length === 0) {
-    return next(new HttpError("Could not find hopital visits", 404));
+    return next(new HttpError("Could not find hospital visits", 404));
   }
 
   res.json(info);
