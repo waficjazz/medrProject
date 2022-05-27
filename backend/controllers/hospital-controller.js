@@ -6,7 +6,7 @@ const gethospitalVisits = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
   try {
-    info = await HospitalVisit.findById($regex);
+    info = await HospitalVisit.find({ patientId: $regex });
     console.log(info);
   } catch (err) {
     const error = new HttpError("Fetching hospital visits info failed, please try again later", 500);

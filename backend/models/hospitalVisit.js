@@ -6,11 +6,11 @@ const hospitalVisitSchema = new Schema({
   patientId: { type: mongoose.Types.ObjectId, required: true, ref: "Patient" },
   entryDate: { type: Date, required: false },
   timeSpent: { type: Number, required: false },
-  description: { type: String, required: true },
+  description: { type: String, required: false },
   prescription: { type: String, required: false },
   cause: { type: String, required: true },
   doctors: { type: [String], required: true },
-  hospitalId: { type: mongoose.Types.ObjectId, required: true, ref: "Hospital" },
+  hospitalId: { type: mongoose.Types.ObjectId, required: false, ref: "Hospital" },
 });
 
 module.exports = mongoose.model("HospitalVisit", hospitalVisitSchema);

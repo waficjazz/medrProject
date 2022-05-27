@@ -1,5 +1,6 @@
 import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -11,9 +12,22 @@ import AddIcon from "@mui/icons-material/Add";
 import HospitalVisitForm from "../../components/HopitalVisitForm/HospitalVisitForm";
 
 const HospitalVisits = () => {
-  const [visits, setVisits] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
+  const [visits, setVisits] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+
+  useEffect(() => {
+    const getVisits = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/hospital/visits/6288751aaa211e70072bd262");
+        setVisits(response.data);
+        console.log(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    getVisits();
+  }, []);
   const DataModel = (props) => {
     const [open, setOpen] = useState(false);
     const { row } = props;
@@ -28,7 +42,7 @@ const HospitalVisits = () => {
             </Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.name}</Typography>
+            <Typography className="tableContents">{row.cause}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.name}</Typography>

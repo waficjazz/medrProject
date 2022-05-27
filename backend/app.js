@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const patientRoutes = require("./routes/patient-routes");
 const hospitalRoutes = require("./routes/hospital-routes");
 const clinicalRoutes = require("./routes/clinical-routes");
+const imagingRoutes = require("./routes/imaging-routes");
 const app = express();
 
 app.use(bodyParser.json());
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
 app.use("/api/patient", patientRoutes);
 app.use("/api/hospital", hospitalRoutes);
 app.use("/api/clinical", clinicalRoutes);
+app.use("/api/imaging", imagingRoutes);
 
 mongoose
   .connect(`mongodb://localhost:27017/medrecord`)
