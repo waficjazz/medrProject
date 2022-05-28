@@ -75,6 +75,24 @@ const getHospitals = async (req, res, next) => {
   res.json(info);
 };
 
+const getHospitalById = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  try {
+    info = await Hospital.findById($regex);
+  } catch (err) {
+    const error = new HttpError("Fetching hospital visits info failed, please try again later", 500);
+    return next(error);
+  }
+
+  if (!info || info.length === 0) {
+    return next(new HttpError("Could not find hospital visits", 404));
+  }
+
+  res.json(info);
+};
+
+exports.getHospitalById = getHospitalById;
 exports.gethospitalVisits = gethospitalVisits;
 exports.getHospitals = getHospitals;
 exports.addHospitalVisit = addHospitalVisit;

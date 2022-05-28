@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./HospitalVisit.css";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Typography, Checkbox, FormControlLabel, Link as MuiLink } from "@mui/material";
 
-const HospitalVisit = () => {
+const HospitalVisit = ({ visit, hospital }) => {
   return (
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisit">
@@ -13,19 +13,19 @@ const HospitalVisit = () => {
           <div>
             <Typography className="internalText">
               Name:
-              <span className="internalData">hamooud</span>
+              <span className="internalData">{hospital.name}</span>
             </Typography>
             <Typography className="internalText">
               Phone Number:
-              <span className="internalData">76082698</span>
+              <span className="internalData">{hospital.phoneNumber}</span>
             </Typography>
             <Typography className="internalText">
               Email:
-              <span className="internalData">hamooud@gmail.com</span>
+              <span className="internalData">{hospital.email}</span>
             </Typography>
             <Typography className="internalText address">
               Address:
-              <span className="internalData">hamooud</span>
+              <span className="internalData">{hospital.address}</span>
             </Typography>
           </div>
         </div>
@@ -35,15 +35,15 @@ const HospitalVisit = () => {
           <div>
             <Typography className="internalText">
               Cause:
-              <span className="internalData">Headache</span>
+              <span className="internalData">{visit.cause}</span>
             </Typography>
             <Typography className="internalText">
               Entry Date:
-              <span className="internalData">7 october 2003</span>
+              <span className="internalData">{visit.entryDate?.toString().slice(0, 10)}</span>
             </Typography>
             <Typography className="internalText">
               Time Spent:
-              <span className="internalData">7 days</span>
+              <span className="internalData">{visit.timeSpent}</span>
             </Typography>
             <Typography className="internalText address">
               Description:

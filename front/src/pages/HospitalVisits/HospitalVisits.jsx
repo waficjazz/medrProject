@@ -21,16 +21,35 @@ const HospitalVisits = () => {
       try {
         const response = await axios.get("http://localhost:5000/api/hospital/visits/6288751aaa211e70072bd262");
         setVisits(response.data);
-        console.log(response.data);
       } catch (err) {
         console.log(err.message);
       }
     };
     getVisits();
   }, []);
+
   const DataModel = (props) => {
     const [open, setOpen] = useState(false);
+    const [hospital, setHospital] = useState({});
     const { row } = props;
+    const getHospital = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/${id}`);
+        let hospital = await response.data;
+        setHospital(hospital);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    useEffect(() => {
+      let isApiSubscribed = true;
+      if (isApiSubscribed) {
+        getHospital(row.hospitalId);
+      }
+      return () => {
+        isApiSubscribed = false;
+      };
+    }, []);
     return (
       <StyledEngineProvider injectFirst>
         <TableRow className="dataRow" onClick={() => setOpen(!open)}>
@@ -42,22 +61,22 @@ const HospitalVisits = () => {
             </Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">{hospital.name}</Typography>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">{row.entryDate?.toString().slice(0, 10)}</Typography>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">{row.timeSpent}</Typography>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.cause}</Typography>
-          </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.name}</Typography>
-          </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.name}</Typography>
-          </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.name}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <HospitalVisit />
+              <HospitalVisit visit={row} hospital={hospital} />
             </Collapse>
           </TableCell>
         </TableRow>
@@ -75,8 +94,8 @@ const HospitalVisits = () => {
           ) : (
             <>
               <h1 className="headTitle">Hospital Visits</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }}>
-                <AddIcon fontSize="large" onClick={() => setOpenForm(true)} />
+              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
+                <AddIcon fontSize="large" />
               </IconButton>
               <div className="tables">
                 <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
