@@ -32,7 +32,7 @@ const HospitalVisitForm = (props) => {
 
       let visit = {
         patientId: "6288751aaa211e70072bd262",
-        hospitalId: "628fdb4cdee93c7dbf0fe84b",
+        hospitalId: hospitalId,
         entryDate: visitDate,
         timeSpent: visitTime,
         cause: visitCause,
@@ -40,7 +40,9 @@ const HospitalVisitForm = (props) => {
       };
       console.log(visit);
       const resp = await axios.post("http://localhost:5000/api/hospital/visits/add", visit);
-      console.log(resp.data);
+      if (resp.statusText === "Created") {
+        props.close();
+      }
     } catch (err) {
       console.log(err.message);
     }

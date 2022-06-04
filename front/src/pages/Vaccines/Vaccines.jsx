@@ -8,7 +8,7 @@ import React from "react";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import "../HospitalVisits/HospitalVisits.css";
 import AddIcon from "@mui/icons-material/Add";
-import HospitalVisitForm from "../../components/HopitalVisitForm/HospitalVisitForm";
+import VaccineForm from "../../components/VaccineForm/VaccineForm";
 
 const Vaccines = () => {
   const [visits, setVisits] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
@@ -38,7 +38,7 @@ const Vaccines = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <HospitalVisitForm isOpen={openForm} close={() => setOpenForm(false)} />
+          <VaccineForm isOpen={openForm} close={() => setOpenForm(false)} />
           {empty ? (
             <EmptyData txt="No hospital visits yet" />
           ) : (

@@ -10,12 +10,13 @@ import EmptyData from "../../components/EmpyData/EmptyData";
 import "./HospitalVisits.css";
 import AddIcon from "@mui/icons-material/Add";
 import HospitalVisitForm from "../../components/HopitalVisitForm/HospitalVisitForm";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 const HospitalVisits = () => {
   const [visits, setVisits] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-
+  const [reload, setReload] = useState(false);
   useEffect(() => {
     const getVisits = async () => {
       try {
@@ -25,8 +26,17 @@ const HospitalVisits = () => {
         console.log(err.message);
       }
     };
-    getVisits();
-  }, []);
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getVisits();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [reload]);
 
   const DataModel = (props) => {
     const [open, setOpen] = useState(false);
@@ -44,6 +54,7 @@ const HospitalVisits = () => {
     useEffect(() => {
       let isApiSubscribed = true;
       if (isApiSubscribed) {
+        console.log(row.hospitalId);
         getHospital(row.hospitalId);
       }
       return () => {
@@ -72,6 +83,16 @@ const HospitalVisits = () => {
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.cause}</Typography>
           </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">
+              <IconButton>
+                <EditIcon fontSize="small" />
+              </IconButton>
+              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Typography>
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
@@ -88,7 +109,13 @@ const HospitalVisits = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <HospitalVisitForm isOpen={openForm} close={() => setOpenForm(false)} />
+          <HospitalVisitForm
+            isOpen={openForm}
+            close={() => {
+              setOpenForm(false);
+              setReload(!reload);
+            }}
+          />
           {empty ? (
             <EmptyData txt="No hospital visits yet" />
           ) : (
@@ -108,11 +135,14 @@ const HospitalVisits = () => {
                       <TableCell align="left" sx={{ width: "22%" }}>
                         <Typography className="tableHeaders">Entry Date</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "18%" }}>
                         <Typography className="tableHeaders">Time Spent</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography className="tableHeaders">Cause</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography className="tableHeaders"></Typography>
                       </TableCell>
                     </TableRow>
                   </TableHead>
