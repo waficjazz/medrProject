@@ -17,6 +17,17 @@ const HospitalVisits = () => {
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [reload, setReload] = useState(false);
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/hospital/delete/visit/${id}`);
+
+      setReload(!reload);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   useEffect(() => {
     const getVisits = async () => {
       try {
@@ -54,7 +65,6 @@ const HospitalVisits = () => {
     useEffect(() => {
       let isApiSubscribed = true;
       if (isApiSubscribed) {
-        console.log(row.hospitalId);
         getHospital(row.hospitalId);
       }
       return () => {
@@ -88,7 +98,7 @@ const HospitalVisits = () => {
               <IconButton>
                 <EditIcon fontSize="small" />
               </IconButton>
-              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }}>
+              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Typography>

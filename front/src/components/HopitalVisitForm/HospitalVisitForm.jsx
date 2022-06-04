@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
 import "./HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,7 +12,8 @@ const HospitalVisitForm = (props) => {
   const [hospitalAddress, setHospitalAddress] = useState("");
   const [hospitalEmail, setHospitalEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [hospitalId, setHospitalId] = useState("");
+  // const [hospitalId, setHospitalId] = useState("");
+  const hospitalId = useRef();
   const [visitDate, setVisitDate] = useState("");
   const [visitTime, setVisitTime] = useState("");
   const [visitCause, setVisitCause] = useState("");
@@ -27,22 +28,22 @@ const HospitalVisitForm = (props) => {
     try {
       const res = await axios.post("http://localhost:5000/api/hospital/add", hospital);
       let id = await res.data._id;
-      setHospitalId(id);
-      console.log(id);
+      hospitalId.current = id;
 
       let visit = {
         patientId: "6288751aaa211e70072bd262",
-        hospitalId: hospitalId,
+        hospitalId: hospitalId.current,
         entryDate: visitDate,
         timeSpent: visitTime,
         cause: visitCause,
         doctors: doctors,
       };
-      console.log(visit);
+
       const resp = await axios.post("http://localhost:5000/api/hospital/visits/add", visit);
       if (resp.statusText === "Created") {
         props.close();
       }
+      console.log(resp);
     } catch (err) {
       console.log(err.message);
     }

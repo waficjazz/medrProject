@@ -2,6 +2,20 @@ const Hospital = require("../models/hospital");
 const HospitalVisit = require("../models/hospitalVisit");
 const HttpError = require("../models/http-error");
 
+const deleteHopitalVisit = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  try {
+    info = await HospitalVisit.deleteOne({ _id: $regex });
+    console.log(info);
+  } catch (err) {
+    const error = new HttpError("Deleteing hospital visits info failed, please try again later", 500);
+    return next(error);
+  }
+
+  res.json(info);
+};
+
 const gethospitalVisits = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
@@ -9,12 +23,12 @@ const gethospitalVisits = async (req, res, next) => {
     info = await HospitalVisit.find({ patientId: $regex });
     console.log(info);
   } catch (err) {
+    if (!info || info.length === 0) {
+      return next(new HttpError("Could not find hospital visits", 404));
+    }
+
     const error = new HttpError("Fetching hospital visits info failed, please try again later", 500);
     return next(error);
-  }
-
-  if (!info || info.length === 0) {
-    return next(new HttpError("Could not find hospital visits", 404));
   }
 
   res.json(info);
@@ -97,3 +111,4 @@ exports.gethospitalVisits = gethospitalVisits;
 exports.getHospitals = getHospitals;
 exports.addHospitalVisit = addHospitalVisit;
 exports.addHospital = addHospital;
+exports.deleteHopitalVisit = deleteHopitalVisit;
