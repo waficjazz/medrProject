@@ -44,8 +44,8 @@ const Vaccines = () => {
           ) : (
             <>
               <h1 className="headTitle">Vaccines</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }}>
-                <AddIcon fontSize="large" onClick={() => setOpenForm(true)} />
+              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
+                <AddIcon fontSize="large" />
               </IconButton>
               <div className="tables">
                 <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">

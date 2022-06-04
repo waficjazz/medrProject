@@ -25,13 +25,7 @@ const SideBar = () => {
   };
   return (
     <StyledEngineProvider injectFirst>
-      <button
-        className={!show ? "hide" : "transButton"}
-        onClick={() => {
-          setShow(false);
-          console.log(show);
-        }}></button>
-
+      {show && <div className="backSideBar" onClick={() => setShow(false)}></div>}
       <div className={show ? "drawer active" : "drawer"}>
         <List>
           <ListItemButton selected={selectedIndex === 0} onClick={(e) => handleSelect(e, 0, "/")}>

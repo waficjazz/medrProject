@@ -43,7 +43,6 @@ const HospitalVisitForm = (props) => {
       if (resp.statusText === "Created") {
         props.close();
       }
-      console.log(resp);
     } catch (err) {
       console.log(err.message);
     }

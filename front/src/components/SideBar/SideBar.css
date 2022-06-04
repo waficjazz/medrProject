@@ -10,7 +10,7 @@
   .drawer {
     width: 60vw;
     transition: 800ms;
-    position: absolute;
+    position: fixed;
     transition: all 1s;
     left: -200%;
   }
@@ -18,11 +18,12 @@
     transition: 1s;
     left: 0;
   }
-  .transButton {
-    display: block !important;
-  }
-  .hide {
-    display: none !important;
+
+  .backSideBar {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
   }
 }
 

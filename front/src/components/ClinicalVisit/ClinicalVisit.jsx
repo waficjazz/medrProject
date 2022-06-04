@@ -3,7 +3,7 @@ import "./ClinicalVisit.css";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Typography, Checkbox, FormControlLabel, Link as MuiLink } from "@mui/material";
 
-const ClinicalVisit = () => {
+const ClinicalVisit = ({ visit }) => {
   return (
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisit">
@@ -13,19 +13,19 @@ const ClinicalVisit = () => {
           <div>
             <Typography className="internalText">
               Doctor's Name:
-              <span className="internalData">hamooud</span>
+              <span className="internalData">{visit.doctorName}</span>
             </Typography>
             <Typography className="internalText">
               Phone Number:
-              <span className="internalData">76082698</span>
+              <span className="internalData">{visit.phoneNumber}</span>
             </Typography>
             <Typography className="internalText">
               Email:
-              <span className="internalData">hamooud@gmail.com</span>
+              <span className="internalData">{visit.email}</span>
             </Typography>
             <Typography className="internalText address">
               Clinic Address:
-              <span className="internalData">hamooud</span>
+              <span className="internalData">{visit.clinicAddress}</span>
             </Typography>
           </div>
         </div>
@@ -35,19 +35,16 @@ const ClinicalVisit = () => {
           <div>
             <Typography className="internalText">
               Cause:
-              <span className="internalData">Headache</span>
+              <span className="internalData">{visit.cause}</span>
             </Typography>
             <Typography className="internalText">
               Date:
-              <span className="internalData">7 october 2003</span>
+              <span className="internalData">{visit.visitDate?.toString().slice(0, 10)}</span>
             </Typography>
-            <Typography className="internalText">
-              Time Spent:
-              <span className="internalData">7 days</span>
-            </Typography>
+
             <Typography className="internalText address">
               Description:
-              <span className="internalData">asdf asdf asdfa dsgadfhfgjsf jdfghj rfg sdsfgds</span>
+              <span className="internalData">{visit.description}</span>
             </Typography>
             <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
               Prescriptions

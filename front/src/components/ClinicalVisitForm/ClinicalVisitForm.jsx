@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -6,15 +7,38 @@ import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton 
 const ClinicalVisitForm = (props) => {
   const [tabValue, setTabValue] = useState("0");
   const [doctorName, setDoctorName] = useState("");
-  const [hopitalAddress, setHopitalAddress] = useState("");
+  const [clinicAddress, setClinicAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [doctorId, setDoctorlId] = useState("");
+  const [email, setEmail] = useState("");
+  // const [doctorId, setDoctorlId] = useState("");
   const [visitDate, setVisitDate] = useState("");
-  const [visitTime, setVisitTime] = useState("");
   const [visitCause, setVisitCause] = useState("");
   const [visitDescription, setVisitDescription] = useState("");
+  const doctorId = useRef();
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
+  };
+
+  const submit = async () => {
+    try {
+      let visit = {
+        patientId: "6288751aaa211e70072bd262",
+        doctorName: doctorName,
+        email: email,
+        phoneNumber: phoneNumber,
+        visitDate: visitDate,
+        description: visitDescription,
+        cause: visitCause,
+        clinicAddress,
+        doctorName,
+      };
+      const resp = await axios.post("http://localhost:5000/api/clinical/visits/add", visit);
+      if (resp.statusText === "Created") {
+        props.close();
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
   };
   return (
     <StyledEngineProvider injectFirst>
@@ -33,9 +57,9 @@ const ClinicalVisitForm = (props) => {
             {tabValue === "1" && (
               <>
                 <TextField size="small" label="Doctor's Name" variant="standard" className="hospitalInputs" onChange={(e) => setDoctorName(e.target.value)} />
-                <TextField size="small" label="Phone number" variant="standard" className="hospitalInputs" />
-                <TextField size="small" label="Email" variant="standard" className="hospitalInputs" />
-                <TextField size="small" label="Clinic Address" variant="standard" fullWidth />
+                <TextField size="small" label="Phone number" variant="standard" className="hospitalInputs" onChange={(e) => setPhoneNumber(e.target.value)} />
+                <TextField size="small" label="Email" variant="standard" className="hospitalInputs" onChange={(e) => setEmail(e.target.value)} />
+                <TextField size="small" label="Clinic Address" variant="standard" fullWidth onChange={(e) => setClinicAddress(e.target.value)} />
               </>
             )}
             {tabValue === "0" && (
@@ -54,23 +78,12 @@ const ClinicalVisitForm = (props) => {
           </div>
           <hr />
           <div className="hopitalForm">
-            <TextField size="small" label="Cause" variant="standard" className="hospitalInputs" />
-            <TextField size="small" label="Entry Date" variant="standard" type="date" focused className="hospitalInputs" />
-            <TextField
-              size="small"
-              label="Time Spent"
-              variant="standard"
-              type="number"
-              focused
-              className="hospitalInputs"
-              InputProps={{
-                startAdornment: <InputAdornment position="start">days</InputAdornment>,
-              }}
-            />
-            <TextField size="small" label="Description" variant="standard" fullWidth multiline maxRows={3} />
-            <TextField size="small" label="Doctors" variant="standard" className="hospitalInputs" />
+            <TextField size="small" label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setVisitCause(e.target.value)} />
+            <TextField size="small" label="Visit Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setVisitDate(e.target.value)} />
+
+            <TextField size="small" label="Description" variant="standard" fullWidth multiline maxRows={3} onChange={(e) => setVisitDescription(e.target.value)} />
           </div>
-          <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital">
+          <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
             Submit
           </Button>
         </div>
