@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
+import ImagingForm from "../../components/ImagingForm/ImagingForm";
 import AddIcon from "@mui/icons-material/Add";
 const Imaging = () => {
-  const [open, setOpen] = useState(false);
   const [labTests, setLabTests] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
   const [empty, setEmpty] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
   const DataModel = (props) => {
     const { row } = props;
     return (
@@ -39,12 +40,13 @@ const Imaging = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
+          <ImagingForm isOpen={openForm} close={() => setOpenForm(false)} />
           {empty ? (
             <EmptyData txt="No Images yet" />
           ) : (
             <>
               <h1 className="headTitle">Imaging</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px", marginBottom: "10px" }}>
+              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px", marginBottom: "10px" }} onClick={() => setOpenForm(true)}>
                 <AddIcon fontSize="large" />
               </IconButton>
               <div className="tables">
