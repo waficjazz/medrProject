@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import "./SignUp.css";
 import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, Input, Box, IconButton, InputAdornment, Autocomplete, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -11,7 +11,10 @@ import mySvg from "./hospital.svg";
 import doctorSvg from "./stethoscope.svg";
 import patientSvg from "./patient.svg";
 import axios from "axios";
+import { regContext } from "../../context";
+
 const SignUp = () => {
+  const auth = useContext(regContext);
   const [userType, setUserType] = useState("patient");
   const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +28,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("dsafasdfasd123");
   const [confirmPassword, setConfirmPassword] = useState("dsafasdfasd123");
   const [phoneNumber, setPhoneNumber] = useState("6223223");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState("asdfasd");
   const [birthDate, setBirthDate] = useState("");
   const [region, setRegion] = useState("asdf");
   const [city, setCity] = useState("");
@@ -35,6 +38,8 @@ const SignUp = () => {
   const [gender, setGender] = useState("");
   const [weight, setWeight] = useState(10);
   const [height, setHeight] = useState(100);
+  const [lisOfHospitals, setLisOfHospitals] = useState("");
+  const [proficiency, setProficiency] = useState("");
   const validEmail = useRef(true);
   const validPassword = useRef(true);
   const validPhone = useRef(true);
@@ -109,7 +114,36 @@ const SignUp = () => {
       height,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/patient/", data);
+      const res = await axios.post("http://localhost:5000/api/patient/signup", data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const submitDoctor = async () => {
+    let data = {
+      firstName,
+      lastName,
+      fatherName,
+      motherName,
+      birthDate,
+      bloodGroup,
+      email,
+      address,
+      city,
+      region,
+      password,
+      phoneNumber,
+      idType,
+      idNumber,
+      gender,
+      proficiency,
+      lisOfHospitals,
+    };
+    try {
+      const res = await axios.post("http://localhost:5000/api/doctor/signup", data);
+      const responseData = await res.data;
+      auth.login(responseData.token, responseData.token);
     } catch (err) {
       console.log(err.message);
     }
@@ -171,7 +205,165 @@ const SignUp = () => {
               </div>
             </>
           )}
+          {role === "doctor" && (
+            <>
+              <div className="stepper">
+                <Stepper activeStep={activeStep}>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                </Stepper>
+              </div>
+              <Box className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate>
+                <TextField className="sm" label="First Name" variant="standard" size="small" required onChange={(e) => setFirstName(e.target.value)} />
+                <TextField className="sm" label="Last Name" variant="standard" size="small" required onChange={(e) => setLastName(e.target.value)} />
+                <TextField className="sm" label="Father Name" variant="standard" size="small" required onChange={(e) => setFatherName(e.target.value)} />
+                <TextField className="sm" label="Mother Name" variant="standard" size="small" onChange={(e) => setMotherName(e.target.value)} required />
+                <TextField
+                  type="email"
+                  className="bg"
+                  label="Email"
+                  variant="standard"
+                  size="small"
+                  fullWidth
+                  error={!validEmail.current}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <FormControl className="sm" variant="standard" error={!validPassword.current}>
+                  <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+                  <Input
+                    id="standard-adornment-password"
+                    type={showPassword ? "text" : "password"}
+                    onChange={(a) => setPassword(a.target.value)}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
+                  <InputLabel htmlFor="standard-adornment-confirmpassword">Confirm Password</InputLabel>
+                  <Input
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    id="standard-adornment-confirmpassword"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl className="bg" variant="standard" error={!validPhone.current}>
+                  <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
+                  <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} onChange={(e) => setPhoneNumber(e.target.value)} />
+                </FormControl>
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  endIcon={<SendIcon fontSize="large" />}
+                  onClick={handleNext}
+                  disabled={
+                    !validEmail.current ||
+                    !validPassword ||
+                    !validPhone ||
+                    password !== confirmPassword ||
+                    firstName.length < 2 ||
+                    lastName.length < 2 ||
+                    motherName.length < 2 ||
+                    fatherName.length < 2
+                  }>
+                  Next
+                </Button>
+              </Box>
+              <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <InputLabel htmlFor="bd">Birth Date</InputLabel>
+                <FormControl className="bg" fullWidth>
+                  <Input
+                    id="bd"
+                    type="date"
+                    onChange={(e) => {
+                      setBirthDate(e.target.value);
+                    }}
+                  />
+                </FormControl>
 
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="region"
+                  options={regions}
+                  onChange={(e, newValue) => setRegion(newValue)}
+                  renderInput={(params) => <TextField {...params} label="region" />}
+                />
+                <TextField className="sm" label="City" variant="standard" size="small" required onChange={(e) => setCity(e.target.value)} />
+                {/* <Autocomplete className="sm" size="small" disablePortal id="region" options={regions} renderInput={(params) => <TextField {...params} label="City" />} /> */}
+                <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="idDocument"
+                  options={idTypes}
+                  onChange={(e, evalue) => setIdType(evalue)}
+                  renderInput={(params) => <TextField {...params} label="ID Document" />}
+                />
+                <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
+                <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+                  Next
+                </Button>
+                <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
+                  Previous
+                </Button>
+              </Box>
+              <Box className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <TextField className="bg" fullWidth label="Proficiency" variant="standard" size="small" required onChange={(e) => setProficiency(e.target.value)} />
+                <TextField className="bg" fullWidth label="Hopitals" variant="standard" size="small" required onChange={(e) => setLisOfHospitals(e.target.value)} />
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="bloodGroup"
+                  onChange={(e, val) => setBloodGroup(val)}
+                  options={bloodGroups}
+                  renderInput={(params) => <TextField {...params} label="Blood Type" />}
+                />
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="gender"
+                  onChange={(e, val) => setGender(val)}
+                  options={["Male", "Female"]}
+                  renderInput={(params) => <TextField {...params} label="Gender" />}
+                />
+                <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={submitDoctor} disabled={gender === "" || bloodGroup === ""}>
+                  Next
+                </Button>
+                <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
+                  Previous
+                </Button>
+              </Box>
+              <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <TextField label="code" size="small" />
+              </Box>
+            </>
+          )}
           {role === "patient" && (
             <>
               <div className="stepper">
