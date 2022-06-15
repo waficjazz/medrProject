@@ -11,10 +11,10 @@ import mySvg from "./hospital.svg";
 import doctorSvg from "./stethoscope.svg";
 import patientSvg from "./patient.svg";
 import axios from "axios";
-import { regContext } from "../../context";
+import { RegContext } from "../../context";
 
 const SignUp = () => {
-  const auth = useContext(regContext);
+  const auth = useContext(RegContext);
   const [userType, setUserType] = useState("patient");
   const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
@@ -115,6 +115,12 @@ const SignUp = () => {
     };
     try {
       const res = await axios.post("http://localhost:5000/api/patient/signup", data);
+      if (res.status != 201) {
+        console.log("error signin up");
+      }
+      const reponse = await res.data;
+      console.log(reponse.user._id);
+      auth.login(reponse.user._id, reponse.token);
     } catch (err) {
       console.log(err.message);
     }
@@ -143,16 +149,19 @@ const SignUp = () => {
     try {
       const res = await axios.post("http://localhost:5000/api/doctor/signup", data);
       const responseData = await res.data;
-      auth.login(responseData.token, responseData.token);
     } catch (err) {
       console.log(err.message);
     }
   };
+  // const testlocal = () => {
+  //   console.log("sss");
+  //   auth.login("aa", "aa");
+  // };
   return (
     <>
       <StyledEngineProvider injectFirst>
-        <div className={hide ? " hidef" : "curtain"}></div>
-        <div className={hide ? "hidef" : "mainForm"}>
+        <div className={auth.token ? " hidef" : "curtain"}></div>
+        <div className={auth.token ? "hidef" : "mainForm"}>
           {/* <button
             className="close"
             onClick={() => {
@@ -385,6 +394,7 @@ const SignUp = () => {
                   </Step>
                 </Stepper>
               </div>
+
               <Box className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate>
                 <TextField className="sm" label="First Name" variant="standard" size="small" required onChange={(e) => setFirstName(e.target.value)} />
                 <TextField className="sm" label="Last Name" variant="standard" size="small" required onChange={(e) => setLastName(e.target.value)} />

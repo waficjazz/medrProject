@@ -1,8 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import MainPage from "./pages/MainPage/MainPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUp from "./components/SignUpForm/SignUp";
-import { ShowContext, regContext } from "./context";
+import { ShowContext, RegContext } from "./context";
 import { BrowserRouter } from "react-router-dom";
 function App() {
   const [show, setShow] = useState(false);
@@ -14,30 +14,36 @@ function App() {
     setToken(token);
     setIsLoggedIn(true);
     // setUserId(uid);
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({
-        userId: uid,
-        token: token,
-      })
-    );
+    // localStorage.setItem("userData", JSON.stringify({ uid, token }));
+
+    localStorage.setItem("userData", JSON.stringify({ uid: uid, token: token }));
+    setShow(false);
   }, []);
   const logout = useCallback(() => {
     setToken(null);
     setIsLoggedIn(false);
     // setUserId(null);
     localStorage.removeItem("userData");
+    setShow(true);
   }, []);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (storedData && storedData.token) {
+      login(storedData.uid, storedData.token);
+      setShow(false);
+    }
+  }, [login]);
   return (
-    <regContext.Provider value={{ token: token, login: login, logout: logout }}>
+    <RegContext.Provider value={{ token: token, login: login, logout: logout }}>
       <ShowContext.Provider value={{ show, setShow }}>
         <BrowserRouter>
-          <SignUp />
+          {!isLoggedIn && <SignUp />}
           <Navbar />
           <MainPage />
         </BrowserRouter>
       </ShowContext.Provider>
-    </regContext.Provider>
+    </RegContext.Provider>
   );
 }
 
