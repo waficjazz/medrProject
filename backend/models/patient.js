@@ -15,8 +15,8 @@ const patientSchema = new Schema({
   city: { type: String, required: true },
   region: { type: String, required: true },
   phoneNumber: { type: String, required: true },
-  idType: { type: String, required: true },
-  idNumber: { type: Number, required: true },
+  // idType: { type: String, required: true },
+  // idNumber: { type: Number, required: true },
   gender: { type: String, required: true },
   weight: { type: Number, required: true },
   height: { type: Number, required: true },
@@ -24,10 +24,11 @@ const patientSchema = new Schema({
   chronicDisease: { type: [String], required: false },
   healthProblems: { type: [String], required: false },
   allergies: { type: [String], required: false },
-  surgicalHistory: [{ type: mongoose.Types.ObjectId, required: false, red: "Surgery" }],
-  hospitalVisits: [{ type: mongoose.Types.ObjectId, required: false, red: "HospitalVisit" }],
-  clinicalVisits: [{ type: mongoose.Types.ObjectId, required: false, red: "ClinicalVisit" }],
+  surgicalHistory: [{ type: mongoose.Types.ObjectId, required: false, ref: "Surgery" }],
+  hospitalVisits: [{ type: mongoose.Types.ObjectId, required: false, ref: "HospitalVisit" }],
+  clinicalVisits: [{ type: mongoose.Types.ObjectId, required: false, ref: "ClinicalVisit" }],
   createdAt: Date,
+  updatedAt: Date,
 });
 
 patientSchema.plugin(uniqueValidtor);
