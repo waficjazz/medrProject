@@ -7,8 +7,9 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { addInfo } from "../../reducers/patientReducer";
-import { RegContext } from "../../context";
+import { ShowContext, RegContext } from "../../context";
 const PersonalInfo = () => {
+  const { show, setShow } = useContext(ShowContext);
   const auth = useContext(RegContext);
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient.value);
@@ -17,9 +18,8 @@ const PersonalInfo = () => {
   const diseases = ["dinoma ", "insuline", "sdfsdf", "dinoma ", "insuline", "sdfsdf"];
 
   useEffect(() => {
-    if (auth.isLoggedIn) {
+    if (!show) {
       const storedData = JSON.parse(localStorage.getItem("userData"));
-      console.log(storedData);
       const uid = storedData.uid;
 
       const getPatientInfo = async () => {
@@ -33,7 +33,7 @@ const PersonalInfo = () => {
       };
       getPatientInfo();
     }
-  }, []);
+  }, [show]);
   return (
     <>
       <StyledEngineProvider injectFirst>

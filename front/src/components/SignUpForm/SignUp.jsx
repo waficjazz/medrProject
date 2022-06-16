@@ -89,9 +89,23 @@ const SignUp = () => {
     });
     setSwipe(newarr);
   };
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    console.log("signed in");
+    let data = {
+      email,
+      password,
+    };
+    try {
+      const res = await axios.post("http://localhost:5000/api/patient/signin", data);
+      if (res.status != 201) {
+        console.log("error signin in");
+      }
+      const reponse = await res.data;
+      console.log(reponse);
+      auth.login(reponse.userId, reponse.token);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
   const submit = async () => {
     let data = {
@@ -207,7 +221,7 @@ const SignUp = () => {
                     onChange={(e, newValue) => setUserType(newValue)}
                     renderInput={(params) => <TextField {...params} label="Sign As" />}
                   />
-                  <Button variant="contained" sx={{ width: "30%", left: "70%" }} onclick={handleSignIn}>
+                  <Button variant="contained" sx={{ width: "30%", left: "70%" }} onClick={handleSignIn}>
                     Sign In
                   </Button>
                 </div>

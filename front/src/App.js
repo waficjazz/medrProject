@@ -13,9 +13,6 @@ function App() {
   const login = useCallback((uid, token) => {
     setToken(token);
     setIsLoggedIn(true);
-    // setUserId(uid);
-    // localStorage.setItem("userData", JSON.stringify({ uid, token }));
-
     localStorage.setItem("userData", JSON.stringify({ uid: uid, token: token }));
     setShow(false);
   }, []);

@@ -6,9 +6,10 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import PersonIcon from "@mui/icons-material/Person";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuIcon from "@mui/icons-material/Menu";
-import { ShowContext } from "../../context";
+import { ShowContext, RegContext } from "../../context";
 const Navbar = () => {
   const { show, setShow } = useContext(ShowContext);
+  const auth = useContext(RegContext);
   return (
     <>
       <StyledEngineProvider injectFirst>
@@ -30,7 +31,7 @@ const Navbar = () => {
                   <Badge className="badge" badgeContent={1} color="error" overlap="circular" />
                   <NotificationsIcon />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={() => auth.logout()}>
                   <PersonIcon />
                 </IconButton>
               </div>
