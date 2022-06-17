@@ -5,6 +5,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
 const ClinicalVisitForm = (props) => {
+  const storedData = JSON.parse(localStorage.getItem("userData"));
+  const patientId = storedData.uid;
   const [tabValue, setTabValue] = useState("0");
   const [doctorName, setDoctorName] = useState("");
   const [clinicAddress, setClinicAddress] = useState("");
@@ -22,7 +24,7 @@ const ClinicalVisitForm = (props) => {
   const submit = async () => {
     try {
       let visit = {
-        patientId: "6288751aaa211e70072bd262",
+        patientId,
         doctorName: doctorName,
         email: email,
         phoneNumber: phoneNumber,

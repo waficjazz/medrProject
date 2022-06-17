@@ -13,6 +13,8 @@ import ClinicalVisitForm from "../../components/ClinicalVisitForm/ClinicalVisitF
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 const ClinicalVisits = () => {
+  const storedData = JSON.parse(localStorage.getItem("userData"));
+  const patientId = storedData.uid;
   const [visits, setVisits] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
@@ -32,7 +34,7 @@ const ClinicalVisits = () => {
   useEffect(() => {
     const getVisits = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/clinical/visits/6288751aaa211e70072bd262");
+        const response = await axios.get(`http://localhost:5000/api/clinical/visits/${patientId}`);
         setVisits(response.data);
       } catch (err) {
         console.log(err.message);

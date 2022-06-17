@@ -33,8 +33,8 @@ const ImagingForm = (props) => {
           <hr />
           <div className="hopitalForm">
             <TextField size="small" label="Name" variant="standard" className="hospitalInputs" onChange={(e) => setName(e.target.value)} />
+            <TextField size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
             <TextField size="small" label="Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setDate(e.target.value)} />
-            <TextField size="small" label="Location" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
             <IconButton color="primary" component="label">
               ADD REPORT
               <input type="file" accept="image/*" hidden />

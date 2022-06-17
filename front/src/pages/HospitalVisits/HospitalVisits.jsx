@@ -13,6 +13,8 @@ import HospitalVisitForm from "../../components/HopitalVisitForm/HospitalVisitFo
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 const HospitalVisits = () => {
+  const storedData = JSON.parse(localStorage.getItem("userData"));
+  const patientId = storedData.uid;
   const [visits, setVisits] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
@@ -31,7 +33,7 @@ const HospitalVisits = () => {
   useEffect(() => {
     const getVisits = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/hospital/visits/6288751aaa211e70072bd262");
+        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
         setVisits(response.data);
       } catch (err) {
         console.log(err.message);

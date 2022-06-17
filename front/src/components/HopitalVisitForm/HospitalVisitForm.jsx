@@ -6,6 +6,8 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
 const HospitalVisitForm = (props) => {
+  const storedData = JSON.parse(localStorage.getItem("userData"));
+  const patientId = storedData.uid;
   const patient = useSelector((state) => state.patient.value);
   const [tabValue, setTabValue] = useState("0");
   const [hospitalName, setHospitalName] = useState("");
@@ -31,7 +33,7 @@ const HospitalVisitForm = (props) => {
       hospitalId.current = id;
 
       let visit = {
-        patientId: "6288751aaa211e70072bd262",
+        patientId,
         hospitalId: hospitalId.current,
         entryDate: visitDate,
         timeSpent: visitTime,

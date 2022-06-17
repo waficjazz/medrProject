@@ -52,22 +52,22 @@ const Imaging = () => {
       <StyledEngineProvider injectFirst>
         <TableRow className="dataRow">
           <TableCell scope="row" style={{ paddingBottom: 8, paddingTop: 8 }}>
-            <Typography className="tableContents">ss</Typography>
-          </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.name}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.name}</Typography>
+            <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">{row.location}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <a href="http://www.africau.edu/images/default/sample.pdf" target="__blank">
-              <Typography className="tableContents">{row.name}</Typography>
+              <Typography className="tableContents">report</Typography>
             </a>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <a href="http://www.africau.edu/images/default/sample.pdf" target="__blank">
-              <Typography className="tableContents">{row.name}</Typography>
+              <Typography className="tableContents">imaging</Typography>
             </a>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
