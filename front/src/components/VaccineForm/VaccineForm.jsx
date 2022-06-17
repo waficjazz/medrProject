@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
@@ -6,19 +6,46 @@ import { StyledEngineProvider } from "@mui/material/styles";
 
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton, Typography } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+
 const VaccineForm = (props) => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   // const patient = useSelector((state) => state.patient.value);
   const [tabValue, setTabValue] = useState("0");
   const [notes, setNotes] = useState("");
-  const [shots, setShots] = useState("1");
+  const [shots, setShots] = useState("");
   const [location, setLocation] = useState("");
   const [name, setName] = useState("");
-  const [date, setDate] = useState();
+  const [date, setDate] = useState("");
+
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  useEffect(() => {
+    if (props.type === "edit") {
+      const getVaccination = async () => {
+        try {
+          const res = await axios.get(`http://localhost:5000/api/vaccination/one/${props.id}`);
+          const data = await res.data[0];
+          setName(data.name);
+          setLocation(data.location);
+          setNotes(data.notes);
+          setDate(data.date?.toString().slice(0, 10));
+          setShots(data.shots);
+        } catch (err) {
+          console.log(err.message);
+        }
+      };
+
+      getVaccination();
+    }
+    setName("");
+    setLocation("");
+    setNotes("");
+    setDate("");
+    setShots("");
+  }, [props]);
 
   const submit = async () => {
     let vaccination = {
@@ -38,6 +65,26 @@ const VaccineForm = (props) => {
       console.log(err.message);
     }
   };
+
+  const handleEdit = async () => {
+    let vaccination = {
+      patientId,
+      name,
+      notes,
+      shots,
+      date,
+      location,
+      id: props.id,
+    };
+    try {
+      const res = await axios.post("http://localhost:5000/api/vaccination/update", vaccination);
+      if (res.statusText === "ok") {
+        props.close();
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <StyledEngineProvider injectFirst>
       <div className={props.isOpen ? "hVisitForm" : "notOpen"}>
@@ -50,14 +97,42 @@ const VaccineForm = (props) => {
           </Typography>
           <hr />
           <div className="hopitalForm">
-            <TextField size="small" label="Name" variant="standard" className="hospitalInputs" onChange={(e) => setName(e.target.value)} />
-            <TextField size="small" label="Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setDate(e.target.value)} />
-            <TextField size="small" label="Location" variant="standard" focused className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
-            <TextField size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setNotes(e.target.value)} />
+            <TextField
+              // defaultValue={name}
+              value={name}
+              size="small"
+              label="Name"
+              variant="standard"
+              className="hospitalInputs"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+            <TextField value={location} size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
+            <TextField
+              size="small"
+              value={date}
+              label="Date"
+              variant="standard"
+              type="date"
+              focused
+              className="hospitalInputs"
+              onChange={(e) => {
+                setDate(e.target.value);
+              }}
+            />
+            <TextField size="small" value={notes} className="bg" label="Notes" fullWidth variant="standard" onChange={(e) => setNotes(e.target.value)} />
           </div>
-          <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
-            Submit
-          </Button>
+          {props.type === "add" && (
+            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+              Submit
+            </Button>
+          )}
+          {props.type === "edit" && (
+            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
+              Submit
+            </Button>
+          )}
         </div>
       </div>
     </StyledEngineProvider>

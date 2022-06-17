@@ -51,6 +51,37 @@ const deleteVaccination = async (req, res, next) => {
   res.json(info);
 };
 
+const getOneVaccination = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  try {
+    info = await Vaccinations.find({ _id: $regex });
+    console.log(info);
+  } catch (err) {
+    if (!info || info.length === 0) {
+      return next(new HttpError("Could not find  vaccination", 404));
+    }
+    const error = new HttpError("Fetching vaccinations info failed, please try again later", 500);
+    return next(error);
+  }
+
+  res.json(info);
+};
+
+const updateVaccination = async (req, res, next) => {
+  const { name, patientId, location, notes, date, shots, id } = req.body;
+
+  try {
+    reseponse = await Vaccinations.updateOne({ _id: id }, { name, patientId, location, notes, date, shots });
+  } catch (err) {
+    const error = new HttpError("could not update vaccination", 500);
+    return next(error);
+  }
+  res.status(200).json("updated");
+};
+
+exports.getOneVaccination = getOneVaccination;
 exports.addVaccination = addVaccination;
 exports.getVaccinations = getVaccinations;
 exports.deleteVaccination = deleteVaccination;
+exports.updateVaccination = updateVaccination;

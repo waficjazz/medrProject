@@ -21,6 +21,8 @@ const Vaccines = () => {
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [reload, setReload] = useState(false);
+  const [formType, setFormType] = useState("add");
+  const [vaccId, setVaccId] = useState("");
 
   const handleDelete = async (id) => {
     try {
@@ -31,6 +33,17 @@ const Vaccines = () => {
       console.log(err.message);
     }
   };
+
+  const handleEdit = async (id) => {
+    try {
+      setFormType("edit");
+      setVaccId(id);
+      setOpenForm(true);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   useEffect(() => {
     const getVaccinations = async () => {
       try {
@@ -63,14 +76,17 @@ const Vaccines = () => {
             <Typography className="tableContents">{row.name}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.name}</Typography>
+            <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.name}</Typography>
+            <Typography className="tableContents">{row.shots}</Typography>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">{row.notes}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">
-              <IconButton>
+              <IconButton onClick={() => handleEdit(row._id)}>
                 <EditIcon fontSize="small" />
               </IconButton>
               <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
@@ -89,7 +105,10 @@ const Vaccines = () => {
         <div className="main">
           <VaccineForm
             isOpen={openForm}
+            type={formType}
+            id={vaccId}
             close={() => {
+              setFormType("add");
               setOpenForm(false);
               setReload(!reload);
             }}
@@ -99,7 +118,12 @@ const Vaccines = () => {
           ) : (
             <>
               <h1 className="headTitle">Vaccines</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
+              <IconButton
+                sx={{ marginLeft: "94%", width: "5px", height: "5px" }}
+                onClick={() => {
+                  setOpenForm(true);
+                  setFormType("add");
+                }}>
                 <AddIcon fontSize="large" />
               </IconButton>
               <div className="tables">
@@ -107,13 +131,16 @@ const Vaccines = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "25%" }}>
-                        <Typography className="tableHeaders">Vaccine</Typography>
+                        <Typography className="tableHeaders">Vaccine Name</Typography>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "22%" }}>
                         <Typography className="tableHeaders">Vaccination Date</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "15%" }}>
                         <Typography className="tableHeaders">Shots</Typography>
+                      </TableCell>
+                      <TableCell align="left" sx={{ width: "22%" }}>
+                        <Typography className="tableHeaders">Notes</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography className="tableHeaders"></Typography>
