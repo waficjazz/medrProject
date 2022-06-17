@@ -4,6 +4,8 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import ImagingForm from "../../components/ImagingForm/ImagingForm";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 const Imaging = () => {
   const [labTests, setLabTests] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
   const [empty, setEmpty] = useState(false);
@@ -32,6 +34,16 @@ const Imaging = () => {
               <Typography className="tableContents">{row.name}</Typography>
             </a>
           </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">
+              <IconButton>
+                <EditIcon fontSize="small" />
+              </IconButton>
+              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Typography>
+          </TableCell>
         </TableRow>
       </StyledEngineProvider>
     );
@@ -53,20 +65,23 @@ const Imaging = () => {
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="left" sx={{ width: "25%" }}>
+                      <TableCell align="left" sx={{ width: "18%" }}>
                         <Typography className="tableHeaders">Name</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "18%" }}>
                         <Typography className="tableHeaders">Date</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "18%" }}>
                         <Typography className="tableHeaders">Location</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "18%" }}>
                         <Typography className="tableHeaders">Report</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "18%" }}>
                         <Typography className="tableHeaders">Image</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography className="tableHeaders"></Typography>
                       </TableCell>
                     </TableRow>
                   </TableHead>

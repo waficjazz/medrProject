@@ -1,5 +1,5 @@
 import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -8,12 +8,51 @@ import React from "react";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import "../HospitalVisits/HospitalVisits.css";
 import AddIcon from "@mui/icons-material/Add";
+import { useSelector } from "react-redux";
+import axios from "axios";
 import VaccineForm from "../../components/VaccineForm/VaccineForm";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Vaccines = () => {
-  const [visits, setVisits] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
+  const storedData = JSON.parse(localStorage.getItem("userData"));
+  const patientId = storedData.uid;
+  const [vaccinations, setVaccinations] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+  const [reload, setReload] = useState(false);
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/vaccination/delete/${id}`);
+
+      setReload(!reload);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+  useEffect(() => {
+    const getVaccinations = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/vaccination/all/${patientId}`);
+
+        setVaccinations(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getVaccinations();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [reload]);
+
   const DataModel = (props) => {
     const [open, setOpen] = useState(false);
     const { row } = props;
@@ -29,6 +68,16 @@ const Vaccines = () => {
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.name}</Typography>
           </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">
+              <IconButton>
+                <EditIcon fontSize="small" />
+              </IconButton>
+              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Typography>
+          </TableCell>
         </TableRow>
       </StyledEngineProvider>
     );
@@ -38,7 +87,13 @@ const Vaccines = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <VaccineForm isOpen={openForm} close={() => setOpenForm(false)} />
+          <VaccineForm
+            isOpen={openForm}
+            close={() => {
+              setOpenForm(false);
+              setReload(!reload);
+            }}
+          />
           {empty ? (
             <EmptyData txt="No hospital visits yet" />
           ) : (
@@ -60,10 +115,13 @@ const Vaccines = () => {
                       <TableCell align="left" sx={{ width: "22%" }}>
                         <Typography className="tableHeaders">Shots</Typography>
                       </TableCell>
+                      <TableCell>
+                        <Typography className="tableHeaders"></Typography>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {visits.map((item, index) => {
+                    {vaccinations.map((item, index) => {
                       return <DataModel key={index} row={item} />;
                     })}
                   </TableBody>
