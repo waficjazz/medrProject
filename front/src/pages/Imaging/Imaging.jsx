@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
@@ -6,10 +6,46 @@ import ImagingForm from "../../components/ImagingForm/ImagingForm";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import axios from "axios";
 const Imaging = () => {
-  const [labTests, setLabTests] = useState([{ name: "aasasd" }, { name: "aasasd" }]);
+  const storedData = JSON.parse(localStorage.getItem("userData"));
+  const patientId = storedData.uid;
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+  const [imagings, setImagings] = useState([]);
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    const getImagings = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/imaging/all/${patientId}`);
+        setImagings(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getImagings();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [reload]);
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/imaging/delete/${id}`);
+
+      setReload(!reload);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   const DataModel = (props) => {
     const { row } = props;
     return (
@@ -39,7 +75,7 @@ const Imaging = () => {
               <IconButton>
                 <EditIcon fontSize="small" />
               </IconButton>
-              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }}>
+              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Typography>
@@ -52,7 +88,13 @@ const Imaging = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <ImagingForm isOpen={openForm} close={() => setOpenForm(false)} />
+          <ImagingForm
+            isOpen={openForm}
+            close={() => {
+              setOpenForm(false);
+              setReload(!reload);
+            }}
+          />
           {empty ? (
             <EmptyData txt="No Images yet" />
           ) : (
@@ -86,7 +128,7 @@ const Imaging = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {labTests.map((item, index) => {
+                    {imagings.map((item, index) => {
                       return <DataModel key={index} row={item} />;
                     })}
                   </TableBody>
