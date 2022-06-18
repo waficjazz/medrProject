@@ -10,12 +10,23 @@ const ImagingForm = (props) => {
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
+  const [image, setImage] = useState("");
   const patientId = storedData.uid;
 
   const submit = async () => {
-    let imaging = { name, date, location, patientId };
+    // let imaging = { name, date, location, patientId };
     try {
-      const res = await axios.post("http://localhost:5000/api/imaging/add", imaging);
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("date", date);
+      formData.append("location", location);
+      formData.append("patientId", patientId);
+      formData.append("image", image);
+      const res = await axios.post("http://localhost:5000/api/imaging/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       if (res.statusText === "Created") {
         props.close();
       }
@@ -37,7 +48,15 @@ const ImagingForm = (props) => {
             <TextField size="small" label="Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setDate(e.target.value)} />
             <IconButton color="primary" component="label">
               ADD REPORT
-              <input type="file" accept="image/*" hidden />
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => {
+                  setImage(e.target.files[0]);
+                  console.log(image);
+                }}
+              />
               <AttachFileIcon fontSize="medium" />
             </IconButton>
           </div>

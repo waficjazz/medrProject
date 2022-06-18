@@ -7,6 +7,7 @@ import HospitalVisits from "../HospitalVisits/HospitalVisits";
 import Vaccines from "../Vaccines/Vaccines";
 import LabTests from "../LabTests/LabTests";
 import Imaging from "../Imaging/Imaging";
+import BChart from "../../components/charts/BChart";
 import { Routes, Route } from "react-router-dom";
 import "./MainPage.css";
 // import { useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ const MainPage = () => {
         <SideBar />
         <Routes>
           <Route path="/" element={<PersonalInfo />} />
+          <Route path="/bs" element={<BChart />} />
           <Route path="/hospital" element={<HospitalVisits />} />
           <Route path="/clinic" element={<ClinicalVisits />} />
           <Route path="/lab" element={<LabTests />} />

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -7,6 +8,7 @@ const clinicalRoutes = require("./routes/clinical-routes");
 const imagingRoutes = require("./routes/imaging-routes");
 const vaccinationRoutes = require("./routes/vaccination-routes");
 const doctorRoutes = require("./routes/doctor-routes");
+const labTestRoutes = require("./routes/labTest-routes");
 const app = express();
 
 app.use(bodyParser.json());
@@ -24,6 +26,8 @@ app.use("/api/hospital", hospitalRoutes);
 app.use("/api/clinical", clinicalRoutes);
 app.use("/api/imaging", imagingRoutes);
 app.use("/api/vaccination", vaccinationRoutes);
+app.use("/api/labtest", labTestRoutes);
+
 mongoose
   .connect(`mongodb://localhost:27017/medrecord`)
   .then(() => {

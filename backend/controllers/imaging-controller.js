@@ -1,5 +1,6 @@
 const Imaging = require("../models/imaging");
 const HttpError = require("../models/http-error");
+const { s3Upload } = require("../s3Service");
 
 const getAll = async (req, res, next) => {
   let info;
@@ -19,10 +20,11 @@ const getAll = async (req, res, next) => {
 };
 
 const addImaging = async (req, res, next) => {
-  const { images, report, name, patientId, clinicalVisit, HopitalVisit, date, hospitalId, location, prescription } = req.body;
+  const { report, name, patientId, clinicalVisit, HopitalVisit, date, hospitalId, location, prescription } = req.body;
+  const file = req.file;
+
   const imaging = new Imaging({
     name,
-    images,
     report,
     patientId,
     clinicalVisit,
@@ -32,6 +34,8 @@ const addImaging = async (req, res, next) => {
   });
   try {
     await imaging.save();
+    const result = await s3Upload(file);
+    console.log(result);
   } catch (err) {
     console.log(err);
     return next(err);
