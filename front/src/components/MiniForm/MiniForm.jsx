@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "./MiniForm.css";
-import { Typography, IconButton, TextField, Button } from "@mui/material";
+import { Typography, IconButton, TextField, Button, Input } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { addInfo } from "../../reducers/patientReducer";
+import { StyledEngineProvider } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
+
 import axios from "axios";
 const MiniForm = (props) => {
   const dispatch = useDispatch();
@@ -15,21 +18,24 @@ const MiniForm = (props) => {
     console.log(patient);
   }, []);
   const handleAdd = async () => {
-    // const set = [...data, newData];
-    const obj = { ...patient };
-    obj.permanentMeds = [...obj.permanentMeds, newData];
-    dispatch(addInfo(obj));
-    try {
-      const res = await axios.post("http://localhost:5000/api/patient/update", obj);
-      //   if (res.statusText === "OK") {
-      //     props.close();
-      //   }
-    } catch (err) {
-      console.log(err.message);
+    // const set = [...data, newData];\
+    if (newData !== "") {
+      const obj = { ...patient };
+      obj[props.name] = [...obj[props.name], newData];
+      dispatch(addInfo(obj));
+      try {
+        const res = await axios.post("http://localhost:5000/api/patient/update", obj);
+        //   if (res.statusText === "OK") {
+        //     props.close();
+        //   }
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   };
+
   return (
-    <>
+    <StyledEngineProvider injectFirst>
       <div className="MiniFormW">
         <div className="MiniForm">
           <IconButton sx={{ marginLeft: "95%", float: "left" }} onClick={props.close}>
@@ -46,11 +52,13 @@ const MiniForm = (props) => {
               return <li key={index}>{item}</li>;
             })}
           </ul>
-          <TextField size="small" onChange={(e) => setNewData(e.target.value)} />
-          <Button onClick={handleAdd}>Add</Button>
+          <input className="addInput" size="small" onChange={(e) => setNewData(e.target.value)} />
+          <Button className="btnadd" sx={{ color: "white", backgroundColor: "var(--third-blue)", marginLeft: "5px" }} onClick={handleAdd}>
+            Add
+          </Button>
         </div>
       </div>
-    </>
+    </StyledEngineProvider>
   );
 };
 

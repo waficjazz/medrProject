@@ -24,3 +24,25 @@
   height: 65%;
   overflow: auto;
 }
+
+.addInput {
+  height: 30px;
+  background-color: transparent;
+  border: 2px solid var(--third-blue);
+  border-radius: 3px;
+}
+.addInput:focus {
+  height: 30px;
+  border: 2px solid var(--third-blue) !important;
+  outline: none;
+  border-radius: 3px;
+}
+.addInput:hover {
+  height: 30px;
+  border: 2px solid var(--second-blue) !important;
+  outline: none;
+  border-radius: 3px;
+}
+.btnadd:hover {
+  background-color: var(--second-blue);
+}
