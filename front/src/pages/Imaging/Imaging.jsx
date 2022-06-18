@@ -61,12 +61,12 @@ const Imaging = () => {
             <Typography className="tableContents">{row.location}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <a href="http://www.africau.edu/images/default/sample.pdf" target="__blank">
+            <a href={row.report} target="__blank">
               <Typography className="tableContents">report</Typography>
             </a>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <a href="http://www.africau.edu/images/default/sample.pdf" target="__blank">
+            <a href={row.images[0]} target="__blank">
               <Typography className="tableContents">imaging</Typography>
             </a>
           </TableCell>

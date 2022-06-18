@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography, Button, TableSortLabel } from "@mui/material";
 import { useState, useEffect } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -23,6 +23,28 @@ const Vaccines = () => {
   const [reload, setReload] = useState(false);
   const [formType, setFormType] = useState("add");
   const [vaccId, setVaccId] = useState("");
+  const [direction, setDirection] = useState("asc");
+  const [orderBy, setOrderBy] = useState("1");
+  const sortByName = (prop) => {
+    setDirection(direction === "desc" ? "asc" : "desc");
+    if (prop === "date") {
+      const sorted = [...vaccinations].sort((a, b) => {
+        return direction === "desc" ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date);
+      });
+      setVaccinations(sorted);
+    } else {
+      const sorted = [...vaccinations].sort((a, b) => {
+        if (a[prop] < b[prop]) {
+          return direction === "desc" ? 1 : -1;
+        }
+        if (a[prop] > b[prop]) {
+          return direction === "desc" ? -1 : 1;
+        }
+        return 0;
+      });
+      setVaccinations(sorted);
+    }
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -130,11 +152,28 @@ const Vaccines = () => {
                 <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="left" sx={{ width: "25%" }}>
-                        <Typography className="tableHeaders">Vaccine Name</Typography>
+                      <TableCell align="left" sx={{ width: "25%" }} key="1">
+                        <TableSortLabel
+                          active={orderBy === "1"}
+                          direction={direction}
+                          onClick={() => {
+                            setOrderBy("1");
+                            sortByName("name");
+                          }}>
+                          {/* <Button onClick={sortByName}>sort</Button> */}
+                          <Typography className="tableHeaders">Vaccine Name</Typography>
+                        </TableSortLabel>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
-                        <Typography className="tableHeaders">Vaccination Date</Typography>
+                      <TableCell align="left" sx={{ width: "22%" }} key="2">
+                        <TableSortLabel
+                          active={orderBy === "2"}
+                          direction={direction}
+                          onClick={() => {
+                            setOrderBy("2");
+                            sortByName("date");
+                          }}>
+                          <Typography className="tableHeaders">Vaccination Date</Typography>
+                        </TableSortLabel>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "15%" }}>
                         <Typography className="tableHeaders">Shots</Typography>
