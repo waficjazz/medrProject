@@ -8,13 +8,16 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { addInfo } from "../../reducers/patientReducer";
 import { ShowContext, RegContext } from "../../context";
+import MiniForm from "../../components/MiniForm/MiniForm";
 const PersonalInfo = () => {
+  const [openMini, setOpenMini] = useState(false);
   const { show, setShow } = useContext(ShowContext);
   const auth = useContext(RegContext);
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient.value);
   const boolArr = ["Medications:", "Chronic Disease:", "Allergies:", "Surgical History:", "Problems:"];
-  const [boolArrExist, setBoolArrExist] = useState(["permanentMeds", "permanentMeds", "permanentMeds", "allergies", "permanentMeds"]);
+  const [boolArrExist, setBoolArrExist] = useState(["permanentMeds", "chronicDisease", "allergies", "surgicalHistory", "healthProblems"]);
+  const [props, setProps] = useState("");
   const diseases = ["dinoma ", "insuline", "sdfsdf", "dinoma ", "insuline", "sdfsdf"];
 
   useEffect(() => {
@@ -38,6 +41,7 @@ const PersonalInfo = () => {
     <>
       <StyledEngineProvider injectFirst>
         <div className="personalPage">
+          {openMini && <MiniForm name={props} close={() => setOpenMini(false)} />}
           <div className="personalInfo">
             <Typography sx={{ fontWeight: "bold", fontSize: "1.35rem", color: "var(--main-blue)" }}>Personal Information</Typography>
             <hr />
@@ -108,7 +112,13 @@ const PersonalInfo = () => {
               if (Object.keys(patient).length !== 0) {
                 // console.log(patient[boolArrExist[0]].length);
                 return (
-                  <div className="medications" key={index}>
+                  <div
+                    className="medications"
+                    key={index}
+                    onClick={() => {
+                      setOpenMini(true);
+                      setProps(boolArrExist[index]);
+                    }}>
                     <Typography className="smheaders">{item}</Typography>
                     <div className={patient[boolArrExist[index]].length > 0 ? "medicationsBody " : "medicationsBody empty"}>
                       {boolArrExist[index] && (

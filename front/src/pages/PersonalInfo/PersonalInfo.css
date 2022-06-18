@@ -157,3 +157,8 @@ li {
   font-size: large;
   padding-top: 1.5%;
 }
+
+.smallParts > div:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
