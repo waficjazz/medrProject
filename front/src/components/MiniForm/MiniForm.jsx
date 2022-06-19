@@ -10,6 +10,8 @@ import { alpha, styled } from "@mui/material/styles";
 
 import axios from "axios";
 const MiniForm = (props) => {
+  const storedData = JSON.parse(localStorage.getItem("userData"));
+  let token = storedData.token;
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient.value);
   const data = patient[props.name];
@@ -24,7 +26,8 @@ const MiniForm = (props) => {
       obj[props.name] = [...obj[props.name], newData];
       dispatch(addInfo(obj));
       try {
-        const res = await axios.post("http://localhost:5000/api/patient/update", obj);
+        console.log(token);
+        const res = await axios.post("http://localhost:5000/api/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
         //   if (res.statusText === "OK") {
         //     props.close();
         //   }

@@ -2,6 +2,7 @@ const Patient = require("../models/patient");
 const HttpError = require("../models/http-error");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { response } = require("express");
 
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -33,12 +34,12 @@ const signin = async (req, res, next) => {
 
   let token;
   try {
-    token = jwt.sign({ userId: existingUser._id, email: existingUser.email }, "JazzPriavteKey", { expiresIn: "5h" });
+    token = jwt.sign({ userId: existingUser._id, email: existingUser.email, type: "patient" }, "JazzPriavteKey", { expiresIn: "9999 years" });
   } catch (err) {
     const error = new HttpError("Invalid credentials, could not log you in.", 401);
     return next(error);
   }
-  res.json({
+  res.status(201).json({
     userId: existingUser._id,
     email: existingUser.email,
     token: token,
@@ -85,7 +86,7 @@ const signup = async (req, res, next) => {
   }
   let token;
   try {
-    token = jwt.sign({ userId: createdUser.id, email: createdUser.email }, "JazzPriavteKey", { expiresIn: "5h" });
+    token = jwt.sign({ userId: createdUser.id, email: createdUser.email, type: "patient" }, "JazzPriavteKey", { expiresIn: "9999 years" });
   } catch (err) {
     const error = new HttpError("Signing up faild , please try again later", 500);
     return next(error);
@@ -112,6 +113,19 @@ const patientInfo = async (req, res, next) => {
 };
 
 const updatePatient = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  console.log(authHeader);
+  const Token = authHeader && authHeader.split(" ")[1];
+  console.log(Token);
+  jwt.verify(Token, "JazzPriavteKey", (err, decodedToken) => {
+    if (!err) {
+      console.log(decodedToken);
+    }
+
+    if (err) {
+      return next(new HttpError("Failed to authenticate token", 401));
+    }
+  });
   const {
     _id,
     firstName,

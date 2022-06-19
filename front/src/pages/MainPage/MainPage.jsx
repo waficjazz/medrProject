@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useContext } from "react";
+import SignUp from "../../components/SignUpForm/SignUp";
 import SideBar from "../../components/SideBar/SideBar";
 import PersonalInfo from "../PersonalInfo/PersonalInfo";
 import ClinicalVisits from "../ClinicalVisits/ClinicalVisits";
@@ -9,13 +9,15 @@ import LabTests from "../LabTests/LabTests";
 import Imaging from "../Imaging/Imaging";
 import BChart from "../../components/charts/BChart";
 import { Routes, Route } from "react-router-dom";
+import { ShowContext, RegContext } from "../../context";
 import "./MainPage.css";
-// import { useNavigate } from "react-router-dom";
 const MainPage = () => {
+  const { show, setShow } = useContext(ShowContext);
   return (
     <>
       <div className="mainPage">
         <SideBar />
+
         <Routes>
           <Route path="/" element={<PersonalInfo />} />
           <Route path="/bs" element={<BChart />} />

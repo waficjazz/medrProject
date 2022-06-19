@@ -9,6 +9,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 const Imaging = () => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  let token = "";
+  token = highStoredData?.token;
   const patientId = storedData.uid;
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
@@ -38,7 +41,7 @@ const Imaging = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/imaging/delete/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/imaging/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
     } catch (err) {

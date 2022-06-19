@@ -12,8 +12,9 @@ import doctorSvg from "./stethoscope.svg";
 import patientSvg from "./patient.svg";
 import axios from "axios";
 import { RegContext } from "../../context";
-
+import { useNavigate } from "react-router-dom";
 const SignUp = () => {
+  const navigate = useNavigate();
   const auth = useContext(RegContext);
   const [userType, setUserType] = useState("patient");
   const [role, setRole] = useState("unset");
@@ -89,24 +90,31 @@ const SignUp = () => {
     });
     setSwipe(newarr);
   };
-  const handleSignIn = async (e) => {
-    e.preventDefault();
+  const handleSignIn = async (type) => {
     let data = {
       email,
       password,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/patient/signin", data);
+      const res = await axios.post(`http://localhost:5000/api/${type}/signin`, data);
       if (res.status != 201) {
         console.log("error signin in");
       }
       const reponse = await res.data;
       console.log(reponse);
-      auth.login(reponse.userId, reponse.token);
+      if (type == "patient") {
+        auth.login(reponse.userId, reponse.token);
+        navigate("/");
+      } else {
+        console.log("aa");
+        auth.highLogin(reponse.userId, reponse.token);
+        setRole("choosePatient");
+      }
     } catch (err) {
       console.log(err.message);
     }
   };
+
   const submit = async () => {
     let data = {
       firstName,
@@ -133,8 +141,8 @@ const SignUp = () => {
         console.log("error signin up");
       }
       const reponse = await res.data;
-      console.log(reponse.user._id);
       auth.login(reponse.user._id, reponse.token);
+      navigate("/");
     } catch (err) {
       console.log(err.message);
     }
@@ -162,7 +170,12 @@ const SignUp = () => {
     };
     try {
       const res = await axios.post("http://localhost:5000/api/doctor/signup", data);
-      const responseData = await res.data;
+      if (res.status != 201) {
+        console.log("error signin up");
+      }
+      const reponse = await res.data;
+      auth.highLogin(reponse.userId, reponse.token);
+      setRole("choosePatient");
     } catch (err) {
       console.log(err.message);
     }
@@ -203,6 +216,23 @@ const SignUp = () => {
               </div>
             </div>
           )}
+
+          {role === "choosePatient" && (
+            <>
+              <div className="signInform">
+                <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>Enter A patient creds</Typography>
+                <hr style={{ width: "100%", marginBottom: "30px" }} />
+                <div className="signInInputs">
+                  <TextField className="bg " label="Email" variant="standard" size="small" required fullWidth onChange={(e) => setEmail(e.target.value)} />
+                  <TextField className="bg " label="Password" variant="standard" size="small" fullWidth required onChange={(e) => setPassword(e.target.value)} />
+                  <Button variant="contained" sx={{ width: "30%", left: "70%" }} onClick={() => handleSignIn("patient")}>
+                    Sign In
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+
           {role === "singIn" && (
             <>
               <div className="signInform">
@@ -221,7 +251,7 @@ const SignUp = () => {
                     onChange={(e, newValue) => setUserType(newValue)}
                     renderInput={(params) => <TextField {...params} label="Sign As" />}
                   />
-                  <Button variant="contained" sx={{ width: "30%", left: "70%" }} onClick={handleSignIn}>
+                  <Button variant="contained" sx={{ width: "30%", left: "70%" }} onClick={() => handleSignIn(userType)}>
                     Sign In
                   </Button>
                 </div>

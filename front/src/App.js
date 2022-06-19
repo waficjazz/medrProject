@@ -3,7 +3,7 @@ import MainPage from "./pages/MainPage/MainPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUp from "./components/SignUpForm/SignUp";
 import { ShowContext, RegContext } from "./context";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 function App() {
   const [show, setShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,26 +16,46 @@ function App() {
     localStorage.setItem("userData", JSON.stringify({ uid: uid, token: token }));
     setShow(false);
   }, []);
+
+  const highLogin = useCallback((uid, token) => {
+    localStorage.setItem("high", JSON.stringify({ uid: uid, token: token }));
+    setShow(false);
+  }, []);
+
+  const highLogout = useCallback(() => {
+    // setUserId(null);
+    localStorage.removeItem("userData");
+    localStorage.removeItem("high");
+    setShow(true);
+  }, []);
+
   const logout = useCallback(() => {
     setToken(null);
     setIsLoggedIn(false);
     // setUserId(null);
     localStorage.removeItem("userData");
+    localStorage.removeItem("high");
     setShow(true);
   }, []);
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("userData"));
-    if (storedData && storedData.token) {
+    const highStoredData = JSON.parse(localStorage.getItem("high"));
+    if (storedData && highStoredData && storedData.token && highStoredData.token) {
       login(storedData.uid, storedData.token);
+      highLogin(highStoredData.uid, highStoredData.token);
       setShow(false);
     }
   }, [login]);
+
   return (
-    <RegContext.Provider value={{ token: token, login: login, logout: logout }}>
+    <RegContext.Provider value={{ token: token, login: login, logout: logout, highLogin: highLogin, highLogout: highLogout }}>
       <ShowContext.Provider value={{ show, setShow }}>
         <BrowserRouter>
-          {!isLoggedIn && <SignUp />}
+          <Routes>
+            <Route path="/s" element={<SignUp />} />
+          </Routes>
+          {/* {!isLoggedIn && <SignUp />} */}
           <Navbar />
           <MainPage />
         </BrowserRouter>

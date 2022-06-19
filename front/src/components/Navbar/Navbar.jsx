@@ -7,7 +7,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ShowContext, RegContext } from "../../context";
+import { useNavigate } from "react-router-dom";
 const Navbar = () => {
+  const navigate = useNavigate();
   const { show, setShow } = useContext(ShowContext);
   const auth = useContext(RegContext);
   return (
@@ -31,7 +33,11 @@ const Navbar = () => {
                   <Badge className="badge" badgeContent={1} color="error" overlap="circular" />
                   <NotificationsIcon />
                 </IconButton>
-                <IconButton onClick={() => auth.logout()}>
+                <IconButton
+                  onClick={() => {
+                    auth.logout();
+                    navigate("/s");
+                  }}>
                   <PersonIcon />
                 </IconButton>
               </div>
