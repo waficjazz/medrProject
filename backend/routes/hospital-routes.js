@@ -9,6 +9,8 @@ router.get("/", hospitalController.getHospitals);
 router.get("/:id", hospitalController.getHospitalById);
 router.post("/visits/add", hospitalController.addHospitalVisit);
 router.post("/add", hospitalController.addHospital);
+router.post("/signup", hospitalController.signup);
+router.post("/signin", hospitalController.signin);
 router.delete("/delete/visit/:id", hospitalController.deleteHopitalVisit);
 
 module.exports = router;

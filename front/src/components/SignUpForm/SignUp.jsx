@@ -41,6 +41,7 @@ const SignUp = () => {
   const [height, setHeight] = useState(100);
   const [lisOfHospitals, setLisOfHospitals] = useState("");
   const [proficiency, setProficiency] = useState("");
+  const [hospitalName, setHospitalName] = useState("");
   const validEmail = useRef(true);
   const validPassword = useRef(true);
   const validPhone = useRef(true);
@@ -180,6 +181,30 @@ const SignUp = () => {
       console.log(err.message);
     }
   };
+
+  const submitHospital = async () => {
+    let data = {
+      email,
+      hospitalName,
+      city,
+      region,
+      address,
+      password,
+      phoneNumber,
+    };
+    try {
+      const res = await axios.post("http://localhost:5000/api/hospital/signup", data);
+      if (res.status != 201) {
+        console.log("error signin up");
+      }
+      const reponse = await res.data;
+      auth.highLogin(reponse.userId, reponse.token);
+      setRole("choosePatient");
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   // const testlocal = () => {
   //   console.log("sss");
   //   auth.login("aa", "aa");
@@ -207,7 +232,7 @@ const SignUp = () => {
                 <div onClick={() => setRole("patient")}>
                   <img src={patientSvg} alt="logo" style={{ width: "50%" }} />
                 </div>
-                <div onClick={() => setRole("hopital")}>
+                <div onClick={() => setRole("hospital")}>
                   <img src={mySvg} alt="logo" style={{ width: "40%" }} />
                 </div>
                 <div onClick={() => setRole("doctor")}>
@@ -417,6 +442,126 @@ const SignUp = () => {
               </Box>
             </>
           )}
+          {/* ################################################################### */}
+          {role === "hospital" && (
+            <>
+              <div className="stepper">
+                <Stepper activeStep={activeStep}>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel></StepLabel>
+                  </Step>
+                </Stepper>
+              </div>
+              <Box className={swipe[0] ? "signform slide" : "signform fade"} component="form" noValidate>
+                <TextField className="sm" label="Hospital Name" variant="standard" size="small" required onChange={(e) => setHospitalName(e.target.value)} />
+                <FormControl className="bg" variant="standard" error={!validPhone.current}>
+                  <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
+                  <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} onChange={(e) => setPhoneNumber(e.target.value)} />
+                </FormControl>
+                <TextField
+                  type="email"
+                  className="bg"
+                  label="Email"
+                  variant="standard"
+                  size="small"
+                  fullWidth
+                  error={!validEmail.current}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <FormControl className="sm" variant="standard" error={!validPassword.current}>
+                  <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+                  <Input
+                    id="standard-adornment-password"
+                    type={showPassword ? "text" : "password"}
+                    onChange={(a) => setPassword(a.target.value)}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
+                  <InputLabel htmlFor="standard-adornment-confirmpassword">Confirm Password</InputLabel>
+                  <Input
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    id="standard-adornment-confirmpassword"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <Autocomplete
+                  className="sm"
+                  size="small"
+                  disablePortal
+                  id="region"
+                  options={regions}
+                  onChange={(e, newValue) => setRegion(newValue)}
+                  renderInput={(params) => <TextField {...params} label="region" />}
+                />
+                <TextField className="sm" label="City" variant="standard" size="small" required onChange={(e) => setCity(e.target.value)} />
+                <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  endIcon={<SendIcon fontSize="large" />}
+                  // onClick={handleNext}
+                  onClick={submitHospital}
+                  disabled={
+                    !validEmail.current ||
+                    !validPassword ||
+                    !validPhone ||
+                    password !== confirmPassword ||
+                    hospitalName.length < 2 ||
+                    region.length < 2 ||
+                    city.length < 2 ||
+                    address.length < 2
+                  }>
+                  Next
+                </Button>
+              </Box>
+              <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <Typography variant="h3"> Identity proof</Typography>
+                <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
+                <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+                  Next
+                </Button>
+                <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
+                  Previous
+                </Button>
+              </Box>
+              <Box className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <TextField className="bg" fullWidth label="Proficiency" variant="standard" size="small" required onChange={(e) => setProficiency(e.target.value)} />
+                <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={submitDoctor} disabled={gender === "" || bloodGroup === ""}>
+                  Next
+                </Button>
+                <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
+                  Previous
+                </Button>
+              </Box>
+              <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+                <TextField label="code" size="small" />
+              </Box>
+            </>
+          )}
+
           {role === "patient" && (
             <>
               <div className="stepper">
