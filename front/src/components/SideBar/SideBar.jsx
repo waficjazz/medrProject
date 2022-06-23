@@ -8,6 +8,7 @@ import LocalConvenienceStoreIcon from "@mui/icons-material/LocalConvenienceStore
 import { useNavigate } from "react-router-dom";
 import BiotechOutlinedIcon from "@mui/icons-material/BiotechOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
+import AirlineSeatFlatIcon from "@mui/icons-material/AirlineSeatFlat";
 import CropPortraitIcon from "@mui/icons-material/CropPortrait";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { ShowContext } from "../../context";
@@ -69,6 +70,12 @@ const SideBar = () => {
               <CropPortraitIcon className="icon" />
             </ListItemIcon>
             Imaging
+          </ListItemButton>
+          <ListItemButton selected={selectedIndex === 7} onClick={(e) => handleSelect(e, 7, "/surgical")}>
+            <ListItemIcon>
+              <AirlineSeatFlatIcon className="icon" />
+            </ListItemIcon>
+            Surgical History
           </ListItemButton>
         </List>
       </div>

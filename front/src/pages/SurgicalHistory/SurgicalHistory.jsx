@@ -1,51 +1,29 @@
-import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
-import HospitalVisit from "../../components/HospitalVisit/HospitalVisit";
+import ClinicalVisit from "../../components/ClinicalVisit/ClinicalVisit";
 import React from "react";
 import EmptyData from "../../components/EmpyData/EmptyData";
-import "./HospitalVisits.css";
+import "../ClinicalVisits/ClinicalVisits.css";
 import AddIcon from "@mui/icons-material/Add";
-import HospitalVisitForm from "../../components/HopitalVisitForm/HospitalVisitForm";
+import ClinicalVisitForm from "../../components/ClinicalVisitForm/ClinicalVisitForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-const HospitalVisits = () => {
+const SurgicalHistory = () => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [visits, setVisits] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+
   const [reload, setReload] = useState(false);
-  const [direction, setDirection] = useState("asc");
-  const [orderBy, setOrderBy] = useState("1");
-  const sortByName = (prop) => {
-    setDirection(direction === "desc" ? "asc" : "desc");
-    if (prop === "date") {
-      const sorted = [...visits].sort((a, b) => {
-        return direction === "desc" ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date);
-      });
-      setVisits(sorted);
-    } else {
-      const sorted = [...visits].sort((a, b) => {
-        if (a[prop] < b[prop]) {
-          return direction === "desc" ? 1 : -1;
-        }
-        if (a[prop] > b[prop]) {
-          return direction === "desc" ? -1 : 1;
-        }
-        return 0;
-      });
-      console.log(sorted);
-      setVisits(sorted);
-    }
-  };
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/hospital/delete/visit/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/clinical/delete/visit/${id}`);
 
       setReload(!reload);
     } catch (err) {
@@ -56,7 +34,7 @@ const HospitalVisits = () => {
   useEffect(() => {
     const getVisits = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+        const response = await axios.get(`http://localhost:5000/api/clinical/visits/${patientId}`);
         setVisits(response.data);
       } catch (err) {
         console.log(err.message);
@@ -75,27 +53,8 @@ const HospitalVisits = () => {
   }, [reload]);
 
   const DataModel = (props) => {
-    const [open, setOpen] = useState(false);
-    const [hospital, setHospital] = useState({});
+    const [open, setOpen] = React.useState(false);
     const { row } = props;
-    const getHospital = async (id) => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/hospital/${id}`);
-        let hospital = await response.data;
-        setHospital(hospital);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    useEffect(() => {
-      let isApiSubscribed = true;
-      if (isApiSubscribed) {
-        getHospital(row.hospitalId);
-      }
-      return () => {
-        isApiSubscribed = false;
-      };
-    }, []);
     return (
       <StyledEngineProvider injectFirst>
         <TableRow className="dataRow" onClick={() => setOpen(!open)}>
@@ -107,13 +66,10 @@ const HospitalVisits = () => {
             </Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{hospital.name}</Typography>
+            <Typography className="tableContents">{row.doctorName}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.entryDate?.toString().slice(0, 10)}</Typography>
-          </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.timeSpent}</Typography>
+            <Typography className="tableContents">{row.visitDate?.toString().slice(0, 10)}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.cause}</Typography>
@@ -132,7 +88,7 @@ const HospitalVisits = () => {
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <HospitalVisit visit={row} hospital={hospital} />
+              <ClinicalVisit visit={row} />
             </Collapse>
           </TableCell>
         </TableRow>
@@ -144,7 +100,7 @@ const HospitalVisits = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <HospitalVisitForm
+          <ClinicalVisitForm
             isOpen={openForm}
             close={() => {
               setOpenForm(false);
@@ -152,52 +108,25 @@ const HospitalVisits = () => {
             }}
           />
           {empty ? (
-            <EmptyData txt="No hospital visits yet" />
+            <EmptyData txt="No Surgeries  yet" />
           ) : (
             <>
-              <h1 className="headTitle">Hospital Visits</h1>
+              <h1 className="headTitle">Surgical History</h1>
               <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
                 <AddIcon fontSize="large" />
               </IconButton>
               <div className="tables">
-                <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
+                <Table sx={{ minWidth: "100%" }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "5px" }}></TableCell>
                       <TableCell align="left" sx={{ width: "25%" }}>
-                        <TableSortLabel
-                          active={orderBy === "1"}
-                          direction={direction}
-                          onClick={() => {
-                            setOrderBy("1");
-                            sortByName("name");
-                          }}>
-                          <Typography className="tableHeaders">Hospital Name</Typography>
-                        </TableSortLabel>
+                        <Typography className="tableHeaders">Visit Id</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
-                        <TableSortLabel
-                          active={orderBy === "2"}
-                          direction={direction}
-                          onClick={() => {
-                            setOrderBy("2");
-                            sortByName("entryDate");
-                          }}>
-                          <Typography className="tableHeaders">Entry Date</Typography>
-                        </TableSortLabel>
+                      <TableCell align="left" sx={{ width: "25%" }}>
+                        <Typography className="tableHeaders">Visit Date</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "18%" }}>
-                        <TableSortLabel
-                          active={orderBy === "2"}
-                          direction={direction}
-                          onClick={() => {
-                            setOrderBy("3");
-                            sortByName("timeSpent");
-                          }}>
-                          <Typography className="tableHeaders">Time Spent</Typography>
-                        </TableSortLabel>
-                      </TableCell>
-                      <TableCell>
+                      <TableCell align="left" sx={{ width: "30%" }}>
                         <Typography className="tableHeaders">Cause</Typography>
                       </TableCell>
                       <TableCell>
@@ -220,4 +149,4 @@ const HospitalVisits = () => {
   );
 };
 
-export default HospitalVisits;
+export default SurgicalHistory;

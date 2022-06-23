@@ -4,6 +4,7 @@ import SideBar from "../../components/SideBar/SideBar";
 import PersonalInfo from "../PersonalInfo/PersonalInfo";
 import ClinicalVisits from "../ClinicalVisits/ClinicalVisits";
 import HospitalVisits from "../HospitalVisits/HospitalVisits";
+import SurgicalHistory from "../SurgicalHistory/SurgicalHistory";
 import Vaccines from "../Vaccines/Vaccines";
 import LabTests from "../LabTests/LabTests";
 import Imaging from "../Imaging/Imaging";
@@ -26,6 +27,7 @@ const MainPage = () => {
           <Route path="/lab" element={<LabTests />} />
           <Route path="/imaging" element={<Imaging />} />
           <Route path="/vaccines" element={<Vaccines />} />
+          <Route path="/surgical" element={<SurgicalHistory />} />
         </Routes>
       </div>
     </>
