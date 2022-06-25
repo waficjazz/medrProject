@@ -4,12 +4,10 @@ import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
-import ClinicalVisit from "../../components/ClinicalVisit/ClinicalVisit";
 import React from "react";
 import EmptyData from "../../components/EmpyData/EmptyData";
-import "../ClinicalVisits/ClinicalVisits.css";
 import AddIcon from "@mui/icons-material/Add";
-import ClinicalVisitForm from "../../components/ClinicalVisitForm/ClinicalVisitForm";
+import SurgeryForm from "../../components/SurgeryForm/SurgeryForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 const SurgicalHistory = () => {
@@ -88,7 +86,7 @@ const SurgicalHistory = () => {
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <ClinicalVisit visit={row} />
+              {/* <ClinicalVisit visit={row} /> */}
             </Collapse>
           </TableCell>
         </TableRow>
@@ -100,18 +98,18 @@ const SurgicalHistory = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <ClinicalVisitForm
+          {/* <SurgeryForm
             isOpen={openForm}
             close={() => {
               setOpenForm(false);
               setReload(!reload);
             }}
-          />
+          /> */}
           {empty ? (
             <EmptyData txt="No Surgeries  yet" />
           ) : (
             <>
-              <h1 className="headTitle">Surgical History</h1>
+              <h1 className="headTitle">Surgeries</h1>
               <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
                 <AddIcon fontSize="large" />
               </IconButton>
@@ -120,14 +118,17 @@ const SurgicalHistory = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "5px" }}></TableCell>
-                      <TableCell align="left" sx={{ width: "25%" }}>
-                        <Typography className="tableHeaders">Visit Id</Typography>
+                      <TableCell align="left" sx={{ width: "22%" }}>
+                        <Typography className="tableHeaders">Name</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "25%" }}>
-                        <Typography className="tableHeaders">Visit Date</Typography>
+                      <TableCell align="left" sx={{ width: "22%" }}>
+                        <Typography className="tableHeaders">Type</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "30%" }}>
-                        <Typography className="tableHeaders">Cause</Typography>
+                      <TableCell align="left" sx={{ width: "22%" }}>
+                        <Typography className="tableHeaders">Hospital</Typography>
+                      </TableCell>
+                      <TableCell align="left" sx={{ width: "22%" }}>
+                        <Typography className="tableHeaders">Date</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography className="tableHeaders"></Typography>
