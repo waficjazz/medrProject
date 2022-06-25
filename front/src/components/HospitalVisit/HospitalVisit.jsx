@@ -6,6 +6,7 @@ import { Typography, Table, TableCell, TableRow, TableHead, TableBody, IconButto
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VisitLabs from "../VisitLabs/VisitLabs";
 import VisitImagings from "../VisitImagings/VisitImagings";
+import VisitSurgeries from "../VisitSurgeries/VisitSurgeries";
 const HospitalVisit = ({ visit, hospital, close }) => {
   const [testShow, setTestShow] = useState("");
   return (
@@ -67,7 +68,7 @@ const HospitalVisit = ({ visit, hospital, close }) => {
               <MuiLink className="internalLink " variant="button" onClick={() => setTestShow("labs")}>
                 Lab Tests
               </MuiLink>
-              <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
+              <MuiLink className="internalLink " variant="button" onClick={() => setTestShow("surgeries")}>
                 Surgeries
               </MuiLink>
             </div>
@@ -76,6 +77,7 @@ const HospitalVisit = ({ visit, hospital, close }) => {
       )}
       {testShow == "imagings" && <VisitImagings visitId={visit._id} close={() => setTestShow("")} />}
       {testShow == "labs" && <VisitLabs visitId={visit._id} close={() => setTestShow("")} />}
+      {testShow == "surgeries" && <VisitSurgeries visitId={visit._id} close={() => setTestShow("")} />}
     </StyledEngineProvider>
   );
 };

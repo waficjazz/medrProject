@@ -9,5 +9,6 @@ router.get("/all/:id", surgeryController.getSurgeries);
 // router.get("/one/:id", vaccinationController.getOneVaccination);
 router.delete("/delete/:id", surgeryController.deleteSurgery);
 // router.post("/update/", vaccinationController.updateVaccination);
+router.get("/visit/:id/:vid", surgeryController.getSurgeriesByVisit);
 
 module.exports = router;

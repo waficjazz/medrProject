@@ -18,6 +18,7 @@ const SurgeryForm = (props) => {
   // const [hospitalId, setHospitalId] = useState("");
   const hospitalId = useRef();
   const [surgeryCause, setSurgeryCause] = useState("");
+  const [verifiedHospital, setVerifiedHospital] = useState(true);
   const [surgeryName, setSurgeryName] = useState("");
   const [surgeryDate, setSurgeryDate] = useState("");
   const [surgeryDescription, setSurgeryDescription] = useState("");
@@ -25,7 +26,45 @@ const SurgeryForm = (props) => {
   const visitId = useRef();
   const [visits, setVisits] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [openHo, setOpenHo] = useState(false);
+  const [hospitals, setHospitals] = useState([]);
   const loading = open && visits.length === 0;
+  const loadingHo = openHo && hospitals.length === 0;
+
+  useEffect(() => {
+    let active = true;
+
+    if (!loadingHo) {
+      return undefined;
+    }
+
+    const getHospitals = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/vhospitals/all`);
+
+        setHospitals(response.data);
+        console.log(hospitals);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getHospitals();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [loadingHo]);
+
+  useEffect(() => {
+    if (!openHo) {
+      setHospitals([]);
+    }
+  }, [openHo]);
 
   useEffect(() => {
     let active = true;
@@ -62,18 +101,22 @@ const SurgeryForm = (props) => {
   }, [open]);
 
   const handleChange = (event, newValue) => {
+    setVerifiedHospital(!verifiedHospital);
     setTabValue(newValue);
   };
 
   const submit = async () => {
     let hospital = { name: hospitalName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber };
     try {
-      const res = await axios.post("http://localhost:5000/api/hospital/add", hospital);
-      let id = await res.data._id;
-      hospitalId.current = id;
-
+      if (tabValue === "1") {
+        const res = await axios.post("http://localhost:5000/api/hospital/add", hospital);
+        let id = await res.data._id;
+        hospitalId.current = id;
+      }
       let surgery = {
         patientId,
+        verifiedHospital,
+        hospitalId: hospitalId.current,
         date: surgeryDate,
         description: surgeryDescription,
         cause: surgeryCause,
@@ -115,11 +158,39 @@ const SurgeryForm = (props) => {
                 <Autocomplete
                   className="hospitalInputs"
                   size="small"
-                  disablePortal
+                  // disablePortal
                   sx={{ marginTop: "10px" }}
-                  id="bloodGroup"
-                  hopitals={["hammoud", "labib"]}
-                  renderInput={(params) => <TextField {...params} label="Hospitals" variant="standard" />}
+                  open={openHo}
+                  onOpen={() => {
+                    setOpenHo(true);
+                  }}
+                  onClose={() => {
+                    setOpenHo(false);
+                  }}
+                  noOptionsText="No Such Hospital"
+                  isOptionEqualToValue={(option, value) => option.hospitalName === value.hospitalName}
+                  getOptionLabel={(option) => option.hospitalName}
+                  options={hospitals}
+                  loading={loadingHo}
+                  onChange={(event, newValue) => {
+                    hospitalId.current = newValue._id;
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Hospitals"
+                      variant="standard"
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <React.Fragment>
+                            {loadingHo ? <CircularProgress color="inherit" size={20} /> : null}
+                            {params.InputProps.endAdornment}
+                          </React.Fragment>
+                        ),
+                      }}
+                    />
+                  )}
                 />
               </>
             )}
@@ -142,7 +213,7 @@ const SurgeryForm = (props) => {
               onClose={() => {
                 setOpen(false);
               }}
-              noOptionsText="No Such Hospital"
+              noOptionsText="No Such Hospital Visit"
               isOptionEqualToValue={(option, value) => option.entryDate === value.entryDate}
               getOptionLabel={(option) => option.entryDate?.toString().slice(0, 10)}
               options={visits}

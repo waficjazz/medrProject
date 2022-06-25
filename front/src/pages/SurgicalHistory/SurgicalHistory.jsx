@@ -10,6 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SurgeryForm from "../../components/SurgeryForm/SurgeryForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Surgery from "../../components/Surgery/Surgery";
 const SurgicalHistory = () => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -55,6 +56,38 @@ const SurgicalHistory = () => {
   const DataModel = (props) => {
     const [open, setOpen] = React.useState(false);
     const { row } = props;
+    const [hospital, setHospital] = useState([]);
+    const getHospital = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/${id}`);
+        let hospital = await response.data;
+        setHospital(hospital);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    const getVerfiedHospital = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/verified/${id}`);
+        let hospital = await response.data;
+        setHospital(hospital);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    useEffect(() => {
+      let isApiSubscribed = true;
+      if (isApiSubscribed) {
+        if (!row.verifiedHospital) {
+          getHospital(row.hospitalId);
+        } else {
+          getVerfiedHospital(row.hospitalId);
+        }
+      }
+      return () => {
+        isApiSubscribed = false;
+      };
+    }, []);
     return (
       <StyledEngineProvider injectFirst>
         <TableRow className="dataRow" onClick={() => setOpen(!open)}>
@@ -88,7 +121,7 @@ const SurgicalHistory = () => {
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              {/* <ClinicalVisit visit={row} /> */}
+              <Surgery surgery={row} hospital={hospital} />
             </Collapse>
           </TableCell>
         </TableRow>

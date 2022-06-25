@@ -1,8 +1,26 @@
 const Surgery = require("../models/surgery");
 const HttpError = require("../models/http-error");
 
+const getSurgeriesByVisit = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  const $regex2 = req.params.vid;
+  try {
+    info = await Surgery.find({ patientId: $regex, HospitalVisit: $regex2 });
+  } catch (err) {
+    const error = new HttpError("Fetching imaging info failed, please try again later", 500);
+    return next(error);
+  }
+
+  if (!info || info.length === 0) {
+    return next(new HttpError("Could not find imaging", 404));
+  }
+
+  res.json(info);
+};
+
 const addSurgery = async (req, res, next) => {
-  const { patientId, date, name, cause, description, HospitalVisit } = req.body;
+  const { patientId, date, name, cause, description, HospitalVisit, verifiedHospital, hospitalId } = req.body;
   const surg = new Surgery({
     patientId,
     date,
@@ -10,6 +28,8 @@ const addSurgery = async (req, res, next) => {
     cause,
     description,
     HospitalVisit,
+    verifiedHospital,
+    hospitalId,
   });
   try {
     await surg.save();
@@ -85,3 +105,4 @@ exports.updateSurgery = updateSurgery;
 exports.deleteSurgery = deleteSurgery;
 exports.getSurgeries = getSurgeries;
 exports.addSurgery = addSurgery;
+exports.getSurgeriesByVisit = getSurgeriesByVisit;

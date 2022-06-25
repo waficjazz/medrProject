@@ -151,7 +151,7 @@ const HospitalVisits = () => {
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit={false}>
-              <HospitalVisit visit={row} hospital={hospital} close={() => setShow("imagings")} />
+              <HospitalVisit visit={row} hospital={hospital} />
               {/* {show == "imagings" && <VisitImagings visitId={row._id} close={() => setShow("")} />} */}
             </Collapse>
           </TableCell>
