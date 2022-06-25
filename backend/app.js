@@ -9,6 +9,7 @@ const imagingRoutes = require("./routes/imaging-routes");
 const vaccinationRoutes = require("./routes/vaccination-routes");
 const doctorRoutes = require("./routes/doctor-routes");
 const labTestRoutes = require("./routes/labTest-routes");
+const surgeryRoutes = require("./routes/surgery-routes");
 const app = express();
 
 app.use(bodyParser.json());
@@ -28,6 +29,7 @@ app.use("/api/clinical", clinicalRoutes);
 app.use("/api/imaging", imagingRoutes);
 app.use("/api/vaccination", vaccinationRoutes);
 app.use("/api/labtest", labTestRoutes);
+app.use("/api/surgery", surgeryRoutes);
 
 mongoose
   .connect(`mongodb://localhost:27017/medrecord`)

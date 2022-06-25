@@ -16,10 +16,10 @@ const SurgeryForm = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   // const [hospitalId, setHospitalId] = useState("");
   const hospitalId = useRef();
-  const [visitDate, setVisitDate] = useState("");
-  const [visitTime, setVisitTime] = useState("");
-  const [visitCause, setVisitCause] = useState("");
-  const [visitDescription, setVisitDescription] = useState("");
+  const [surgeryCause, setSurgeryCause] = useState("");
+  const [surgeryName, setSurgeryName] = useState("");
+  const [surgeryDate, setSurgeryDate] = useState("");
+  const [surgeryDescription, setSurgeryDescription] = useState("");
   const [doctors, setDoctors] = useState([]);
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -32,16 +32,15 @@ const SurgeryForm = (props) => {
       let id = await res.data._id;
       hospitalId.current = id;
 
-      let visit = {
+      let surgery = {
         patientId,
-        hospitalId: hospitalId.current,
-        entryDate: visitDate,
-        timeSpent: visitTime,
-        cause: visitCause,
-        doctors: doctors,
+        date: surgeryDate,
+        description: surgeryDescription,
+        cause: surgeryCause,
+        name: surgeryName,
       };
 
-      const resp = await axios.post("http://localhost:5000/api/hospital/visits/add", visit);
+      const resp = await axios.post("http://localhost:5000/api/surgery/add", surgery);
       if (resp.statusText === "Created") {
         props.close();
       }
@@ -79,7 +78,7 @@ const SurgeryForm = (props) => {
                   disablePortal
                   sx={{ marginTop: "10px" }}
                   id="bloodGroup"
-                  options={["hammoud", "labib"]}
+                  hopitals={["hammoud", "labib"]}
                   renderInput={(params) => <TextField {...params} label="Hospitals" variant="standard" />}
                 />
               </>
@@ -87,21 +86,10 @@ const SurgeryForm = (props) => {
           </div>
           <hr />
           <div className="hopitalForm">
-            <TextField size="small" label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setVisitCause(e.target.value)} />
-            <TextField size="small" label="Entry Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setVisitDate(e.target.value)} />
-            <TextField
-              size="small"
-              label="Time Spent"
-              variant="standard"
-              type="number"
-              focused
-              className="hospitalInputs"
-              InputProps={{
-                startAdornment: <InputAdornment position="start">days</InputAdornment>,
-              }}
-              onChange={(e) => setVisitTime(e.target.value)}
-            />
-            <TextField size="small" label="Description" variant="standard" fullWidth multiline maxRows={3} onChange={(e) => setVisitDescription(e.target.value)} />
+            <TextField size="small" label="Name" variant="standard" focused className="hospitalInputs" onChange={(e) => setSurgeryName(e.target.value)} />
+            <TextField size="small" label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setSurgeryCause(e.target.value)} />
+            <TextField size="small" label="Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setSurgeryDate(e.target.value)} />
+            <TextField size="small" label="Description" variant="standard" fullWidth multiline maxRows={3} onChange={(e) => setSurgeryDescription(e.target.value)} />
             <TextField size="small" label="Doctors" variant="standard" className="hospitalInputs" onChange={(e) => setDoctors(e.target.value)} />
           </div>
           <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>

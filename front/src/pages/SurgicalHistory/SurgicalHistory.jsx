@@ -13,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 const SurgicalHistory = () => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
-  const [visits, setVisits] = useState([]);
+  const [surgeries, setSurgeries] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
 
@@ -21,7 +21,7 @@ const SurgicalHistory = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/clinical/delete/visit/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/surgery/delete/${id}`);
 
       setReload(!reload);
     } catch (err) {
@@ -30,20 +30,22 @@ const SurgicalHistory = () => {
   };
 
   useEffect(() => {
-    const getVisits = async () => {
+    const getSurgeries = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/clinical/visits/${patientId}`);
-        setVisits(response.data);
+        const response = await axios.get(`http://localhost:5000/api/surgery/all/${patientId}`);
+        setSurgeries(response.data);
       } catch (err) {
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
-      getVisits();
+      getSurgeries();
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
+
+      console.log(surgeries);
     }
     return () => {
       isApiSubscribed = false;
@@ -64,13 +66,13 @@ const SurgicalHistory = () => {
             </Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.doctorName}</Typography>
-          </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.visitDate?.toString().slice(0, 10)}</Typography>
+            <Typography className="tableContents">{row.name}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.cause}</Typography>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">
@@ -98,13 +100,13 @@ const SurgicalHistory = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          {/* <SurgeryForm
+          <SurgeryForm
             isOpen={openForm}
             close={() => {
               setOpenForm(false);
               setReload(!reload);
             }}
-          /> */}
+          />
           {empty ? (
             <EmptyData txt="No Surgeries  yet" />
           ) : (
@@ -122,7 +124,7 @@ const SurgicalHistory = () => {
                         <Typography className="tableHeaders">Name</Typography>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "22%" }}>
-                        <Typography className="tableHeaders">Type</Typography>
+                        <Typography className="tableHeaders">Cause</Typography>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "22%" }}>
                         <Typography className="tableHeaders">Hospital</Typography>
@@ -136,7 +138,7 @@ const SurgicalHistory = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {visits.map((item, index) => {
+                    {surgeries.map((item, index) => {
                       return <DataModel key={index} row={item} />;
                     })}
                   </TableBody>

@@ -6,10 +6,11 @@ const surgerySchema = new Schema({
   patientId: { type: mongoose.Types.ObjectId, required: true, red: "Patient" },
   HopitalVisit: { type: mongoose.Types.ObjectId, required: false, red: "HospitalVisit" },
   date: { type: Date, required: true },
-  type: { type: String, required: true },
+  name: { type: String, required: true },
   description: { type: String, required: true },
   cause: { type: String, required: true },
-  imaging: { type: mongoose.Types.ObjectId, required: false, red: "Radio" },
+  doctors: { type: [String], required: false },
+  // imaging: { type: mongoose.Types.ObjectId, required: false, red: "Radio" },
 });
 
 module.exports = mongoose.model("Surgery", surgerySchema);

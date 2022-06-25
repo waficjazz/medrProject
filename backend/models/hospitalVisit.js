@@ -10,6 +10,7 @@ const hospitalVisitSchema = new Schema({
   prescription: { type: String, required: false },
   cause: { type: String, required: true },
   doctors: { type: [String], required: true },
+  verifiedHospital: { type: Boolean, required: true },
   hospitalId: { type: mongoose.Types.ObjectId, required: false, ref: "Hospital" },
 });
 

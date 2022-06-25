@@ -13,7 +13,7 @@ const HospitalVisit = ({ visit, hospital }) => {
           <div>
             <Typography className="internalText">
               Name:
-              <span className="internalData">{hospital.name}</span>
+              <span className="internalData">{hospital.hospitalName}</span>
             </Typography>
             <Typography className="internalText">
               Phone Number:

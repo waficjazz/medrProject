@@ -72,7 +72,7 @@ const ClinicalVisitForm = (props) => {
                   disablePortal
                   sx={{ marginTop: "10px" }}
                   id="bloodGroup"
-                  options={["hammoud", "labib"]}
+                  hopitals={["hammoud", "labib"]}
                   renderInput={(params) => <TextField {...params} label="Clinics" variant="standard" />}
                 />
               </>

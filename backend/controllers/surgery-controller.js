@@ -1,34 +1,33 @@
-const Vaccinations = require("../models/surgery");
+const Surgery = require("../models/surgery");
 const HttpError = require("../models/http-error");
 
 const addSurgery = async (req, res, next) => {
-  const { name, patientId, location, notes, date, shots } = req.body;
-  const vacc = new Vaccinations({
-    name,
+  const { patientId, date, name, cause, description } = req.body;
+  const surg = new Surgery({
     patientId,
-    location,
-    notes,
     date,
-    shots,
+    name,
+    cause,
+    description,
   });
   try {
-    await vacc.save();
+    await surg.save();
   } catch (err) {
     console.log(err);
     return next(err);
   }
-  res.status(201).json(vacc);
+  res.status(201).json(surg);
 };
 
 const getSurgeries = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
   try {
-    info = await Vaccinations.find({ patientId: $regex });
+    info = await Surgery.find({ patientId: $regex });
     console.log(info);
   } catch (err) {
     if (!info || info.length === 0) {
-      return next(new HttpError("Could not find  vaccinations", 404));
+      return next(new HttpError("Could not find  surgeries", 404));
     }
     const error = new HttpError("Fetching vaccinations info failed, please try again later", 500);
     return next(error);
@@ -41,10 +40,10 @@ const deleteSurgery = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
   try {
-    info = await Vaccinations.deleteOne({ _id: $regex });
+    info = await Surgery.deleteOne({ _id: $regex });
     console.log(info);
   } catch (err) {
-    const error = new HttpError("Deleteing vaccination   failed, please try again later", 500);
+    const error = new HttpError("Deleteing surgery   failed, please try again later", 500);
     return next(error);
   }
 

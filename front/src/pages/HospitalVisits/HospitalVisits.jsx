@@ -87,10 +87,23 @@ const HospitalVisits = () => {
         console.log(err.message);
       }
     };
+    const getVerfiedHospital = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/verified/${id}`);
+        let hospital = await response.data;
+        setHospital(hospital);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
     useEffect(() => {
       let isApiSubscribed = true;
       if (isApiSubscribed) {
-        getHospital(row.hospitalId);
+        if (!row.verifiedHospital) {
+          getHospital(row.hospitalId);
+        } else {
+          getVerfiedHospital(row.hospitalId);
+        }
       }
       return () => {
         isApiSubscribed = false;
@@ -107,7 +120,7 @@ const HospitalVisits = () => {
             </Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{hospital.name}</Typography>
+            <Typography className="tableContents">{hospital.hospitalName}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.entryDate?.toString().slice(0, 10)}</Typography>
