@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
+import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
@@ -14,10 +15,49 @@ const ImagingForm = (props) => {
   const [image, setImage] = useState("");
   const patientId = storedData.uid;
   const inputName = useRef("");
+  const [visits, setVisits] = useState([]);
   const [selectedImage, setSelectedImage] = useState();
   const [preview, setPreview] = useState();
   const [namePreview, setNamePreview] = useState();
   const [selectedPDF, setSelectedPDF] = useState();
+  const [open, setOpen] = React.useState(false);
+  const loading = open && visits.length === 0;
+  const visitId = useRef();
+
+  useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    const getVisits = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+
+        setVisits(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getVisits();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    if (!open) {
+      setVisits([]);
+    }
+  }, [open]);
+
   useEffect(() => {
     if (!selectedImage) {
       setPreview(undefined);
@@ -57,6 +97,7 @@ const ImagingForm = (props) => {
       formData.append("date", date);
       formData.append("location", location);
       formData.append("patientId", patientId);
+      formData.append("HospitalVisit", visitId.current);
       formData.append("image", image);
       formData.append("report", selectedPDF);
       const res = await axios.post("http://localhost:5000/api/imaging/add", formData, {
@@ -84,6 +125,45 @@ const ImagingForm = (props) => {
             <TextField size="small" label="Name" variant="standard" className="hospitalInputs" onChange={(e) => setName(e.target.value)} />
             <TextField size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
             <TextField size="small" label="Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setDate(e.target.value)} />
+            <Autocomplete
+              className="hospitalInputs"
+              size="small"
+              // disablePortal
+              sx={{ marginTop: "10px" }}
+              open={open}
+              onOpen={() => {
+                setOpen(true);
+              }}
+              onClose={() => {
+                setOpen(false);
+              }}
+              noOptionsText="No Such Hospital"
+              isOptionEqualToValue={(option, value) => option.entryDate === value.entryDate}
+              getOptionLabel={(option) => option.entryDate?.toString().slice(0, 10)}
+              options={visits}
+              loading={loading}
+              onChange={(event, newValue) => {
+                visitId.current = newValue._id;
+                console.log(visitId.current);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Hospital Visit"
+                  variant="standard"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
+            />
+
             <div className="imgPreviewDiv">
               <Button sx={{ backgroundColor: "var(--third-blue)", color: "white" }} component="label" className="submitHospital">
                 Upload imaging

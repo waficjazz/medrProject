@@ -11,7 +11,7 @@ const HospitalVisitForm = (props) => {
   const patientId = storedData.uid;
   const patient = useSelector((state) => state.patient.value);
   const [tabValue, setTabValue] = useState("0");
-  const [hospitalName, setHospitalName] = useState("");
+  const [hName, setHName] = useState("");
   const [hospitalAddress, setHospitalAddress] = useState("");
   const [hospitalEmail, setHospitalEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -69,7 +69,8 @@ const HospitalVisitForm = (props) => {
   };
 
   const submit = async () => {
-    let hospital = { hospitalName: hospitalName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber };
+    let hospital = { hospitalName: hName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber };
+    console.log(hospital);
     try {
       if (tabValue === "1") {
         const res = await axios.post("http://localhost:5000/api/hospital/add", hospital);
@@ -110,7 +111,7 @@ const HospitalVisitForm = (props) => {
           <div className="hopitalForm">
             {tabValue === "1" && (
               <>
-                <TextField size="small" label="Hospital Name" variant="standard" className="hospitalInputs" onChange={(e) => setHospitalName(e.target.value)} />
+                <TextField size="small" label="Hospital Name" variant="standard" className="hospitalInputs" onChange={(e) => setHName(e.target.value)} />
                 <TextField size="small" label="Phone number" variant="standard" className="hospitalInputs" onChange={(e) => setPhoneNumber(e.target.value)} />
                 <TextField size="small" label="Email" variant="standard" className="hospitalInputs" onChange={(e) => setHospitalEmail(e.target.value)} />
                 <TextField size="small" label="Address" variant="standard" fullWidth onChange={(e) => setHospitalAddress(e.target.value)} />

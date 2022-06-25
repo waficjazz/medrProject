@@ -135,9 +135,9 @@ const addHospitalVisit = async (req, res, next) => {
 };
 
 const addHospital = async (req, res, next) => {
-  const { name, email, phoneNumber, address } = req.body;
+  const { hospitalName, email, phoneNumber, address } = req.body;
   const hospital = new Hospital({
-    name,
+    hospitalName,
     email,
     phoneNumber,
     address,

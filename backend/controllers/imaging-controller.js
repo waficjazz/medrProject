@@ -20,12 +20,12 @@ const getAll = async (req, res, next) => {
 };
 
 const addImaging = async (req, res, next) => {
-  const { name, patientId, clinicalVisit, HopitalVisit, date, hospitalId, location, prescription } = req.body;
+  const { name, patientId, clinicalVisit, HospitalVisit, date, hospitalId, location, prescription } = req.body;
   const image = req.files["image"][0];
   const report = req.files["report"][0];
   // console.log(req.files);
   let imagesArray = [];
-
+  console.log(HospitalVisit);
   try {
     const result = await s3Upload(image, ".png", "imgagings");
     imagesArray.push(result.Location);
@@ -36,7 +36,7 @@ const addImaging = async (req, res, next) => {
       report: reportURL,
       patientId,
       clinicalVisit,
-      HopitalVisit,
+      HospitalVisit,
       date,
       location,
       images: imagesArray,
@@ -81,6 +81,27 @@ const deleteImaging = async (req, res, next) => {
   res.json(info);
 };
 
+const getImagingByVisit = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  const $regex2 = req.params.vid;
+  try {
+    console.log("fetching");
+    info = await Imaging.find({ patientId: $regex, HospitalVisit: $regex2 });
+    console.log(info);
+  } catch (err) {
+    const error = new HttpError("Fetching imaging info failed, please try again later", 500);
+    return next(error);
+  }
+
+  if (!info || info.length === 0) {
+    return next(new HttpError("Could not find imaging", 404));
+  }
+
+  res.json(info);
+};
+
+exports.getImagingByVisit = getImagingByVisit;
 exports.getAll = getAll;
 exports.deleteImaging = deleteImaging;
 exports.addImaging = addImaging;

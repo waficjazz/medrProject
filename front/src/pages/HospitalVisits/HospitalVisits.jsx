@@ -1,5 +1,5 @@
 import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -12,6 +12,9 @@ import AddIcon from "@mui/icons-material/Add";
 import HospitalVisitForm from "../../components/HopitalVisitForm/HospitalVisitForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Imaging from "../Imaging/Imaging";
+import VisitImagings from "../../components/VisitImagings/VisitImagings";
+
 const HospitalVisits = () => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -21,6 +24,8 @@ const HospitalVisits = () => {
   const [reload, setReload] = useState(false);
   const [direction, setDirection] = useState("asc");
   const [orderBy, setOrderBy] = useState("1");
+  const [show, setShow] = useState("");
+
   const sortByName = (prop) => {
     setDirection(direction === "desc" ? "asc" : "desc");
     if (prop === "date") {
@@ -75,6 +80,7 @@ const HospitalVisits = () => {
   }, [reload]);
 
   const DataModel = (props) => {
+    const openRef = useRef(false);
     const [open, setOpen] = useState(false);
     const [hospital, setHospital] = useState({});
     const { row } = props;
@@ -144,8 +150,9 @@ const HospitalVisits = () => {
         </TableRow>
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <HospitalVisit visit={row} hospital={hospital} />
+            <Collapse in={open} timeout="auto" unmountOnExit={false}>
+              <HospitalVisit visit={row} hospital={hospital} close={() => setShow("imagings")} />
+              {/* {show == "imagings" && <VisitImagings visitId={row._id} close={() => setShow("")} />} */}
             </Collapse>
           </TableCell>
         </TableRow>
