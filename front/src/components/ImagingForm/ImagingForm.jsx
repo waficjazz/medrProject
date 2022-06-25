@@ -19,8 +19,8 @@ const ImagingForm = (props) => {
   const [selectedImage, setSelectedImage] = useState();
   const [preview, setPreview] = useState();
   const [namePreview, setNamePreview] = useState();
-  const [selectedPDF, setSelectedPDF] = useState();
   const [open, setOpen] = React.useState(false);
+  const [selectedPDF, setSelectedPDF] = useState();
   const loading = open && visits.length === 0;
   const visitId = useRef();
 

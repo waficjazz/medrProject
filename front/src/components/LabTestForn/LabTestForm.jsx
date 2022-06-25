@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
+import CircularProgress from "@mui/material/CircularProgress";
 import { StyledEngineProvider } from "@mui/material/styles";
 
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton, Typography } from "@mui/material";
@@ -17,6 +18,44 @@ const LabTestForm = (props) => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [csv, setCsv] = useState("");
+  const [visits, setVisits] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const loading = open && visits.length === 0;
+  const visitId = useRef();
+
+  useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    const getVisits = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+
+        setVisits(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getVisits();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    if (!open) {
+      setVisits([]);
+    }
+  }, [open]);
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -55,6 +94,7 @@ const LabTestForm = (props) => {
       csv,
       date,
       location,
+      HospitalVisit: visitId.current,
     };
     try {
       const res = await axios.post("http://localhost:5000/api/labtest/add", labTest);
@@ -123,6 +163,44 @@ const LabTestForm = (props) => {
             />
             <TextField size="small" value={notes} className="bg" label="Notes" fullWidth variant="standard" onChange={(e) => setNotes(e.target.value)} />
             <TextField size="small" value={csv} className="bg" label="CSV" fullWidth variant="standard" onChange={(e) => setCsv(e.target.value)} />
+            <Autocomplete
+              className="hospitalInputs"
+              size="small"
+              // disablePortal
+              sx={{ marginTop: "10px" }}
+              open={open}
+              onOpen={() => {
+                setOpen(true);
+              }}
+              onClose={() => {
+                setOpen(false);
+              }}
+              noOptionsText="No Such Hospital"
+              isOptionEqualToValue={(option, value) => option.entryDate === value.entryDate}
+              getOptionLabel={(option) => option.entryDate?.toString().slice(0, 10)}
+              options={visits}
+              loading={loading}
+              onChange={(event, newValue) => {
+                visitId.current = newValue._id;
+                console.log(visitId.current);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Hospital Visit"
+                  variant="standard"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
+            />
           </div>
           {/* {props.type === "add" && ( */}
           <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>

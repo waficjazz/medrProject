@@ -2,13 +2,14 @@ const Surgery = require("../models/surgery");
 const HttpError = require("../models/http-error");
 
 const addSurgery = async (req, res, next) => {
-  const { patientId, date, name, cause, description } = req.body;
+  const { patientId, date, name, cause, description, HospitalVisit } = req.body;
   const surg = new Surgery({
     patientId,
     date,
     name,
     cause,
     description,
+    HospitalVisit,
   });
   try {
     await surg.save();

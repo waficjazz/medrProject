@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
+import CircularProgress from "@mui/material/CircularProgress";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
@@ -21,6 +22,45 @@ const SurgeryForm = (props) => {
   const [surgeryDate, setSurgeryDate] = useState("");
   const [surgeryDescription, setSurgeryDescription] = useState("");
   const [doctors, setDoctors] = useState([]);
+  const visitId = useRef();
+  const [visits, setVisits] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const loading = open && visits.length === 0;
+
+  useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    const getVisits = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+
+        setVisits(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getVisits();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    if (!open) {
+      setVisits([]);
+    }
+  }, [open]);
+
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -90,6 +130,44 @@ const SurgeryForm = (props) => {
             <TextField size="small" label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setSurgeryCause(e.target.value)} />
             <TextField size="small" label="Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setSurgeryDate(e.target.value)} />
             <TextField size="small" label="Description" variant="standard" fullWidth multiline maxRows={3} onChange={(e) => setSurgeryDescription(e.target.value)} />
+            <Autocomplete
+              className="hospitalInputs"
+              size="small"
+              // disablePortal
+              sx={{ marginTop: "10px" }}
+              open={open}
+              onOpen={() => {
+                setOpen(true);
+              }}
+              onClose={() => {
+                setOpen(false);
+              }}
+              noOptionsText="No Such Hospital"
+              isOptionEqualToValue={(option, value) => option.entryDate === value.entryDate}
+              getOptionLabel={(option) => option.entryDate?.toString().slice(0, 10)}
+              options={visits}
+              loading={loading}
+              onChange={(event, newValue) => {
+                visitId.current = newValue._id;
+                console.log(visitId.current);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Hospital Visit"
+                  variant="standard"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
+            />
             <TextField size="small" label="Doctors" variant="standard" className="hospitalInputs" onChange={(e) => setDoctors(e.target.value)} />
           </div>
           <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>

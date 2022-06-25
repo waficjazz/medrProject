@@ -4,12 +4,13 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { Checkbox, FormControlLabel, Link as MuiLink } from "@mui/material";
 import { Typography, Table, TableCell, TableRow, TableHead, TableBody, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import VisitLabs from "../VisitLabs/VisitLabs";
 import VisitImagings from "../VisitImagings/VisitImagings";
 const HospitalVisit = ({ visit, hospital, close }) => {
-  const [testShow, setTestShow] = useState(false);
+  const [testShow, setTestShow] = useState("");
   return (
     <StyledEngineProvider injectFirst>
-      {!testShow && (
+      {testShow == "" && (
         <div className="hospitalVisit">
           <Typography className="smheaders">Hospital Information</Typography>
           <hr />
@@ -60,10 +61,10 @@ const HospitalVisit = ({ visit, hospital, close }) => {
               <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
                 Prescriptions
               </MuiLink>
-              <MuiLink className="internalLink " variant="button" onClick={() => setTestShow(true)}>
+              <MuiLink className="internalLink " variant="button" onClick={() => setTestShow("imagings")}>
                 Imaging
               </MuiLink>
-              <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
+              <MuiLink className="internalLink " variant="button" onClick={() => setTestShow("labs")}>
                 Lab Tests
               </MuiLink>
               <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
@@ -73,7 +74,8 @@ const HospitalVisit = ({ visit, hospital, close }) => {
           </div>
         </div>
       )}
-      {testShow && <VisitImagings visitId={visit._id} close={() => setTestShow(false)} />}
+      {testShow == "imagings" && <VisitImagings visitId={visit._id} close={() => setTestShow("")} />}
+      {testShow == "labs" && <VisitLabs visitId={visit._id} close={() => setTestShow("")} />}
     </StyledEngineProvider>
   );
 };
