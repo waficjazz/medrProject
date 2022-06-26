@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { addInfo } from "../../reducers/patientReducer";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { alpha, styled } from "@mui/material/styles";
-
+import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 const MiniForm = (props) => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
@@ -31,6 +31,7 @@ const MiniForm = (props) => {
         //   if (res.statusText === "OK") {
         //     props.close();
         //   }
+        setNewData("");
       } catch (err) {
         console.log(err.message);
       }
@@ -52,10 +53,17 @@ const MiniForm = (props) => {
           <hr />
           <ul className="ulMini">
             {data.map((item, index) => {
-              return <li key={index}>{item}</li>;
+              return (
+                <div className="listContainer">
+                  <li key={index}>{item}</li>
+                  <IconButton>
+                    <ClearIcon fontSize="small" className="deleteIcon" />
+                  </IconButton>
+                </div>
+              );
             })}
           </ul>
-          <input className="addInput" size="small" onChange={(e) => setNewData(e.target.value)} />
+          <input value={newData} className="addInput" size="small" onChange={(e) => setNewData(e.target.value)} />
           <Button className="btnadd" sx={{ color: "white", backgroundColor: "var(--third-blue)", marginLeft: "5px" }} onClick={handleAdd}>
             Add
           </Button>
