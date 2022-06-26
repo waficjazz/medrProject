@@ -49,16 +49,7 @@ const data = [
 const BChart = () => {
   return (
     <>
-      <ResponsiveContainer width="20%" debounce="1" height="20%" className="chartstyle">
-        <BarChart width={10} height={20} data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <YAxis />
-          <XAxis />
-          <Bar dataKey="uv" fill="#8884d8" />
-        </BarChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="20%" debounce="1" height="20%" className="chartstyle">
+      <ResponsiveContainer draggable="true" width="20%" debounce="1" height="20%"  className="chartstyle">
         <BarChart width={10} height={20} data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />

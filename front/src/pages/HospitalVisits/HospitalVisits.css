@@ -7,6 +7,23 @@
   height: 100vh;
 }
 
+.chartPage {
+  width: 86%;
+  position: relative;
+  background-color: var(--main-white);
+  border-radius: 4px;
+  box-shadow: 3px 0px 8px #888888;
+  padding-inline: 40px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  min-height: 90%;
+  max-height: 95%;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .main {
   width: 90%;
   position: relative;

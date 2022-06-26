@@ -16,9 +16,9 @@ const MiniForm = (props) => {
   const patient = useSelector((state) => state.patient.value);
   const data = patient[props.name];
   const [newData, setNewData] = useState("");
-  useEffect(() => {
-    console.log(patient);
-  }, []);
+  // useEffect(() => {
+  //   console.log(patient);
+  // }, []);
   const handleAdd = async () => {
     // const set = [...data, newData];\
     if (newData !== "") {
@@ -35,6 +35,24 @@ const MiniForm = (props) => {
       } catch (err) {
         console.log(err.message);
       }
+    }
+  };
+
+  const handleDelete = async (i) => {
+    // const set = [...data, newData];\
+    let tmp = [...patient[props.name]];
+    tmp.splice(i, 1);
+    let obj = { ...patient };
+    obj[props.name] = tmp;
+    dispatch(addInfo(obj));
+    try {
+      const res = await axios.post("http://localhost:5000/api/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
+      //   if (res.statusText === "OK") {
+      //     props.close();
+      //   }
+      setNewData("");
+    } catch (err) {
+      console.log(err.message);
     }
   };
 
@@ -56,7 +74,7 @@ const MiniForm = (props) => {
               return (
                 <div className="listContainer">
                   <li key={index}>{item}</li>
-                  <IconButton>
+                  <IconButton onClick={() => handleDelete(index)}>
                     <ClearIcon fontSize="small" className="deleteIcon" />
                   </IconButton>
                 </div>
