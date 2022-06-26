@@ -158,7 +158,7 @@ const SignUp = () => {
       birthDate,
       bloodGroup,
       email,
-      address,
+      clinicAddress: address,
       city,
       region,
       password,
@@ -272,7 +272,7 @@ const SignUp = () => {
                     size="small"
                     disablePortal
                     id="singInAs"
-                    hopitals={userTypes}
+                    options={userTypes}
                     onChange={(e, newValue) => setUserType(newValue)}
                     renderInput={(params) => <TextField {...params} label="Sign As" />}
                   />
@@ -385,19 +385,19 @@ const SignUp = () => {
                   size="small"
                   disablePortal
                   id="region"
-                  hopitals={regions}
+                  options={regions}
                   onChange={(e, newValue) => setRegion(newValue)}
                   renderInput={(params) => <TextField {...params} label="region" />}
                 />
                 <TextField className="sm" label="City" variant="standard" size="small" required onChange={(e) => setCity(e.target.value)} />
                 {/* <Autocomplete className="sm" size="small" disablePortal id="region" hopitals={regions} renderInput={(params) => <TextField {...params} label="City" />} /> */}
-                <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
+                <TextField className="bg " label="Clinic Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
                 <Autocomplete
                   className="sm"
                   size="small"
                   disablePortal
                   id="idDocument"
-                  hopitals={idTypes}
+                  options={idTypes}
                   onChange={(e, evalue) => setIdType(evalue)}
                   renderInput={(params) => <TextField {...params} label="ID Document" />}
                 />
@@ -418,7 +418,7 @@ const SignUp = () => {
                   disablePortal
                   id="bloodGroup"
                   onChange={(e, val) => setBloodGroup(val)}
-                  hopitals={bloodGroups}
+                  options={bloodGroups}
                   renderInput={(params) => <TextField {...params} label="Blood Type" />}
                 />
                 <Autocomplete
@@ -427,7 +427,7 @@ const SignUp = () => {
                   disablePortal
                   id="gender"
                   onChange={(e, val) => setGender(val)}
-                  hopitals={["Male", "Female"]}
+                  options={["Male", "Female"]}
                   renderInput={(params) => <TextField {...params} label="Gender" />}
                 />
                 <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={submitDoctor} disabled={gender === "" || bloodGroup === ""}>
@@ -512,7 +512,7 @@ const SignUp = () => {
                   size="small"
                   disablePortal
                   id="region"
-                  hopitals={regions}
+                  options={regions}
                   onChange={(e, newValue) => setRegion(newValue)}
                   renderInput={(params) => <TextField {...params} label="region" />}
                 />
@@ -667,7 +667,7 @@ const SignUp = () => {
                   size="small"
                   disablePortal
                   id="region"
-                  hopitals={regions}
+                  options={regions}
                   onChange={(e, newValue) => setRegion(newValue)}
                   renderInput={(params) => <TextField {...params} label="region" />}
                 />
@@ -718,7 +718,7 @@ const SignUp = () => {
                   disablePortal
                   id="bloodGroup"
                   onChange={(e, val) => setBloodGroup(val)}
-                  hopitals={bloodGroups}
+                  options={bloodGroups}
                   renderInput={(params) => <TextField {...params} label="Blood Type" />}
                 />
                 <Autocomplete
@@ -727,7 +727,7 @@ const SignUp = () => {
                   disablePortal
                   id="gender"
                   onChange={(e, val) => setGender(val)}
-                  hopitals={["Male", "Female"]}
+                  options={["Male", "Female"]}
                   renderInput={(params) => <TextField {...params} label="Gender" />}
                 />
                 <Button

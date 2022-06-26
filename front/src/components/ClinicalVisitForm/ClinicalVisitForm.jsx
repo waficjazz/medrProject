@@ -1,9 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 const ClinicalVisitForm = (props) => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -12,17 +13,65 @@ const ClinicalVisitForm = (props) => {
   const [clinicAddress, setClinicAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
-  // const [doctorId, setDoctorlId] = useState("");
   const [visitDate, setVisitDate] = useState("");
+  const [doctors, setDoctors] = React.useState([]);
   const [visitCause, setVisitCause] = useState("");
   const [visitDescription, setVisitDescription] = useState("");
+  const [proficiency, setProficiency] = useState("");
   const doctorId = useRef();
+  const [open, setOpen] = React.useState(false);
+  const loading = open && doctors.length === 0;
+
+  useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    const getDoctors = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/doctor/verified/all`);
+
+        setDoctors(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getDoctors();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    if (!open) {
+      setDoctors([]);
+    }
+  }, [open]);
+
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
   const submit = async () => {
+    let doctor = { clinicAddress: clinicAddress, email: email, name: doctorName, phoneNumber: phoneNumber, proficiency: proficiency };
+
     try {
+      if (tabValue === "1") {
+        const res = await axios.post("http://localhost:5000/api/doctor/add", doctor);
+        let id = await res.data._id;
+        let doc = await res.data;
+        doctorId.current = id;
+        console.log(doc);
+      }
+
       let visit = {
         patientId,
         doctorName: doctorName,
@@ -59,6 +108,7 @@ const ClinicalVisitForm = (props) => {
             {tabValue === "1" && (
               <>
                 <TextField size="small" label="Doctor's Name" variant="standard" className="hospitalInputs" onChange={(e) => setDoctorName(e.target.value)} />
+                <TextField size="small" label="Doctor's proficiency" variant="standard" className="hospitalInputs" onChange={(e) => setProficiency(e.target.value)} />
                 <TextField size="small" label="Phone number" variant="standard" className="hospitalInputs" onChange={(e) => setPhoneNumber(e.target.value)} />
                 <TextField size="small" label="Email" variant="standard" className="hospitalInputs" onChange={(e) => setEmail(e.target.value)} />
                 <TextField size="small" label="Clinic Address" variant="standard" fullWidth onChange={(e) => setClinicAddress(e.target.value)} />
@@ -66,7 +116,7 @@ const ClinicalVisitForm = (props) => {
             )}
             {tabValue === "0" && (
               <>
-                <Autocomplete
+                {/* <Autocomplete
                   className="hospitalInputs"
                   size="small"
                   disablePortal
@@ -74,6 +124,47 @@ const ClinicalVisitForm = (props) => {
                   id="bloodGroup"
                   hopitals={["hammoud", "labib"]}
                   renderInput={(params) => <TextField {...params} label="Clinics" variant="standard" />}
+                /> */}
+                <Autocomplete
+                  className="hospitalInputs"
+                  size="small"
+                  // disablePortal
+                  sx={{ marginTop: "10px" }}
+                  open={open}
+                  onOpen={() => {
+                    setOpen(true);
+                  }}
+                  onClose={() => {
+                    setOpen(false);
+                  }}
+                  noOptionsText="No Such Doctor"
+                  isOptionEqualToValue={(option, value) => option.firstName === value.firstName}
+                  getOptionLabel={(option) => option.firstName}
+                  options={doctors}
+                  loading={loading}
+                  onChange={(event, newValue) => {
+                    doctorId.current = newValue._id;
+                    setPhoneNumber(newValue.phoneNumber);
+                    setClinicAddress(newValue.clinicAddress);
+                    setEmail(newValue.email);
+                    setDoctorName(`${newValue.firstName} ${newValue.lastName}`);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Doctors"
+                      variant="standard"
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <React.Fragment>
+                            {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                            {params.InputProps.endAdornment}
+                          </React.Fragment>
+                        ),
+                      }}
+                    />
+                  )}
                 />
               </>
             )}

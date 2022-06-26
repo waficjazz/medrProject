@@ -121,7 +121,7 @@ const ClinicalVisits = () => {
                     <TableRow>
                       <TableCell align="left" sx={{ width: "5px" }}></TableCell>
                       <TableCell align="left" sx={{ width: "25%" }}>
-                        <Typography className="tableHeaders">Visit Id</Typography>
+                        <Typography className="tableHeaders">Doctor</Typography>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "25%" }}>
                         <Typography className="tableHeaders">Visit Date</Typography>

@@ -1,7 +1,43 @@
+const verifiedDoctor = require("../models/verifiedDoctor");
 const Doctor = require("../models/doctor");
 const HttpError = require("../models/http-error");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const getVerfiedDoctors = async (req, res, next) => {
+  let info;
+
+  try {
+    info = await verifiedDoctor.find();
+  } catch (err) {
+    const error = new HttpError("Fetching doctors failed, please try again later", 500);
+    return next(error);
+  }
+
+  if (!info || info.length === 0) {
+    return next(new HttpError("Could not find doctors ", 404));
+  }
+
+  res.json(info);
+};
+
+const addDoctor = async (req, res, next) => {
+  const { name, email, phoneNumber, clinicAddress, proficiency } = req.body;
+  const doctor = new Doctor({
+    name,
+    email,
+    phoneNumber,
+    clinicAddress,
+    proficiency,
+  });
+  try {
+    await doctor.save();
+  } catch (err) {
+    console.log(err);
+    return next(err);
+  }
+  res.status(201).json(doctor);
+};
 
 const signup = async (req, res, next) => {
   const {
@@ -12,7 +48,7 @@ const signup = async (req, res, next) => {
     birthDate,
     bloodGroup,
     email,
-    address,
+    clinicAddress,
     city,
     region,
     password,
@@ -31,7 +67,7 @@ const signup = async (req, res, next) => {
     const error = new HttpError("Could not create doctor please try again", 500);
     return next(error);
   }
-  const createdDoctor = new Doctor({
+  const createdDoctor = new verifiedDoctor({
     firstName,
     lastName,
     fatherName,
@@ -39,7 +75,7 @@ const signup = async (req, res, next) => {
     birthDate,
     bloodGroup,
     email,
-    address,
+    clinicAddress,
     city,
     region,
     password: hashedPassword,
@@ -74,7 +110,7 @@ const signin = async (req, res, next) => {
   let existingUser;
 
   try {
-    existingUser = await Doctor.findOne({ email: email });
+    existingUser = await verifiedDoctor.findOne({ email: email });
   } catch (err) {
     const error = new HttpError("Logging in failed, please try again later.", 500);
     return next(error);
@@ -112,3 +148,5 @@ const signin = async (req, res, next) => {
 
 exports.signin = signin;
 exports.signup = signup;
+exports.addDoctor = addDoctor;
+exports.getVerfiedDoctors = getVerfiedDoctors;
