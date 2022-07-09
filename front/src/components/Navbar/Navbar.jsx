@@ -9,9 +9,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { ShowContext, RegContext } from "../../context";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import ReplayIcon from "@mui/icons-material/Replay";
 const Navbar = () => {
   const navigate = useNavigate();
+  const patient = useSelector((state) => state.patient.value);
   const [open, setOpen] = useState(false);
   const { show, setShow } = useContext(ShowContext);
   const auth = useContext(RegContext);
@@ -24,7 +26,7 @@ const Navbar = () => {
               <MenuIcon />
             </IconButton>
             <Typography className="id">
-              ID:<span>19238372</span>
+              {patient.firstName} {patient.lastName}
             </Typography>
             <div className="tools">
               <div className="search">

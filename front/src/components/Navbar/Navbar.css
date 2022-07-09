@@ -38,6 +38,9 @@
     color: var(--third-blue) !important;
     margin-top: 5px;
   }
+  .id {
+    width: 70% !important;
+  }
 }
 
 .badge {
@@ -63,6 +66,7 @@
   font-size: large;
   font-weight: bold;
   margin-top: 2px;
+  width: 10%;
 }
 /* .id > span {
   color: var(--third-blue);
