@@ -3,6 +3,43 @@ const Doctor = require("../models/doctor");
 const HttpError = require("../models/http-error");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+
+function makeid(length) {
+  var result = "";
+  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+const verifyCode = async (req, res, next) => {
+  const { email, code } = req.body;
+
+  let doctor;
+  console.log(req.body);
+  try {
+    doctor = await verifiedDoctor.findOne({ email: email, validationCode: code });
+  } catch (err) {
+    const error = new HttpError("Verfication , failed  please try again later.", 500);
+    return next(error);
+  }
+  if (!doctor) {
+    const error = new HttpError("Email does not exist  could not log you in.", 401);
+    return next(error);
+  }
+  let emailVerified = true;
+  let response;
+  try {
+    response = await doctor.updateOne({ _id: doctor._id }, { emailVerified });
+  } catch (err) {
+    const error = new HttpError("could not verify email id", 500);
+    return next(error);
+  }
+  token = jwt.sign({ userId: doctor.id, email: doctor.email, type: "doctor" }, "JazzPriavteKey", { expiresIn: "9999 years" });
+  res.status(201).json({ user: doctor, token: token });
+};
 
 const getVerfiedDoctors = async (req, res, next) => {
   let info;
@@ -60,9 +97,11 @@ const signup = async (req, res, next) => {
     proficiency,
   } = req.body;
   let hashedPassword;
+  let validationCode;
 
   try {
     hashedPassword = await bcrypt.hash(password, 12);
+    validationCode = makeid(5);
   } catch (err) {
     const error = new HttpError("Could not create doctor please try again", 500);
     return next(error);
@@ -86,6 +125,7 @@ const signup = async (req, res, next) => {
     proficiency,
     hospitals: listOfHospitals,
     createdAt: new Date(),
+    validationCode,
   });
   console;
   try {
@@ -96,7 +136,28 @@ const signup = async (req, res, next) => {
   }
   let token;
   try {
-    token = jwt.sign({ userId: createdDoctor.id, email: createdDoctor.email, type: "doctor" }, "JazzPriavteKey", { expiresIn: "9999 years" });
+    let transport = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      auth: {
+        user: "jazzarwafic@gmail.com",
+        pass: "crwmeopaehovudlj",
+      },
+    });
+
+    const mailOptions = {
+      from: "jazzarwafic@gmail.com",
+      to: email,
+      subject: "medpfe verfication code",
+      text: "You Verfication Code is: " + validationCode,
+    };
+
+    transport.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+      }
+    });
   } catch (err) {
     const error = new HttpError("Signing up faild , please try again later", 500);
     return next(error);
@@ -150,3 +211,4 @@ exports.signin = signin;
 exports.signup = signup;
 exports.addDoctor = addDoctor;
 exports.getVerfiedDoctors = getVerfiedDoctors;
+exports.verifyCode = verifyCode;

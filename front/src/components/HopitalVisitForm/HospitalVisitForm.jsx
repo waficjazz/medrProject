@@ -25,8 +25,8 @@ const HospitalVisitForm = (props) => {
   const [visitDescription, setVisitDescription] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [open, setOpen] = React.useState(false);
-  const loading = open && hospitals.length === 0;
   const [hospitals, setHospitals] = React.useState([]);
+  const loading = open && hospitals.length === 0;
 
   useEffect(() => {
     let active = true;
@@ -70,6 +70,7 @@ const HospitalVisitForm = (props) => {
 
   const submit = async () => {
     let hospital = { hospitalName: hName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber };
+
     try {
       if (tabValue === "1") {
         const res = await axios.post("http://localhost:5000/api/hospital/add", hospital);

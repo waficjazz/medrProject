@@ -11,6 +11,8 @@ const verifiedHospitalSchema = new Schema({
   address: { type: String, required: true },
   region: { type: String, required: true },
   city: { type: String, required: true },
+  emailVerified: { type: Boolean, required: true, default: false },
+  validationCode: { type: String, required: true },
   // isValid: { type: Boolean, default: false },
 });
 

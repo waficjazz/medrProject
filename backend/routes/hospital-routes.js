@@ -14,5 +14,5 @@ router.post("/add", hospitalController.addHospital);
 router.post("/signup", hospitalController.signup);
 router.post("/signin", hospitalController.signin);
 router.delete("/delete/visit/:id", hospitalController.deleteHopitalVisit);
-
+router.post("/verifyCode", hospitalController.verifyCode);
 module.exports = router;

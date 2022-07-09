@@ -14,6 +14,8 @@ const verifiedDoctorSchema = new Schema({
   proficiency: { type: [String], required: true },
   hospital: { type: [String], required: false },
   clinicAddress: { type: String, required: false },
+  emailVerified: { type: Boolean, required: true, default: false },
+  validationCode: { type: String, required: true },
 });
 
 verifiedDoctorSchema.plugin(uniqueValidtor);

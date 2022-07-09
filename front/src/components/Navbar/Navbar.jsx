@@ -1,15 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./Navbar.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { AppBar, Toolbar, InputBase, IconButton, Badge, Typography } from "@mui/material";
+import { AppBar, Toolbar, InputBase, IconButton, Badge, Typography, Collapse } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import PersonIcon from "@mui/icons-material/Person";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ShowContext, RegContext } from "../../context";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import ReplayIcon from "@mui/icons-material/Replay";
 const Navbar = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const { show, setShow } = useContext(ShowContext);
   const auth = useContext(RegContext);
   return (
@@ -34,12 +37,25 @@ const Navbar = () => {
                   <NotificationsIcon />
                 </IconButton>
                 <IconButton
-                  onClick={() => {
-                    auth.logout();
-                    navigate("/s");
-                  }}>
+                  // onClick={() => {
+                  //   auth.logout();
+                  //   navigate("/s");
+                  // }}
+                  onClick={() => setOpen(!open)}>
                   <PersonIcon />
                 </IconButton>
+                <Collapse in={open}>
+                  <div className="userAction">
+                    <IconButton sx={{ fontSize: "15px" }}>
+                      <LogoutIcon />
+                      Logout
+                    </IconButton>
+                    <IconButton>
+                      <ReplayIcon />
+                      Switch Patient
+                    </IconButton>
+                  </div>
+                </Collapse>
               </div>
             </div>
           </Toolbar>

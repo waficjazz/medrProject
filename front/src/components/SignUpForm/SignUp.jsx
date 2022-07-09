@@ -13,12 +13,16 @@ import patientSvg from "./patient.svg";
 import axios from "axios";
 import { RegContext } from "../../context";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+
 const SignUp = () => {
   const navigate = useNavigate();
   const auth = useContext(RegContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState("patient");
   const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
+  const [code, setCode] = useState("");
   const [activeStep, setActiveStep] = useState(0);
   const [swipe, setSwipe] = useState([true, false, false, false]);
   const [firstName, setFirstName] = useState("");
@@ -69,8 +73,8 @@ const SignUp = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleNext = (event) => {
-    event.preventDefault();
+  const handleNext = () => {
+    // event.preventDefault();
     setActiveStep(activeStep + 1);
     const newarr = swipe.map((index, i) => {
       if (i === activeStep + 1) {
@@ -98,18 +102,53 @@ const SignUp = () => {
     };
     try {
       const res = await axios.post(`http://localhost:5000/api/${type}/signin`, data);
+      setIsLoading(true);
+      console.log(res);
       if (res.status != 201) {
         console.log("error signin in");
       }
       const reponse = await res.data;
+
       console.log(reponse);
       if (type == "patient") {
+        setIsLoading(false);
         auth.login(reponse.userId, reponse.token);
         navigate("/");
       } else {
-        console.log("aa");
+        setIsLoading(false);
         auth.highLogin(reponse.userId, reponse.token);
         setRole("choosePatient");
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const submitVerficationCode = async (type) => {
+    let data = {
+      email,
+      code,
+    };
+
+    try {
+      const res = await axios.post(`http://localhost:5000/api/${type}/verifyCode`, data);
+      setIsLoading(true);
+      if (res.status != 201) {
+        console.log("error with verification code ");
+      }
+      const reponse = await res.data;
+      if (type == "doctor") {
+        setIsLoading(false);
+        auth.highLogin(reponse.userId, reponse.token);
+        setRole("choosePatient");
+      } else if (type == "hospital") {
+        setIsLoading(false);
+        auth.highLogin(reponse.userId, reponse.token);
+        setRole("choosePatient");
+      } else {
+        setIsLoading(false);
+        auth.login(reponse.user._id, reponse.token);
+        navigate("/");
       }
     } catch (err) {
       console.log(err.message);
@@ -138,12 +177,15 @@ const SignUp = () => {
     };
     try {
       const res = await axios.post("http://localhost:5000/api/patient/signup", data);
-      if (res.status != 201) {
+      setIsLoading(true);
+      if (res.status !== 201) {
         console.log("error signin up");
       }
-      const reponse = await res.data;
-      auth.login(reponse.user._id, reponse.token);
-      navigate("/");
+
+      // auth.login(reponse.user._id, reponse.token);
+      // navigate("/");
+      setIsLoading(false);
+      handleNext();
     } catch (err) {
       console.log(err.message);
     }
@@ -171,12 +213,15 @@ const SignUp = () => {
     };
     try {
       const res = await axios.post("http://localhost:5000/api/doctor/signup", data);
+      setIsLoading(true);
       if (res.status != 201) {
         console.log("error signin up");
       }
       const reponse = await res.data;
-      auth.highLogin(reponse.userId, reponse.token);
-      setRole("choosePatient");
+      // auth.highLogin(reponse.userId, reponse.token);
+      // setRole("choosePatient");
+      setIsLoading(false);
+      handleNext();
     } catch (err) {
       console.log(err.message);
     }
@@ -194,12 +239,15 @@ const SignUp = () => {
     };
     try {
       const res = await axios.post("http://localhost:5000/api/hospital/signup", data);
+      setIsLoading(false);
       if (res.status != 201) {
         console.log("error signin up");
       }
       const reponse = await res.data;
-      auth.highLogin(reponse.userId, reponse.token);
-      setRole("choosePatient");
+      // auth.highLogin(reponse.userId, reponse.token);
+      // setRole("choosePatient");
+      setIsLoading(false);
+      handleNext();
     } catch (err) {
       console.log(err.message);
     }
@@ -212,6 +260,12 @@ const SignUp = () => {
   return (
     <>
       <StyledEngineProvider injectFirst>
+        {isLoading && (
+          <div className="loading">
+            <CircularProgress sx={{ color: "var(--second-blue)" }} size="50px" />
+          </div>
+        )}
+
         <div className={auth.token ? " hidef" : "curtain"}></div>
         <div className={auth.token ? "hidef" : "mainForm"}>
           {/* <button
@@ -438,7 +492,18 @@ const SignUp = () => {
                 </Button>
               </Box>
               <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-                <TextField label="code" size="small" />
+                <Typography variant="h6" gutterBottom>
+                  An verification code has been sent to your email.
+                </Typography>
+                <TextField label="code" size="small" onChange={(e) => setCode(e.target.value)} />
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  onClick={() => {
+                    submitVerficationCode("doctor");
+                  }}>
+                  Submit
+                </Button>
               </Box>
             </>
           )}
@@ -557,7 +622,18 @@ const SignUp = () => {
                 </Button>
               </Box>
               <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-                <TextField label="code" size="small" />
+                <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", marginBottom: "50px" }} variant="h6">
+                  A verification code has been sent to your email.
+                </Typography>
+                <TextField label="code" size="small" onChange={(e) => setCode(e.target.value)} sx={{ marginBottom: "50px" }} />
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  onClick={() => {
+                    submitVerficationCode("doctor");
+                  }}>
+                  Submit
+                </Button>
               </Box>
             </>
           )}
@@ -566,9 +642,6 @@ const SignUp = () => {
             <>
               <div className="stepper">
                 <Stepper activeStep={activeStep}>
-                  <Step>
-                    <StepLabel></StepLabel>
-                  </Step>
                   <Step>
                     <StepLabel></StepLabel>
                   </Step>
@@ -674,7 +747,7 @@ const SignUp = () => {
                 <TextField className="sm" label="City" variant="standard" size="small" required onChange={(e) => setCity(e.target.value)} />
                 {/* <Autocomplete className="sm" size="small" disablePortal id="region" hopitals={regions} renderInput={(params) => <TextField {...params} label="City" />} /> */}
                 <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
-                <Autocomplete
+                {/* <Autocomplete
                   className="sm"
                   size="small"
                   disablePortal
@@ -682,7 +755,7 @@ const SignUp = () => {
                   hopitals={idTypes}
                   onChange={(e, evalue) => setIdType(evalue)}
                   renderInput={(params) => <TextField {...params} label="ID Document" />}
-                />
+                /> */}
                 <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
                 <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
                   Next
@@ -743,7 +816,18 @@ const SignUp = () => {
                 </Button>
               </Box>
               <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-                <TextField label="code" size="small" />
+                <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", marginBottom: "50px" }} variant="h6">
+                  A verification code has been sent to your email.
+                </Typography>
+                <TextField label="code" size="small" onChange={(e) => setCode(e.target.value)} sx={{ marginBottom: "50px" }} />
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  onClick={() => {
+                    submitVerficationCode("patient");
+                  }}>
+                  Submit
+                </Button>
               </Box>
             </>
           )}

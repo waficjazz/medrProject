@@ -8,5 +8,6 @@ router.post("/signup", doctorController.signup);
 router.post("/signin", doctorController.signin);
 router.post("/add", doctorController.addDoctor);
 router.get("/verified/all", doctorController.getVerfiedDoctors);
+router.post("/verifyCode", doctorController.verifyCode);
 
 module.exports = router;

@@ -15,7 +15,7 @@ const patientSchema = new Schema({
   city: { type: String, required: true },
   region: { type: String, required: true },
   phoneNumber: { type: String, required: true },
-  idType: { type: String, required: true },
+  idType: { type: String, required: false },
   idNumber: { type: Number, required: true },
   gender: { type: String, required: true },
   weight: { type: Number, required: true },
@@ -29,6 +29,8 @@ const patientSchema = new Schema({
   clinicalVisits: [{ type: mongoose.Types.ObjectId, required: false, ref: "ClinicalVisit" }],
   createdAt: Date,
   updatedAt: Date,
+  emailVerified: { type: Boolean, required: true, default: false },
+  validationCode: { type: String, required: true },
 });
 
 patientSchema.plugin(uniqueValidtor);

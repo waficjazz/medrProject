@@ -19,7 +19,8 @@ function App() {
 
   const highLogin = useCallback((uid, token) => {
     localStorage.setItem("high", JSON.stringify({ uid: uid, token: token }));
-    setShow(false);
+    // setIsLoggedIn(true);
+    // setShow(false);
   }, []);
 
   const highLogout = useCallback(() => {
@@ -41,10 +42,13 @@ function App() {
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("userData"));
     const highStoredData = JSON.parse(localStorage.getItem("high"));
-    if (storedData && highStoredData && storedData.token && highStoredData.token) {
-      login(storedData.uid, storedData.token);
+    if (highStoredData && highStoredData.token) {
       highLogin(highStoredData.uid, highStoredData.token);
+    }
+    if (storedData && storedData.token) {
+      login(storedData.uid, storedData.token);
       setShow(false);
+      setIsLoggedIn(true);
     }
   }, [login]);
 
@@ -52,12 +56,12 @@ function App() {
     <RegContext.Provider value={{ token: token, login: login, logout: logout, highLogin: highLogin, highLogout: highLogout }}>
       <ShowContext.Provider value={{ show, setShow }}>
         <BrowserRouter>
-          <Routes>
+          {/* <Routes>
             <Route path="/s" element={<SignUp />} />
-          </Routes>
-          {/* {!isLoggedIn && <SignUp />} */}
+          </Routes> */}
+          {!isLoggedIn && <SignUp />}
           <Navbar />
-          <MainPage />
+          {isLoggedIn && <MainPage />}
         </BrowserRouter>
       </ShowContext.Provider>
     </RegContext.Provider>

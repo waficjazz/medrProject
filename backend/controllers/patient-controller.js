@@ -2,7 +2,7 @@ const Patient = require("../models/patient");
 const HttpError = require("../models/http-error");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { response } = require("express");
+const nodemailer = require("nodemailer");
 
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -46,13 +46,50 @@ const signin = async (req, res, next) => {
   });
 };
 
+function makeid(length) {
+  var result = "";
+  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+const verifyCode = async (req, res, next) => {
+  const { email, code } = req.body;
+
+  let user;
+
+  try {
+    user = await Patient.findOne({ email: email, validationCode: code });
+  } catch (err) {
+    const error = new HttpError("Verfication , failed  please try again later.", 500);
+    return next(error);
+  }
+  if (!user) {
+    const error = new HttpError("Email does not exist  could not log you in.", 401);
+    return next(error);
+  }
+  let emailVerified = true;
+  let response;
+  try {
+    response = await Patient.updateOne({ _id: user._id }, { emailVerified });
+  } catch (err) {
+    const error = new HttpError("could not verify email id", 500);
+    return next(error);
+  }
+  token = jwt.sign({ userId: user.id, email: user.email, type: "patient" }, "JazzPriavteKey", { expiresIn: "9999 years" });
+  res.status(201).json({ user: user, token: token });
+};
 const signup = async (req, res, next) => {
   const { firstName, lastName, fatherName, motherName, birthDate, bloodGroup, email, address, city, region, password, phoneNumber, idType, idNumber, gender, weight, height } =
     req.body;
   let hashedPassword;
+  let validationCode;
 
   try {
     hashedPassword = await bcrypt.hash(password, 12);
+    validationCode = makeid(5);
   } catch (err) {
     const error = new HttpError("Could not create patient please try again", 500);
     return next(error);
@@ -76,6 +113,7 @@ const signup = async (req, res, next) => {
     weight,
     height,
     createdAt: new Date(),
+    validationCode,
   });
 
   try {
@@ -86,12 +124,33 @@ const signup = async (req, res, next) => {
   }
   let token;
   try {
-    token = jwt.sign({ userId: createdUser.id, email: createdUser.email, type: "patient" }, "JazzPriavteKey", { expiresIn: "9999 years" });
+    let transport = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      auth: {
+        user: "jazzarwafic@gmail.com",
+        pass: "crwmeopaehovudlj",
+      },
+    });
+
+    const mailOptions = {
+      from: "jazzarwafic@gmail.com",
+      to: email,
+      subject: "medpfe verfication code",
+      text: "You Verfication Code is: " + validationCode,
+    };
+
+    transport.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+      }
+    });
   } catch (err) {
     const error = new HttpError("Signing up faild , please try again later", 500);
     return next(error);
   }
-  res.status(201).json({ user: createdUser, token: token });
+  res.status(201).json({ message: "email verification sent" });
 };
 
 const patientInfo = async (req, res, next) => {
@@ -113,19 +172,6 @@ const patientInfo = async (req, res, next) => {
 };
 
 const updatePatient = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  console.log(authHeader);
-  const Token = authHeader && authHeader.split(" ")[1];
-  console.log(Token);
-  jwt.verify(Token, "JazzPriavteKey", (err, decodedToken) => {
-    if (!err) {
-      console.log(decodedToken);
-    }
-
-    if (err) {
-      return next(new HttpError("Failed to authenticate token", 401));
-    }
-  });
   const {
     _id,
     firstName,
@@ -164,3 +210,4 @@ exports.updatePatient = updatePatient;
 exports.patientInfo = patientInfo;
 exports.signup = signup;
 exports.signin = signin;
+exports.verifyCode = verifyCode;
