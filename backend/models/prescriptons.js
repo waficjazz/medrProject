@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const prescirptionSchema = new Schema({
   patientId: { type: mongoose.Types.ObjectId, required: true, ref: "Patient" },
-  clinicalVisit: { type: mongoose.Types.ObjectId, required: false, red: "ClinicalVisit" },
-  HospitalVisit: { type: mongoose.Types.ObjectId, required: false, red: "HospitalVisit" },
+  clinicalVisit: { type: mongoose.Types.ObjectId, required: false, ref: "ClinicalVisit" },
+  HospitalVisit: { type: mongoose.Types.ObjectId, required: false, ref: "HospitalVisit" },
   date: { type: Date, required: true },
   location: { type: String, required: true },
   notes: { type: String, required: false },

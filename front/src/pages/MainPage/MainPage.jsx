@@ -13,6 +13,7 @@ import BChart from "../../components/charts/BChart";
 import { Routes, Route } from "react-router-dom";
 import { ShowContext, RegContext } from "../../context";
 import "./MainPage.css";
+import Prescriptions from "../Prescriptions/Presrciptions";
 const MainPage = () => {
   const { show, setShow } = useContext(ShowContext);
   return (
@@ -30,6 +31,7 @@ const MainPage = () => {
           <Route path="/vaccines" element={<Vaccines />} />
           <Route path="/surgical" element={<SurgicalHistory />} />
           <Route path="/charts" element={<Charts />} />
+          <Route path="/presc" element={<Prescriptions />} />
         </Routes>
       </div>
     </>

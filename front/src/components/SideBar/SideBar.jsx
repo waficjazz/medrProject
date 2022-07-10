@@ -53,7 +53,7 @@ const SideBar = () => {
             </ListItemIcon>
             Clinical Visits
           </ListItemButton>
-          <ListItemButton selected={selectedIndex === 4} onClick={(e) => handleSelect(e, 4)}>
+          <ListItemButton selected={selectedIndex === 4} onClick={(e) => handleSelect(e, 4, "/presc")}>
             <ListItemIcon>
               <DescriptionIcon className="icon" />
             </ListItemIcon>
