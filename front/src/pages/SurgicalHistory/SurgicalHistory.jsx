@@ -21,7 +21,7 @@ const SurgicalHistory = () => {
   const [orderBy, setOrderBy] = useState("1");
   const [reload, setReload] = useState(false);
   const [surgeryId, setSurgeryId] = useState("");
-  const [formType, setFormType] = useState("");
+  const [formType, setFormType] = useState("add");
   const sortByName = (prop) => {
     setDirection(direction === "desc" ? "asc" : "desc");
     if (prop === "date") {
