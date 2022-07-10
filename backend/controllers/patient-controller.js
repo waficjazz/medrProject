@@ -17,7 +17,7 @@ const signin = async (req, res, next) => {
   }
 
   if (!existingUser) {
-    const error = new HttpError("Email does not exist  could not log you in.", 401);
+    const error = new HttpError("Email does not exist could not log you in", 401);
     return next(error);
   }
   let isValidPassword = false;

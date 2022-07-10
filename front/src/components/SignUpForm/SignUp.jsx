@@ -23,6 +23,8 @@ const SignUp = () => {
   const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState("");
   const [activeStep, setActiveStep] = useState(0);
   const [swipe, setSwipe] = useState([true, false, false, false]);
   const [firstName, setFirstName] = useState("");
@@ -108,10 +110,10 @@ const SignUp = () => {
     try {
       const res = await axios.post(`http://localhost:5000/api/${type}/signin`, data);
       setIsLoading(true);
-      console.log(res);
       if (res.status != 201) {
-        console.log("error signin in");
+        console.log(res.message);
       }
+
       const reponse = await res.data;
 
       console.log(reponse);
@@ -125,7 +127,9 @@ const SignUp = () => {
         setRole("choosePatient");
       }
     } catch (err) {
-      console.log(err.message);
+      console.log(err.response.data.message);
+      setIsError(true);
+      setError(err.response.data.message);
     }
   };
 
@@ -335,6 +339,11 @@ const SignUp = () => {
                     onChange={(e, newValue) => setUserType(newValue)}
                     renderInput={(params) => <TextField {...params} label="Sign As" />}
                   />
+                  {isError && (
+                    <Typography variant="body1" color="red">
+                      {error}
+                    </Typography>
+                  )}
                   <Button variant="contained" sx={{ width: "30%", left: "70%" }} onClick={() => handleSignIn(userType)}>
                     Sign In
                   </Button>

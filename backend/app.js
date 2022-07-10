@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const HttpError = require("./models/http-error");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const patientRoutes = require("./routes/patient-routes");
@@ -31,6 +32,18 @@ app.use("/api/vaccination", vaccinationRoutes);
 app.use("/api/labtest", labTestRoutes);
 app.use("/api/surgery", surgeryRoutes);
 
+app.use((req, res, next) => {
+  const error = new HttpError("Could not find this route.", 404);
+  throw error;
+});
+
+app.use((error, req, res, next) => {
+  if (res.headerSent) {
+    return next(error);
+  }
+  res.status(error.code || 500);
+  res.send({ message: error.message || "An unknown error occurred!" });
+});
 mongoose
   .connect(`mongodb://localhost:27017/medrecord`)
   .then(() => {
