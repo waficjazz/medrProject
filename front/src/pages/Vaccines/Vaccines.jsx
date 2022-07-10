@@ -179,7 +179,7 @@ const Vaccines = () => {
                       </TableCell>
                       <TableCell align="left" sx={{ width: "15%" }}>
                         <TableSortLabel
-                          active={orderBy === "1"}
+                          active={orderBy === "3"}
                           direction={direction}
                           onClick={() => {
                             setOrderBy("3");

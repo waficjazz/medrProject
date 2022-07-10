@@ -172,7 +172,7 @@ const gethospitalVisits = async (req, res, next) => {
 };
 
 const addHospitalVisit = async (req, res, next) => {
-  const { verifiedHospital, patientId, entryDate, timeSpent, cause, hospitalId, doctors, prescription } = req.body;
+  const { verifiedHospital, patientId, entryDate, timeSpent, cause, hospitalId, doctors, prescription, description } = req.body;
   const hospitalVisit = new HospitalVisit({
     verifiedHospital,
     patientId,
@@ -182,6 +182,7 @@ const addHospitalVisit = async (req, res, next) => {
     doctors,
     hospitalId,
     prescription,
+    description,
   });
   try {
     await hospitalVisit.save();
@@ -251,7 +252,7 @@ const getHospitalById = async (req, res, next) => {
   try {
     info = await Hospital.findById($regex);
   } catch (err) {
-    const error = new HttpError("Fetching hospital visits info failed, please try again later", 500);
+    const error = new HttpError("Fetching hospital  info failed, please try again later", 500);
     return next(error);
   }
 
@@ -279,6 +280,46 @@ const getVerifiedHospitalById = async (req, res, next) => {
   res.json(info);
 };
 
+const getOneVisit = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  try {
+    info = await HospitalVisit.find({ _id: $regex });
+    console.log(info);
+  } catch (err) {
+    if (!info || info.length === 0) {
+      return next(new HttpError("Could not find  vaccination", 404));
+    }
+    const error = new HttpError("Fetching vaccinations info failed, please try again later", 500);
+    return next(error);
+  }
+
+  res.json(info);
+};
+
+const updateVisit = async (req, res, next) => {
+  const { verifiedHospital, patientId, entryDate, timeSpent, cause, hospitalId, doctors, prescription, description, id } = req.body;
+  console.log(req.body);
+  try {
+    await HospitalVisit.updateOne({ _id: id }, { verifiedHospital, patientId, entryDate, timeSpent, cause, hospitalId, doctors, prescription, description });
+  } catch (err) {
+    const error = new HttpError("could not update vaccination", 500);
+    return next(error);
+  }
+  res.status(200).json("updated");
+};
+
+const updateHospital = async (req, res, next) => {
+  const { hospitalName, email, phoneNumber, address, id } = req.body;
+  try {
+    await Hospital.updateOne({ _id: id }, { hospitalName, email, phoneNumber, address });
+  } catch (err) {
+    const error = new HttpError("could not update hospital", 500);
+    return next(error);
+  }
+  res.status(200).json("updated");
+};
+
 exports.getVerifiedHospitalById = getVerifiedHospitalById;
 exports.getHospitalById = getHospitalById;
 exports.gethospitalVisits = gethospitalVisits;
@@ -290,3 +331,6 @@ exports.deleteHopitalVisit = deleteHopitalVisit;
 exports.signup = signup;
 exports.signin = signin;
 exports.verifyCode = verifyCode;
+exports.getOneVisit = getOneVisit;
+exports.updateVisit = updateVisit;
+exports.updateHospital = updateHospital;

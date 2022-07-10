@@ -19,12 +19,24 @@ const HospitalVisits = () => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [visits, setVisits] = useState([]);
+  const [visitId, setVisitId] = useState("");
+  const [formType, setFormType] = useState("add");
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [reload, setReload] = useState(false);
   const [direction, setDirection] = useState("asc");
   const [orderBy, setOrderBy] = useState("1");
   const [show, setShow] = useState("");
+
+  const handleEdit = async (id) => {
+    try {
+      setFormType("edit");
+      setVisitId(id);
+      setOpenForm(true);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const sortByName = (prop) => {
     setDirection(direction === "desc" ? "asc" : "desc");
@@ -139,7 +151,7 @@ const HospitalVisits = () => {
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">
-              <IconButton>
+              <IconButton onClick={() => handleEdit(row._id)}>
                 <EditIcon fontSize="small" />
               </IconButton>
               <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
@@ -166,9 +178,12 @@ const HospitalVisits = () => {
         <div className="main">
           <HospitalVisitForm
             isOpen={openForm}
+            type={formType}
+            id={visitId}
             close={() => {
               setOpenForm(false);
               setReload(!reload);
+              setFormType("add");
             }}
           />
           {empty ? (
