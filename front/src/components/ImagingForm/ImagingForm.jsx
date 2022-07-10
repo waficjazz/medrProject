@@ -97,7 +97,7 @@ const ImagingForm = (props) => {
       formData.append("date", date);
       formData.append("location", location);
       formData.append("patientId", patientId);
-      formData.append("HospitalVisit", visitId.current);
+      if (visitId != undefined) formData.append("HospitalVisit", visitId.current);
       formData.append("image", image);
       formData.append("report", selectedPDF);
       const res = await axios.post("http://localhost:5000/api/imaging/add", formData, {
@@ -163,9 +163,10 @@ const ImagingForm = (props) => {
                 />
               )}
             />
-
+          </div>
+          <div className="uploads">
             <div className="imgPreviewDiv">
-              <Button sx={{ backgroundColor: "var(--third-blue)", color: "white" }} component="label" className="submitHospital">
+              <Button sx={{ backgroundColor: "var(--third-blue)", color: "white", width: "50%" }} component="label" className="submitHospital">
                 Upload imaging
                 <input
                   type="file"
@@ -181,7 +182,7 @@ const ImagingForm = (props) => {
               {selectedImage && <img src={preview} className="imgPreview" />}
             </div>
             <div className="imgPreviewDiv">
-              <Button variant="contained" sx={{ backgroundColor: "var(--third-blue)", color: "white" }} component="label" className="submitHospital">
+              <Button variant="contained" sx={{ backgroundColor: "var(--third-blue)", color: "white", width: "50%" }} component="label" className="submitHospital">
                 Upload report
                 <input
                   type="file"

@@ -100,8 +100,8 @@ const ClinicalVisitForm = (props) => {
           </IconButton>
           <div>
             <Tabs onChange={handleChange} value={tabValue} sx={{ marginBottom: "10px" }} TabIndicatorProps={{ sx: { background: "var(--third-blue)" } }}>
-              <Tab value="0" label="Choose A Clinic" />
-              <Tab value="1" label="Add A Clinic" />
+              <Tab value="0" label="Choose A Doctor" />
+              <Tab value="1" label="Add A Doctor" />
             </Tabs>
           </div>
           <div className="hopitalForm">

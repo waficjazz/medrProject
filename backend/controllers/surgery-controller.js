@@ -21,6 +21,7 @@ const getSurgeriesByVisit = async (req, res, next) => {
 
 const addSurgery = async (req, res, next) => {
   const { patientId, date, name, cause, description, HospitalVisit, verifiedHospital, hospitalId } = req.body;
+  console.log(HospitalVisit);
   const surg = new Surgery({
     patientId,
     date,
@@ -75,7 +76,7 @@ const getOneSurgery = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
   try {
-    info = await Vaccinations.find({ _id: $regex });
+    info = await Surgery.find({ _id: $regex });
     console.log(info);
   } catch (err) {
     if (!info || info.length === 0) {
@@ -89,12 +90,12 @@ const getOneSurgery = async (req, res, next) => {
 };
 
 const updateSurgery = async (req, res, next) => {
-  const { name, patientId, location, notes, date, shots, id } = req.body;
+  const { id, patientId, date, name, cause, description, HospitalVisit, verifiedHospital, hospitalId } = req.body;
 
   try {
-    reseponse = await Vaccinations.updateOne({ _id: id }, { name, patientId, location, notes, date, shots });
+    reseponse = await Surgery.updateOne({ _id: id }, { patientId, date, name, cause, description, HospitalVisit, verifiedHospital, hospitalId });
   } catch (err) {
-    const error = new HttpError("could not update vaccination", 500);
+    const error = new HttpError("could not update surgery", 500);
     return next(error);
   }
   res.status(200).json("updated");

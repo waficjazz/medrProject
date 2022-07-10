@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -17,8 +17,41 @@ const SurgicalHistory = () => {
   const [surgeries, setSurgeries] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-
+  const [direction, setDirection] = useState("asc");
+  const [orderBy, setOrderBy] = useState("1");
   const [reload, setReload] = useState(false);
+  const [surgeryId, setSurgeryId] = useState("");
+  const [formType, setFormType] = useState("");
+  const sortByName = (prop) => {
+    setDirection(direction === "desc" ? "asc" : "desc");
+    if (prop === "date") {
+      const sorted = [...surgeries].sort((a, b) => {
+        return direction === "desc" ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date);
+      });
+      setSurgeries(sorted);
+    } else {
+      const sorted = [...surgeries].sort((a, b) => {
+        if (a[prop] < b[prop]) {
+          return direction === "desc" ? 1 : -1;
+        }
+        if (a[prop] > b[prop]) {
+          return direction === "desc" ? -1 : 1;
+        }
+        return 0;
+      });
+      setSurgeries(sorted);
+    }
+  };
+
+  const handleEdit = async (id) => {
+    try {
+      setFormType("edit");
+      setSurgeryId(id);
+      setOpenForm(true);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -105,12 +138,15 @@ const SurgicalHistory = () => {
             <Typography className="tableContents">{row.cause}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">{hospital.hospitalName}</Typography>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">
               <IconButton>
-                <EditIcon fontSize="small" />
+                <EditIcon fontSize="small" onClick={() => handleEdit(row._id)} />
               </IconButton>
               <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
                 <DeleteIcon fontSize="small" />
@@ -135,9 +171,12 @@ const SurgicalHistory = () => {
         <div className="main">
           <SurgeryForm
             isOpen={openForm}
+            type={formType}
+            id={surgeryId}
             close={() => {
               setOpenForm(false);
               setReload(!reload);
+              setFormType("add");
             }}
           />
           {empty ? (
@@ -153,17 +192,33 @@ const SurgicalHistory = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "5px" }}></TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
-                        <Typography className="tableHeaders">Name</Typography>
+                      <TableCell align="left" sx={{ width: "20%" }}>
+                        <TableSortLabel
+                          active={orderBy === "1"}
+                          direction={direction}
+                          onClick={() => {
+                            setOrderBy("1");
+                            sortByName("name");
+                          }}>
+                          <Typography className="tableHeaders">Name</Typography>
+                        </TableSortLabel>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "20%" }}>
                         <Typography className="tableHeaders">Cause</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "20%" }}>
                         <Typography className="tableHeaders">Hospital</Typography>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
-                        <Typography className="tableHeaders">Date</Typography>
+                      <TableCell align="left" sx={{ width: "20%" }}>
+                        <TableSortLabel
+                          active={orderBy === "2"}
+                          direction={direction}
+                          onClick={() => {
+                            setOrderBy("2");
+                            sortByName("date");
+                          }}>
+                          <Typography className="tableHeaders">Date</Typography>
+                        </TableSortLabel>
                       </TableCell>
                       <TableCell>
                         <Typography className="tableHeaders"></Typography>

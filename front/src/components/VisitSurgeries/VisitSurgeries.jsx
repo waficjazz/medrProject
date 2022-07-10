@@ -35,6 +35,7 @@ const VisitSurgeries = ({ visitId, close }) => {
       //   setEmpty(true);
       // }
     }
+
     return () => {
       isApiSubscribed = false;
     };
@@ -42,9 +43,42 @@ const VisitSurgeries = ({ visitId, close }) => {
 
   const DataModel = (props) => {
     const { row } = props;
+    const [hospital, setHospital] = useState([]);
+    const getHospital = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/${id}`);
+        let hospital = await response.data;
+        setHospital(hospital);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    const getVerfiedHospital = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/verified/${id}`);
+        let hospital = await response.data;
+        setHospital(hospital);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    useEffect(() => {
+      let isApiSubscribed = true;
+      if (isApiSubscribed) {
+        if (!row.verifiedHospital) {
+          getHospital(row.hospitalId);
+        } else {
+          getVerfiedHospital(row.hospitalId);
+        }
+      }
+      return () => {
+        isApiSubscribed = false;
+      };
+    }, []);
+
     return (
       <StyledEngineProvider injectFirst>
-        <TableRow className="dataRow">
+        <TableRow className="dataRow" sx={{ height: "40px" }}>
           <TableCell scope="row" style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents"></Typography>
           </TableCell>
@@ -55,18 +89,21 @@ const VisitSurgeries = ({ visitId, close }) => {
             <Typography className="tableContents">{row.cause}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
+            <Typography className="tableContents">{hospital.hospitalName}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
+            <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
+          </TableCell>
+          {/* <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}> */}
+          {/* <Typography className="tableContents">
               <IconButton>
                 <EditIcon fontSize="small" />
               </IconButton>
               <IconButton aria-label="delete row" sx={{ marginRight: "4px" }}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
-            </Typography>
-          </TableCell>
+            </Typography> */}
+          {/* </TableCell> */}
         </TableRow>
         <TableRow>
           {/* <TableCell className="moreData" colSpan={6}>
@@ -107,9 +144,9 @@ const VisitSurgeries = ({ visitId, close }) => {
                   <TableCell align="left" sx={{ width: "22%" }}>
                     <Typography className="tableHeaders">Date</Typography>
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <Typography className="tableHeaders"></Typography>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>

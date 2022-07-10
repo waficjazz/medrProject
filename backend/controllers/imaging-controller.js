@@ -1,7 +1,7 @@
 const Imaging = require("../models/imaging");
 const HttpError = require("../models/http-error");
 const { s3Upload } = require("../s3Service");
-
+const mongoose = require("mongoose");
 const getAll = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
@@ -21,22 +21,43 @@ const getAll = async (req, res, next) => {
 
 const addImaging = async (req, res, next) => {
   const { name, patientId, clinicalVisit, HospitalVisit, date, hospitalId, location, prescription } = req.body;
-  const image = req.files["image"][0];
-  const report = req.files["report"][0];
+  let hVisit = HospitalVisit;
+  let cVisit = clinicalVisit;
+  if (!mongoose.Types.ObjectId.isValid(HospitalVisit)) {
+    hVisit = null;
+  }
+  if (!mongoose.Types.ObjectId.isValid(clinicalVisit)) {
+    cVisit = null;
+  }
+  let image;
+  let report;
+  let reportURL;
+  if (req.files["image"]) {
+    image = req.files["image"][0];
+  }
+  if (req.files["report"]) {
+    report = req.files["report"][0];
+  }
   // console.log(req.files);
   let imagesArray = [];
-  console.log(HospitalVisit);
+
   try {
-    const result = await s3Upload(image, ".png", "imgagings");
-    imagesArray.push(result.Location);
-    const resultReport = await s3Upload(report, ".pdf", "reports");
-    const reportURL = resultReport.Location;
+    if (req.files["image"]) {
+      const result = await s3Upload(image, ".png", "imgagings");
+      imagesArray.push(result.Location);
+    }
+    if (req.files["report"]) {
+      const resultReport = await s3Upload(report, ".pdf", "reports");
+      reportURL = resultReport.Location;
+    } else {
+      reportURL = "";
+    }
     const imaging = new Imaging({
       name,
       report: reportURL,
       patientId,
-      clinicalVisit,
-      HospitalVisit,
+      clinicalVisit: cVisit,
+      HospitalVisit: hVisit,
       date,
       location,
       images: imagesArray,
