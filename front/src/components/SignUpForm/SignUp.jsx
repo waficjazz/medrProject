@@ -14,6 +14,7 @@ import axios from "axios";
 import { RegContext } from "../../context";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import CloseIcon from "@mui/icons-material/Close";
 
 const SignUp = () => {
   const auth = useContext(RegContext);
@@ -49,7 +50,8 @@ const SignUp = () => {
   const [hospitalName, setHospitalName] = useState("");
   const validEmail = useRef(true);
   const validPassword = useRef(true);
-  const validPhone = useRef(true);
+  // const validPhone = useRef(false);
+  const [validPhone, setValidPhone] = useState(false);
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   const navigate = useNavigate();
   useEffect(() => {
@@ -63,7 +65,8 @@ const SignUp = () => {
   }, [password]);
 
   useEffect(() => {
-    validPhone.current = /^[0-9]{7}$/.test(phoneNumber);
+    // validPhone.current = /^\d{7}$/.test(phoneNumber);
+    setValidPhone(/^\d{8}$/.test(phoneNumber));
   }, [phoneNumber]);
 
   useEffect(() => {
@@ -149,14 +152,17 @@ const SignUp = () => {
       }
       const reponse = await res.data;
       if (type == "doctor") {
+        navigate("/personalinfo");
         setIsLoading(false);
         auth.highLogin(reponse.userId, reponse.token);
         setRole("choosePatient");
       } else if (type == "hospital") {
+        // navigate("/personalinfo");
         setIsLoading(false);
         auth.highLogin(reponse.userId, reponse.token);
         setRole("choosePatient");
       } else {
+        // navigate("/personalinfo");
         setIsLoading(false);
         auth.login(reponse.user._id, reponse.token);
         navigate("/");
@@ -198,7 +204,9 @@ const SignUp = () => {
       setIsLoading(false);
       handleNext();
     } catch (err) {
-      console.log(err.message);
+      setIsError(true);
+      setError(err.response.data.message);
+      console.log(err.response.data.message);
     }
   };
 
@@ -427,8 +435,8 @@ const SignUp = () => {
                   onClick={handleNext}
                   disabled={
                     !validEmail.current ||
-                    !validPassword ||
-                    !validPhone ||
+                    !validPassword.current ||
+                    !validPhone.current ||
                     password !== confirmPassword ||
                     firstName.length < 2 ||
                     lastName.length < 2 ||
@@ -722,6 +730,7 @@ const SignUp = () => {
                   <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
                   <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} onChange={(e) => setPhoneNumber(e.target.value)} />
                 </FormControl>
+
                 <Button
                   className="nextIcon"
                   variant="contained"
@@ -729,7 +738,7 @@ const SignUp = () => {
                   onClick={handleNext}
                   disabled={
                     !validEmail.current ||
-                    !validPassword ||
+                    !validPassword.current ||
                     !validPhone ||
                     password !== confirmPassword ||
                     firstName.length < 2 ||
@@ -740,6 +749,9 @@ const SignUp = () => {
                   Next
                 </Button>
               </Box>
+              <IconButton className="finishStep" onClick={() => setRole("unset")}>
+                <CloseIcon />
+              </IconButton>
               <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
                 <InputLabel htmlFor="bd">Birth Date</InputLabel>
                 <FormControl className="bg" fullWidth>
@@ -763,15 +775,15 @@ const SignUp = () => {
                 <TextField className="sm" label="City" variant="standard" size="small" required onChange={(e) => setCity(e.target.value)} />
                 {/* <Autocomplete className="sm" size="small" disablePortal id="region" hopitals={regions} renderInput={(params) => <TextField {...params} label="City" />} /> */}
                 <TextField className="bg " label="Address" fullWidth multiline size="small" maxRows={3} onChange={(e) => setAddress(e.target.value)} />
-                {/* <Autocomplete
+                <Autocomplete
                   className="sm"
                   size="small"
                   disablePortal
                   id="idDocument"
-                  hopitals={idTypes}
+                  options={idTypes}
                   onChange={(e, evalue) => setIdType(evalue)}
                   renderInput={(params) => <TextField {...params} label="ID Document" />}
-                /> */}
+                />
                 <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
                 <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
                   Next
@@ -819,6 +831,11 @@ const SignUp = () => {
                   options={["Male", "Female"]}
                   renderInput={(params) => <TextField {...params} label="Gender" />}
                 />
+                {isError && (
+                  <Typography color="red" sx={{ marginBottom: "20px" }}>
+                    {error}
+                  </Typography>
+                )}
                 <Button
                   className="nextIcon"
                   variant="contained"

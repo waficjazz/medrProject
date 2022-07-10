@@ -86,6 +86,17 @@ const signup = async (req, res, next) => {
     req.body;
   let hashedPassword;
   let validationCode;
+  let exist;
+  try {
+    exist = Patient.findOne({ email: email });
+    if (exist) {
+      const error = new HttpError("Email already exist please use different email or sign in ", 500);
+      return next(error);
+    }
+  } catch (err) {
+    const error = new HttpError("error signing up", 500);
+    return next(error);
+  }
 
   try {
     hashedPassword = await bcrypt.hash(password, 12);
