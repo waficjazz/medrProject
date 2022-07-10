@@ -9,6 +9,7 @@ import EmptyData from "../../components/EmpyData/EmptyData";
 import "../HospitalVisits/HospitalVisits.css";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
+import PrescForm from "../../components/PrescriptionForm/PrescriptionForm";
 import axios from "axios";
 import VaccineForm from "../../components/VaccineForm/VaccineForm";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -127,7 +128,7 @@ const Prescriptions = () => {
     <StyledEngineProvider injectFirst>
       <div className="hospitalVisits">
         <div className="main">
-          <VaccineForm
+          <PrescForm
             isOpen={openForm}
             type={formType}
             id={vaccId}
@@ -154,19 +155,19 @@ const Prescriptions = () => {
                 <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="left" sx={{ width: "25%" }} key="1">
+                      <TableCell align="left" sx={{ width: "18%" }} key="1">
                         <TableSortLabel
                           active={orderBy === "1"}
                           direction={direction}
                           onClick={() => {
                             setOrderBy("1");
-                            sortByName("name");
+                            sortByName("date");
                           }}>
                           {/* <Button onClick={sortByName}>sort</Button> */}
-                          <Typography className="tableHeaders">Vaccine Name</Typography>
+                          <Typography className="tableHeaders">Date</Typography>
                         </TableSortLabel>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }} key="2">
+                      <TableCell align="left" sx={{ width: "20%" }} key="2">
                         <TableSortLabel
                           active={orderBy === "2"}
                           direction={direction}
@@ -174,10 +175,10 @@ const Prescriptions = () => {
                             setOrderBy("2");
                             sortByName("date");
                           }}>
-                          <Typography className="tableHeaders">Vaccination Date</Typography>
+                          <Typography className="tableHeaders">Location</Typography>
                         </TableSortLabel>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "15%" }}>
+                      <TableCell align="left" sx={{ width: "20%" }}>
                         <TableSortLabel
                           active={orderBy === "3"}
                           direction={direction}
@@ -185,10 +186,10 @@ const Prescriptions = () => {
                             setOrderBy("3");
                             sortByName("name");
                           }}>
-                          <Typography className="tableHeaders">Shots</Typography>
+                          <Typography className="tableHeaders">Isuser</Typography>
                         </TableSortLabel>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "22%" }}>
+                      <TableCell align="left" sx={{ width: "20%" }}>
                         <Typography className="tableHeaders">Notes</Typography>
                       </TableCell>
                       <TableCell>
