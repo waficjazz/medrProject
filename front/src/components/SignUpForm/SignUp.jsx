@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const SignUp = () => {
-  const navigate = useNavigate();
   const auth = useContext(RegContext);
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState("patient");
@@ -52,6 +51,7 @@ const SignUp = () => {
   const validPassword = useRef(true);
   const validPhone = useRef(true);
   const highStoredData = JSON.parse(localStorage.getItem("high"));
+  const navigate = useNavigate();
   useEffect(() => {
     if (highStoredData && highStoredData.token) {
       setRole("choosePatient");
@@ -118,10 +118,12 @@ const SignUp = () => {
 
       console.log(reponse);
       if (type == "patient") {
+        navigate("/personalinfo");
         setIsLoading(false);
         auth.login(reponse.userId, reponse.token);
         navigate("/");
       } else {
+        navigate("/personalinfo");
         setIsLoading(false);
         auth.highLogin(reponse.userId, reponse.token);
         setRole("choosePatient");
