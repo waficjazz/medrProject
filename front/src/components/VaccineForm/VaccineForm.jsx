@@ -17,7 +17,7 @@ const VaccineForm = (props) => {
   const [location, setLocation] = useState("");
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
-
+  const [doses, setDoses] = useState("");
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -33,6 +33,7 @@ const VaccineForm = (props) => {
           setNotes(data.notes);
           setDate(data.date?.toString().slice(0, 10));
           setShots(data.shots);
+          setDoses(data.doses);
         } catch (err) {
           console.log(err.message);
         }
@@ -45,6 +46,7 @@ const VaccineForm = (props) => {
     setNotes("");
     setDate("");
     setShots("");
+    setDoses("");
   }, [props]);
 
   const submit = async () => {
@@ -53,6 +55,7 @@ const VaccineForm = (props) => {
       name,
       notes,
       shots,
+      doses,
       date,
       location,
     };
@@ -72,6 +75,7 @@ const VaccineForm = (props) => {
       name,
       notes,
       shots,
+      doses,
       date,
       location,
       id: props.id,
@@ -122,6 +126,8 @@ const VaccineForm = (props) => {
               }}
             />
             <TextField size="small" value={notes} className="bg" label="Notes" fullWidth variant="standard" onChange={(e) => setNotes(e.target.value)} />
+            <TextField value={shots} size="small" type="number" label="Dose Number" variant="standard" className="hospitalInputs" onChange={(e) => setShots(e.target.value)} />
+            <TextField value={doses} type="number" size="small" label="Total Doses" variant="standard" className="hospitalInputs" onChange={(e) => setDoses(e.target.value)} />
           </div>
           {props.type === "add" && (
             <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>

@@ -101,7 +101,9 @@ const Vaccines = () => {
             <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.shots}</Typography>
+            <Typography className="tableContents">
+              {row.shots}/{row.doses}
+            </Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.notes}</Typography>
@@ -176,7 +178,15 @@ const Vaccines = () => {
                         </TableSortLabel>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "15%" }}>
-                        <Typography className="tableHeaders">Shots</Typography>
+                        <TableSortLabel
+                          active={orderBy === "1"}
+                          direction={direction}
+                          onClick={() => {
+                            setOrderBy("3");
+                            sortByName("name");
+                          }}>
+                          <Typography className="tableHeaders">Shots</Typography>
+                        </TableSortLabel>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "22%" }}>
                         <Typography className="tableHeaders">Notes</Typography>

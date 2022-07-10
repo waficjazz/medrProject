@@ -2,7 +2,7 @@ const Vaccinations = require("../models/vaccinations");
 const HttpError = require("../models/http-error");
 
 const addVaccination = async (req, res, next) => {
-  const { name, patientId, location, notes, date, shots } = req.body;
+  const { name, patientId, location, notes, date, shots, doses } = req.body;
   const vacc = new Vaccinations({
     name,
     patientId,
@@ -10,6 +10,7 @@ const addVaccination = async (req, res, next) => {
     notes,
     date,
     shots,
+    doses,
   });
   try {
     await vacc.save();
@@ -69,10 +70,10 @@ const getOneVaccination = async (req, res, next) => {
 };
 
 const updateVaccination = async (req, res, next) => {
-  const { name, patientId, location, notes, date, shots, id } = req.body;
+  const { name, patientId, location, notes, date, shots, id, doses } = req.body;
 
   try {
-    reseponse = await Vaccinations.updateOne({ _id: id }, { name, patientId, location, notes, date, shots });
+    reseponse = await Vaccinations.updateOne({ _id: id }, { name, patientId, location, notes, date, shots, doses });
   } catch (err) {
     const error = new HttpError("could not update vaccination", 500);
     return next(error);

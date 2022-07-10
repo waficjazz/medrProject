@@ -11,6 +11,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ReplayIcon from "@mui/icons-material/Replay";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+
 const Navbar = () => {
   const navigate = useNavigate();
   const patient = useSelector((state) => state.patient.value);
@@ -49,12 +51,18 @@ const Navbar = () => {
                 <Collapse in={open}>
                   <div className="userAction">
                     <List>
-                      <IconButton sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
-                        <ReplayIcon sx={{ marginRight: "5px" }} fontSize="small" />
+                      <IconButton className="userButton" sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
+                        <PersonIcon sx={{ marginRight: "5px" }} fontSize="small" />
                         Account
                       </IconButton>
                       <hr />
+                      <IconButton className="userButton" sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
+                        <AssignmentIndIcon sx={{ marginRight: "5px" }} fontSize="small" />
+                        Patient
+                      </IconButton>
+                      <hr />
                       <IconButton
+                        className="userButton"
                         sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}
                         onClick={() => {
                           auth.logout();
@@ -65,6 +73,7 @@ const Navbar = () => {
                       </IconButton>
                       <hr />
                       <IconButton
+                        className="userButton"
                         sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}
                         onClick={() => {
                           auth.highLogout();
