@@ -25,9 +25,12 @@ function App() {
 
   const highLogout = useCallback(() => {
     // setUserId(null);
+    setToken(null);
+    setIsLoggedIn(false);
     localStorage.removeItem("userData");
     localStorage.removeItem("high");
     setShow(true);
+    setIsLoggedIn(false);
   }, []);
 
   const logout = useCallback(() => {
@@ -35,7 +38,8 @@ function App() {
     setIsLoggedIn(false);
     // setUserId(null);
     localStorage.removeItem("userData");
-    localStorage.removeItem("high");
+
+    // localStorage.removeItem("high");
     setShow(true);
   }, []);
 

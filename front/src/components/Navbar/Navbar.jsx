@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import "./Navbar.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { AppBar, Toolbar, InputBase, IconButton, Badge, Typography, Collapse } from "@mui/material";
+import { AppBar, Toolbar, InputBase, List, ListItemButton, IconButton, Badge, Typography, Collapse } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import PersonIcon from "@mui/icons-material/Person";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -48,14 +48,32 @@ const Navbar = () => {
                 </IconButton>
                 <Collapse in={open}>
                   <div className="userAction">
-                    <IconButton sx={{ fontSize: "15px" }}>
-                      <LogoutIcon />
-                      Logout
-                    </IconButton>
-                    <IconButton>
-                      <ReplayIcon />
-                      Switch Patient
-                    </IconButton>
+                    <List>
+                      <IconButton sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
+                        <ReplayIcon sx={{ marginRight: "5px" }} fontSize="small" />
+                        Account
+                      </IconButton>
+                      <hr />
+                      <IconButton
+                        sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}
+                        onClick={() => {
+                          auth.logout();
+                          setOpen(!open);
+                        }}>
+                        <ReplayIcon sx={{ marginRight: "5px" }} fontSize="small" />
+                        Switch Patient
+                      </IconButton>
+                      <hr />
+                      <IconButton
+                        sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}
+                        onClick={() => {
+                          auth.highLogout();
+                          setOpen(!open);
+                        }}>
+                        <LogoutIcon fontSize="small" sx={{ marginRight: "5px" }} />
+                        Logout
+                      </IconButton>
+                    </List>
                   </div>
                 </Collapse>
               </div>

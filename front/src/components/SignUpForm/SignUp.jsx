@@ -49,7 +49,12 @@ const SignUp = () => {
   const validEmail = useRef(true);
   const validPassword = useRef(true);
   const validPhone = useRef(true);
-
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  useEffect(() => {
+    if (highStoredData && highStoredData.token) {
+      setRole("choosePatient");
+    }
+  }, []);
   const [hide, setHide] = useState(false);
   useEffect(() => {
     validPassword.current = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
