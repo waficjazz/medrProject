@@ -139,7 +139,7 @@ const signup = async (req, res, next) => {
       host: "smtp.gmail.com",
       auth: {
         user: "jazzarwafic@gmail.com",
-        pass: "crwmeopaehovudlj",
+        pass: process.env.APP_PASSWORD,
       },
     });
 
