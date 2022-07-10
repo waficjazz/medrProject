@@ -5,8 +5,8 @@ const labTestController = require("../controllers/labTest-controller");
 const router = express.Router();
 
 router.get("/visit/:id/:vid", labTestController.getLabByVisit);
-router.post("/add", labTestController.addLabTest);
+router.post("/add", auth, labTestController.addLabTest);
 router.get("/getall/:id", labTestController.getLabTests);
-router.delete("/delete/:id", labTestController.deleteLabTest);
+router.delete("/delete/:id", auth, labTestController.deleteLabTest);
 
 module.exports = router;

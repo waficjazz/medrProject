@@ -1,7 +1,7 @@
 const express = require("express");
 
 const doctorController = require("../controllers/doctor-controller");
-
+const { auth } = require("../middleware/rbac");
 const router = express.Router();
 
 router.post("/signup", doctorController.signup);
