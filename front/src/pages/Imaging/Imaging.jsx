@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import ImagingForm from "../../components/ImagingForm/ImagingForm";
@@ -17,6 +17,28 @@ const Imaging = () => {
   const [openForm, setOpenForm] = useState(false);
   const [imagings, setImagings] = useState([]);
   const [reload, setReload] = useState(false);
+  const [direction, setDirection] = useState("");
+  const [orderBy, setOrderBy] = useState("1");
+  const sortByName = (prop) => {
+    setDirection(direction === "desc" ? "asc" : "desc");
+    if (prop === "date") {
+      const sorted = [...imagings].sort((a, b) => {
+        return direction === "desc" ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date);
+      });
+      setImagings(sorted);
+    } else {
+      const sorted = [...imagings].sort((a, b) => {
+        if (a[prop] < b[prop]) {
+          return direction === "desc" ? 1 : -1;
+        }
+        if (a[prop] > b[prop]) {
+          return direction === "desc" ? -1 : 1;
+        }
+        return 0;
+      });
+      setImagings(sorted);
+    }
+  };
 
   useEffect(() => {
     const getImagings = async () => {
@@ -111,13 +133,37 @@ const Imaging = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "18%" }}>
-                        <Typography className="tableHeaders">Name</Typography>
+                        <TableSortLabel
+                          active={orderBy === "1"}
+                          direction={direction}
+                          onClick={() => {
+                            setOrderBy("1");
+                            sortByName("name");
+                          }}>
+                          <Typography className="tableHeaders">Name</Typography>
+                        </TableSortLabel>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "18%" }}>
-                        <Typography className="tableHeaders">Date</Typography>
+                        <TableSortLabel
+                          active={orderBy === "2"}
+                          direction={direction}
+                          onClick={() => {
+                            setOrderBy("2");
+                            sortByName("date");
+                          }}>
+                          <Typography className="tableHeaders">Date</Typography>
+                        </TableSortLabel>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "18%" }}>
-                        <Typography className="tableHeaders">Location</Typography>
+                        <TableSortLabel
+                          active={orderBy === "3"}
+                          direction={direction}
+                          onClick={() => {
+                            setOrderBy("3");
+                            sortByName("location");
+                          }}>
+                          <Typography className="tableHeaders">Location</Typography>
+                        </TableSortLabel>
                       </TableCell>
                       <TableCell align="left" sx={{ width: "18%" }}>
                         <Typography className="tableHeaders">Report</Typography>
