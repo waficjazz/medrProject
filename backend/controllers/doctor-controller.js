@@ -4,6 +4,7 @@ const HttpError = require("../models/http-error");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const { get } = require("../routes/vaccination-routes");
 
 function makeid(length) {
   var result = "";
@@ -207,6 +208,36 @@ const signin = async (req, res, next) => {
   });
 };
 
+const getDoctorById = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  try {
+    info = await Doctor.findById($regex);
+  } catch (err) {
+    const error = new HttpError("Fetching doctor  info failed, please try again later", 500);
+    return next(error);
+  }
+
+  if (!info || info.length === 0) {
+    return next(new HttpError("Could not find doctor doctor", 404));
+  }
+
+  res.json(info);
+};
+
+const updateDoctor = async (req, res, next) => {
+  const { name, email, phoneNumber, clinicAddress, proficiency, id } = req.body;
+  try {
+    await Doctor.updateOne({ _id: id }, { name, email, phoneNumber, clinicAddress, proficiency });
+  } catch (err) {
+    const error = new HttpError("could not update doctor", 500);
+    return next(error);
+  }
+  res.status(200).json("updated");
+};
+
+exports.updateDoctor = updateDoctor;
+exports.getDoctorById = getDoctorById;
 exports.signin = signin;
 exports.signup = signup;
 exports.addDoctor = addDoctor;

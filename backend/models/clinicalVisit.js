@@ -13,6 +13,8 @@ const clinicalVisitSchema = new Schema({
   prescription: { type: String, required: false },
   cause: { type: String, required: true },
   clinicAddress: { type: String, required: true },
+  verifiedDoctor: { type: Boolean, required: true },
+  doctorId: { type: mongoose.Types.ObjectId, required: false },
 });
 
 module.exports = mongoose.model("ClinicalVisit", clinicalVisitSchema);

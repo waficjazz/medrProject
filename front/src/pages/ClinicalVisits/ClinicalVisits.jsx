@@ -18,8 +18,19 @@ const ClinicalVisits = () => {
   const [visits, setVisits] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-
+  const [visitId, setVisitId] = useState("");
+  const [formType, setFormType] = useState("");
   const [reload, setReload] = useState(false);
+
+  const handleEdit = async (id) => {
+    try {
+      setFormType("edit");
+      setVisitId(id);
+      setOpenForm(true);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -76,7 +87,7 @@ const ClinicalVisits = () => {
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">
-              <IconButton>
+              <IconButton onClick={() => handleEdit(row._id)}>
                 <EditIcon fontSize="small" />
               </IconButton>
               <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
@@ -102,9 +113,12 @@ const ClinicalVisits = () => {
         <div className="main">
           <ClinicalVisitForm
             isOpen={openForm}
+            type={formType}
+            id={visitId}
             close={() => {
               setOpenForm(false);
               setReload(!reload);
+              setFormType("add");
             }}
           />
           {empty ? (

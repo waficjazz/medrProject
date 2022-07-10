@@ -18,9 +18,54 @@ const ClinicalVisitForm = (props) => {
   const [visitCause, setVisitCause] = useState("");
   const [visitDescription, setVisitDescription] = useState("");
   const [proficiency, setProficiency] = useState("");
+  const [verifiedDoctor, setVerifiedDoctor] = useState(true);
   const doctorId = useRef();
   const [open, setOpen] = React.useState(false);
   const loading = open && doctors.length === 0;
+
+  useEffect(() => {
+    if (props.type === "edit") {
+      const getOneVisit = async () => {
+        try {
+          const res = await axios.get(`http://localhost:5000/api/clinical/one/${props.id}`);
+          const data = await res.data[0];
+          console.log(data);
+          setVisitCause(data.cause);
+          setVisitDescription(data.description);
+          setVisitDate(data.visitDate?.toString().slice(0, 10));
+
+          // setSurgeryDate(data.date?.toString().slice(0, 10));
+          // setSurgeryName(data.name);
+          // setSurgeryDescription(data.description);
+          // visitId.current = data.HospitalVisit;
+          let i = data.doctorId;
+          if (data.verifiedDoctor == false) {
+            setTabValue("1");
+            const res1 = await axios.get(`http://localhost:5000/api/doctor/one/${i}`);
+            const data = await res1.data;
+            console.log(data);
+            setProficiency(data.proficiency[0]);
+            setDoctorName(data.name);
+            console.log(data.name);
+            setClinicAddress(data.clinicAddress);
+            setEmail(data.email);
+            setPhoneNumber(data.phoneNumber);
+          }
+        } catch (err) {
+          console.log(err.message);
+        }
+      };
+
+      getOneVisit();
+    }
+    setVisitCause("");
+    setVisitDescription("");
+    setVisitDate("");
+    setDoctorName("");
+    setClinicAddress("");
+    setEmail("");
+    setPhoneNumber("");
+  }, [props]);
 
   useEffect(() => {
     let active = true;
@@ -57,6 +102,7 @@ const ClinicalVisitForm = (props) => {
   }, [open]);
 
   const handleChange = (event, newValue) => {
+    setVerifiedDoctor(!verifiedDoctor);
     setTabValue(newValue);
   };
 
@@ -74,6 +120,8 @@ const ClinicalVisitForm = (props) => {
 
       let visit = {
         patientId,
+        verifiedDoctor,
+        doctorId: doctorId.current,
         doctorName: doctorName,
         email: email,
         phoneNumber: phoneNumber,
@@ -85,6 +133,36 @@ const ClinicalVisitForm = (props) => {
       };
       const resp = await axios.post("http://localhost:5000/api/clinical/visits/add", visit);
       if (resp.statusText === "Created") {
+        props.close();
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const handleEdit = async () => {
+    let visit = {
+      patientId,
+      doctorName: doctorName,
+      email: email,
+      phoneNumber: phoneNumber,
+      visitDate: visitDate,
+      description: visitDescription,
+      cause: visitCause,
+      clinicAddress,
+      doctorName,
+      id: props.id,
+    };
+    try {
+      const res = await axios.post("http://localhost:5000/api/clinical/visit/update", visit);
+      if (tabValue === "1") {
+        let doctor = { id: doctorId.current, clinicAddress: clinicAddress, email: email, name: doctorName, phoneNumber: phoneNumber, proficiency: proficiency };
+        const res1 = await axios.post("http://localhost:5000/api/doctor/update", doctor);
+
+        if (res1.statusText === "OK" && res.statusText === "OK") {
+          props.close();
+        }
+      } else if (res.statusText === "OK") {
         props.close();
       }
     } catch (err) {
@@ -107,11 +185,18 @@ const ClinicalVisitForm = (props) => {
           <div className="hopitalForm">
             {tabValue === "1" && (
               <>
-                <TextField size="small" label="Doctor's Name" variant="standard" className="hospitalInputs" onChange={(e) => setDoctorName(e.target.value)} />
-                <TextField size="small" label="Doctor's proficiency" variant="standard" className="hospitalInputs" onChange={(e) => setProficiency(e.target.value)} />
-                <TextField size="small" label="Phone number" variant="standard" className="hospitalInputs" onChange={(e) => setPhoneNumber(e.target.value)} />
-                <TextField size="small" label="Email" variant="standard" className="hospitalInputs" onChange={(e) => setEmail(e.target.value)} />
-                <TextField size="small" label="Clinic Address" variant="standard" fullWidth onChange={(e) => setClinicAddress(e.target.value)} />
+                <TextField value={doctorName} size="small" label="Doctor's Name" variant="standard" className="hospitalInputs" onChange={(e) => setDoctorName(e.target.value)} />
+                <TextField
+                  value={proficiency}
+                  size="small"
+                  label="Doctor's proficiency"
+                  variant="standard"
+                  className="hospitalInputs"
+                  onChange={(e) => setProficiency(e.target.value)}
+                />
+                <TextField value={phoneNumber} size="small" label="Phone number" variant="standard" className="hospitalInputs" onChange={(e) => setPhoneNumber(e.target.value)} />
+                <TextField value={email} size="small" label="Email" variant="standard" className="hospitalInputs" onChange={(e) => setEmail(e.target.value)} />
+                <TextField value={clinicAddress} size="small" label="Clinic Address" variant="standard" fullWidth onChange={(e) => setClinicAddress(e.target.value)} />
               </>
             )}
             {tabValue === "0" && (
@@ -171,14 +256,39 @@ const ClinicalVisitForm = (props) => {
           </div>
           <hr />
           <div className="hopitalForm">
-            <TextField size="small" label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setVisitCause(e.target.value)} />
-            <TextField size="small" label="Visit Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setVisitDate(e.target.value)} />
+            <TextField value={visitCause} size="small" label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setVisitCause(e.target.value)} />
+            <TextField
+              value={visitDate}
+              size="small"
+              label="Visit Date"
+              variant="standard"
+              type="date"
+              focused
+              className="hospitalInputs"
+              onChange={(e) => setVisitDate(e.target.value)}
+            />
 
-            <TextField size="small" label="Description" variant="standard" fullWidth multiline maxRows={3} onChange={(e) => setVisitDescription(e.target.value)} />
+            <TextField
+              value={visitDescription}
+              size="small"
+              label="Description"
+              variant="standard"
+              fullWidth
+              multiline
+              maxRows={3}
+              onChange={(e) => setVisitDescription(e.target.value)}
+            />
           </div>
-          <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
-            Submit
-          </Button>
+          {props.type === "add" && (
+            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+              Submit
+            </Button>
+          )}
+          {props.type === "edit" && (
+            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
+              Submit
+            </Button>
+          )}
         </div>
       </div>
     </StyledEngineProvider>

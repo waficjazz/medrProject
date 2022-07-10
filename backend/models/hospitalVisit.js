@@ -11,7 +11,7 @@ const hospitalVisitSchema = new Schema({
   cause: { type: String, required: true },
   doctors: { type: [String], required: true },
   verifiedHospital: { type: Boolean, required: true },
-  hospitalId: { type: mongoose.Types.ObjectId, required: false, ref: "Hospital" },
+  hospitalId: { type: mongoose.Types.ObjectId, required: false },
 });
 
 module.exports = mongoose.model("HospitalVisit", hospitalVisitSchema);

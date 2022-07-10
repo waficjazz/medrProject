@@ -145,8 +145,8 @@ const SurgicalHistory = () => {
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">
-              <IconButton>
-                <EditIcon fontSize="small" onClick={() => handleEdit(row._id)} />
+              <IconButton onClick={() => handleEdit(row._id)}>
+                <EditIcon fontSize="small" />
               </IconButton>
               <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
                 <DeleteIcon fontSize="small" />
