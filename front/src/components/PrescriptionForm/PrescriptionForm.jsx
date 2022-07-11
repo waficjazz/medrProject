@@ -41,28 +41,32 @@ const PrescForm = (props) => {
       setLabs(tmp);
     }
   };
-  // useEffect(() => {
-  //   if (props.type === "edit") {
-  //     const getPrescription = async () => {
-  //       try {
-  //         const res = await axios.get(`http://localhost:5000/api/vaccination/one/${props.id}`);
-  //         const data = await res.data[0];
-  //         setName(data.name);
-  //         setLocation(data.location);
-  //         setNotes(data.notes);
-  //         setDate(data.date?.toString().slice(0, 10));
-  //         setShots(data.shots);
-  //         setDoses(data.doses);
-  //       } catch (err) {
-  //         console.log(err.message);
-  //       }
-  //     };
+  useEffect(() => {
+    if (props.type === "edit") {
+      const getPrescription = async () => {
+        try {
+          const res = await axios.get(`http://localhost:5000/api/prescription/one/${props.id}`);
+          const data = await res.data;
+          setDescription(data.description);
+          setLocation(data.location);
+          setDate(data.date?.toString().slice(0, 10));
+          setIssuer(data.issuer);
+          setMedications(data.medications);
+          setLabs(data.labs);
+        } catch (err) {
+          console.log(err.message);
+        }
+      };
 
-  //     getPrescription();
-  //   }
-  //   setLocation("");
-  //   setDate("");
-  // }, [props]);
+      getPrescription();
+    }
+    setDescription("");
+    setLocation("");
+    setDate("");
+    setIssuer("");
+    setMedications([]);
+    setLabs([]);
+  }, [props]);
 
   const submit = async () => {
     let presc = {
@@ -84,26 +88,25 @@ const PrescForm = (props) => {
     }
   };
 
-  // const handleEdit = async () => {
-  //   let vaccination = {
-  //     patientId,
-  //     name,
-  //     notes,
-  //     shots,
-  //     doses,
-  //     date,
-  //     location,
-  //     id: props.id,
-  //   };
-  //   try {
-  //     const res = await axios.post("http://localhost:5000/api/vaccination/update", vaccination);
-  //     if (res.statusText === "OK") {
-  //       props.close();
-  //     }
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
+  const handleEdit = async () => {
+    let presc = {
+      patientId,
+      medications,
+      labs,
+      description,
+      date,
+      location,
+      id: props.id,
+    };
+    try {
+      const res = await axios.post("http://localhost:5000/api/prescription/update", presc);
+      if (res.statusText === "OK") {
+        props.close();
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <StyledEngineProvider injectFirst>
       <div className={props.isOpen ? "hVisitForm" : "notOpen"}>
@@ -205,11 +208,11 @@ const PrescForm = (props) => {
               Submit
             </Button>
           )}
-          {/* {props.type === "edit" && (
+          {props.type === "edit" && (
             <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
               Submit
             </Button>
-          )} */}
+          )}
         </div>
       </div>
     </StyledEngineProvider>

@@ -2,22 +2,6 @@ const Prescription = require("../models/prescriptions");
 const HttpError = require("../models/http-error");
 const { s3Upload } = require("../s3Service");
 const mongoose = require("mongoose");
-const getAll = async (req, res, next) => {
-  let info;
-  const $regex = req.params.id;
-  try {
-    info = await Imaging.find({ patientId: $regex });
-    console.log(info);
-  } catch (err) {
-    if (!info || info.length === 0) {
-      return next(new HttpError("Could not find  Imagings", 404));
-    }
-    const error = new HttpError("Fetching Imagingsinfo failed, please try again later", 500);
-    return next(error);
-  }
-
-  res.json(info);
-};
 
 const addPrescription = async (req, res, next) => {
   const { labs, patientId, date, description, hospitalVisit, clinicalVisit, location, issuer, medications } = req.body;
@@ -59,6 +43,23 @@ const getPrescriptions = async (req, res, next) => {
   res.json(info);
 };
 
+const getOne = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  try {
+    info = await Prescription.findById($regex);
+  } catch (err) {
+    const error = new HttpError("Fetching Prescription  failed, please try again later", 500);
+    return next(error);
+  }
+
+  if (!info || info.length === 0) {
+    return next(new HttpError("Could not find prescription", 404));
+  }
+
+  res.json(info);
+};
+
 const deletePrescription = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
@@ -73,26 +74,20 @@ const deletePrescription = async (req, res, next) => {
   res.json(info);
 };
 
-const getImagingByVisit = async (req, res, next) => {
-  let info;
-  const $regex = req.params.id;
-  const $regex2 = req.params.vid;
+const updatePrescription = async (req, res, next) => {
+  const { patientId, medications, labs, description, date, location, id } = req.body;
+
   try {
-    console.log("fetching");
-    info = await Imaging.find({ patientId: $regex, HospitalVisit: $regex2 });
-    console.log(info);
+    reseponse = await Prescription.updateOne({ _id: id }, { patientId, medications, labs, description, date, location, id });
   } catch (err) {
-    const error = new HttpError("Fetching imaging info failed, please try again later", 500);
+    const error = new HttpError("could not update prescription", 500);
     return next(error);
   }
-
-  if (!info || info.length === 0) {
-    return next(new HttpError("Could not find imaging", 404));
-  }
-
-  res.json(info);
+  res.status(200).json("updated");
 };
 
+exports.updatePrescription = updatePrescription;
 exports.addPrescription = addPrescription;
 exports.getPrescriptions = getPrescriptions;
 exports.deletePrescription = deletePrescription;
+exports.getOne = getOne;
