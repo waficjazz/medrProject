@@ -8,6 +8,11 @@ import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton,
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const VaccineForm = (props) => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   // const patient = useSelector((state) => state.patient.value);
@@ -60,7 +65,7 @@ const VaccineForm = (props) => {
       location,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/vaccination/add", vaccination);
+      const res = await axios.post("http://localhost:5000/api/vaccination/add", vaccination, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "Created") {
         props.close();
       }
@@ -81,7 +86,7 @@ const VaccineForm = (props) => {
       id: props.id,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/vaccination/update", vaccination);
+      const res = await axios.post("http://localhost:5000/api/vaccination/update", vaccination, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "OK") {
         props.close();
       }

@@ -13,13 +13,18 @@ import ClinicalVisitForm from "../../components/ClinicalVisitForm/ClinicalVisitF
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 const ClinicalVisits = () => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [visits, setVisits] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [visitId, setVisitId] = useState("");
-  const [formType, setFormType] = useState("");
+  const [formType, setFormType] = useState("add");
   const [reload, setReload] = useState(false);
 
   const handleEdit = async (id) => {
@@ -34,7 +39,7 @@ const ClinicalVisits = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/clinical/delete/visit/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/clinical/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
     } catch (err) {

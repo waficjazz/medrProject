@@ -8,6 +8,11 @@ import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton 
 import DownloadIcon from "@mui/icons-material/Download";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 const ImagingForm = (props) => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
@@ -103,6 +108,7 @@ const ImagingForm = (props) => {
       const res = await axios.post("http://localhost:5000/api/imaging/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${token}`,
         },
       });
       console.log(res.statusText);

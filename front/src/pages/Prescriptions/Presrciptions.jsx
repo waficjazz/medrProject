@@ -17,6 +17,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import OnePrescription from "../../components/OnePrescription/OnePrescription";
 
 const Prescriptions = () => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [prescriptions, setPrescriptions] = useState([]);
@@ -50,7 +55,7 @@ const Prescriptions = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/prescription/delete/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/prescription/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
     } catch (err) {

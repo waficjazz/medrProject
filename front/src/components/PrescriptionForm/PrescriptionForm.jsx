@@ -9,8 +9,14 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Description from "@mui/icons-material/Description";
 import MiniForm from "../MiniForm/MiniForm";
 import ClearIcon from "@mui/icons-material/Clear";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const PrescForm = (props) => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   // const patient = useSelector((state) => state.patient.value);
@@ -21,8 +27,47 @@ const PrescForm = (props) => {
   const [description, setDescription] = useState("");
   const [medications, setMedications] = useState([]);
   const [medication, setMedication] = useState("");
+  const [visits, setVisits] = useState([]);
   const [labs, setLabs] = useState([]);
   const [lab, setLab] = useState("");
+  const [open, setOpen] = useState(false);
+  const loading = open && visits.length === 0;
+  const visitId = useRef();
+
+  useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    const getVisits = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+
+        setVisits(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getVisits();
+      // if (visits.length === 0) {
+      //   setEmpty(true);
+      // }
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    if (!open) {
+      setVisits([]);
+    }
+  }, [open]);
+
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -77,9 +122,10 @@ const PrescForm = (props) => {
       issuer,
       medications,
       labs,
+      hospitalVisit: visitId.current,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/prescription/add", presc);
+      const res = await axios.post("http://localhost:5000/api/prescription/add", presc, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "Created") {
         props.close();
       }
@@ -96,10 +142,11 @@ const PrescForm = (props) => {
       description,
       date,
       location,
+      hospitalVisit: visitId.current,
       id: props.id,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/prescription/update", presc);
+      const res = await axios.post("http://localhost:5000/api/prescription/update", presc, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "OK") {
         props.close();
       }
@@ -143,7 +190,45 @@ const PrescForm = (props) => {
                 setDate(e.target.value);
               }}
             />
-            <TextField size="small" value={description} className="bg" label="Description" fullWidth variant="standard" onChange={(e) => setDescription(e.target.value)} />
+            <TextField size="small" value={description} label="Description" variant="standard" onChange={(e) => setDescription(e.target.value)} />
+            <Autocomplete
+              className="hospitalInputs"
+              size="small"
+              // disablePortal
+              sx={{ marginTop: "10px" }}
+              open={open}
+              onOpen={() => {
+                setOpen(true);
+              }}
+              onClose={() => {
+                setOpen(false);
+              }}
+              noOptionsText="No Such Hospital"
+              isOptionEqualToValue={(option, value) => option.entryDate === value.entryDate}
+              getOptionLabel={(option) => option.entryDate?.toString().slice(0, 10)}
+              options={visits}
+              loading={loading}
+              onChange={(event, newValue) => {
+                visitId.current = newValue._id;
+                console.log(visitId.current);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Hospital Visit"
+                  variant="standard"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
+            />
             <div className="addMedLab">
               <div style={{ width: "100%" }}>
                 <Typography sx={{ marginBottom: "5px", color: "var(--third-blue)", fontWeight: "bold", fontSize: "1.15rem" }}>Mediactions</Typography>

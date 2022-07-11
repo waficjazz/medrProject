@@ -10,6 +10,11 @@ import AddIcon from "@mui/icons-material/Add";
 import LabTestForm from "../../components/LabTestForn/LabTestForm";
 import axios from "axios";
 const LabTests = () => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [open, setOpen] = useState(false);
@@ -21,7 +26,7 @@ const LabTests = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/labtest/delete/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/labtest/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
       setReload(!reload);
     } catch (err) {
       console.log(err.message);

@@ -9,6 +9,11 @@ import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton,
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const LabTestForm = (props) => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   // const patient = useSelector((state) => state.patient.value);
@@ -97,7 +102,7 @@ const LabTestForm = (props) => {
       HospitalVisit: visitId.current,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/labtest/add", labTest);
+      const res = await axios.post("http://localhost:5000/api/labtest/add", labTest, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "Created") {
         props.close();
       }

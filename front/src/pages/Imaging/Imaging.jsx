@@ -9,9 +9,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 const Imaging = () => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
-  const highStoredData = JSON.parse(localStorage.getItem("high"));
   let token = "";
-  token = highStoredData?.token;
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const patientId = storedData.uid;
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);

@@ -6,6 +6,11 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 const ClinicalVisitForm = (props) => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [tabValue, setTabValue] = useState("0");
@@ -111,7 +116,7 @@ const ClinicalVisitForm = (props) => {
 
     try {
       if (tabValue === "1") {
-        const res = await axios.post("http://localhost:5000/api/doctor/add", doctor);
+        const res = await axios.post("http://localhost:5000/api/doctor/add", doctor, { headers: { authorization: `Bearer ${token}` } });
         let id = await res.data._id;
         let doc = await res.data;
         doctorId.current = id;
@@ -131,7 +136,7 @@ const ClinicalVisitForm = (props) => {
         clinicAddress,
         doctorName,
       };
-      const resp = await axios.post("http://localhost:5000/api/clinical/visits/add", visit);
+      const resp = await axios.post("http://localhost:5000/api/clinical/visits/add", visit, { headers: { authorization: `Bearer ${token}` } });
       if (resp.statusText === "Created") {
         props.close();
       }
@@ -154,7 +159,7 @@ const ClinicalVisitForm = (props) => {
       id: props.id,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/clinical/visit/update", visit);
+      const res = await axios.post("http://localhost:5000/api/clinical/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
       if (tabValue === "1") {
         let doctor = { id: doctorId.current, clinicAddress: clinicAddress, email: email, name: doctorName, phoneNumber: phoneNumber, proficiency: proficiency };
         const res1 = await axios.post("http://localhost:5000/api/doctor/update", doctor);

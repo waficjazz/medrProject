@@ -7,6 +7,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector } from "react-redux";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
 const HospitalVisitForm = (props) => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const patient = useSelector((state) => state.patient.value);
@@ -119,10 +124,10 @@ const HospitalVisitForm = (props) => {
       id: props.id,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/hospital/visit/update", visit);
+      const res = await axios.post("http://localhost:5000/api/hospital/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
       if (tabValue === "1") {
         let hospital = { hospitalName: hName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber, id: hospitalId.current };
-        const res1 = await axios.post("http://localhost:5000/api/hospital/update", hospital);
+        const res1 = await axios.post("http://localhost:5000/api/hospital/update", hospital, { headers: { authorization: `Bearer ${token}` } });
 
         if (res1.statusText === "OK" && res.statusText === "OK") {
           props.close();
@@ -140,7 +145,7 @@ const HospitalVisitForm = (props) => {
 
     try {
       if (tabValue === "1") {
-        const res = await axios.post("http://localhost:5000/api/hospital/add", hospital);
+        const res = await axios.post("http://localhost:5000/api/hospital/add", hospital, { headers: { authorization: `Bearer ${token}` } });
         console.log(res.data);
         let id = await res.data._id;
         hospitalId.current = id;
@@ -156,7 +161,7 @@ const HospitalVisitForm = (props) => {
         description: visitDescription,
       };
 
-      const resp = await axios.post("http://localhost:5000/api/hospital/visits/add", visit);
+      const resp = await axios.post("http://localhost:5000/api/hospital/visits/add", visit, { headers: { authorization: `Bearer ${token}` } });
       if (resp.statusText === "Created") {
         props.close();
       }

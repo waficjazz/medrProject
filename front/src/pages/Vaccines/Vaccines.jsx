@@ -15,6 +15,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 const Vaccines = () => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [vaccinations, setVaccinations] = useState([]);
@@ -48,7 +53,7 @@ const Vaccines = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/vaccination/delete/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/vaccination/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
     } catch (err) {

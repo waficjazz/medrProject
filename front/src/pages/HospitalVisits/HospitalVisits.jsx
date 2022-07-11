@@ -16,6 +16,11 @@ import Imaging from "../Imaging/Imaging";
 import VisitImagings from "../../components/VisitImagings/VisitImagings";
 
 const HospitalVisits = () => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [visits, setVisits] = useState([]);
@@ -62,7 +67,7 @@ const HospitalVisits = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/hospital/delete/visit/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/hospital/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
     } catch (err) {
