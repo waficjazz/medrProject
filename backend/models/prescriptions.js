@@ -11,7 +11,7 @@ const prescirptionSchema = new Schema({
   issuer: { type: String, required: false },
   description: { type: String, required: false },
   medications: { type: [String], required: false },
-  labTests: { type: [String], required: false },
+  labs: { type: [String], required: false },
   createdAt: Date,
   updatedAt: Date,
 });

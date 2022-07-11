@@ -20,11 +20,11 @@ const getAll = async (req, res, next) => {
 };
 
 const addPrescription = async (req, res, next) => {
-  const { labTests, patientId, date, description, hospitalVisit, clinicalVisit, location, issuer, medications } = req.body;
+  const { labs, patientId, date, description, hospitalVisit, clinicalVisit, location, issuer, medications } = req.body;
   const presc = new Prescription({
     patientId,
     date,
-    labTests,
+    labs,
     description,
     hospitalVisit,
     clinicalVisit,
@@ -41,29 +41,29 @@ const addPrescription = async (req, res, next) => {
   res.status(201).json(presc);
 };
 
-const getImaging = async (req, res, next) => {
+const getPrescriptions = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
   try {
-    info = await Imaging.findById($regex);
+    info = await Prescription.find({ patientId: $regex });
     console.log(info);
   } catch (err) {
-    const error = new HttpError("Fetching imaging info failed, please try again later", 500);
+    const error = new HttpError("Fetching Prescriptions info failed, please try again later", 500);
     return next(error);
   }
 
   if (!info || info.length === 0) {
-    return next(new HttpError("Could not find imaging", 404));
+    return next(new HttpError("Could not find prescriptions", 404));
   }
 
   res.json(info);
 };
 
-const deleteImaging = async (req, res, next) => {
+const deletePrescription = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
   try {
-    info = await Imaging.deleteOne({ _id: $regex });
+    info = await Prescription.deleteOne({ _id: $regex });
     console.log(info);
   } catch (err) {
     const error = new HttpError("Deleteing imaging failed, please try again later", 500);
@@ -94,3 +94,5 @@ const getImagingByVisit = async (req, res, next) => {
 };
 
 exports.addPrescription = addPrescription;
+exports.getPrescriptions = getPrescriptions;
+exports.deletePrescription = deletePrescription;

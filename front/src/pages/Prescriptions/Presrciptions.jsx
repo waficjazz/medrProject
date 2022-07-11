@@ -14,27 +14,28 @@ import axios from "axios";
 import VaccineForm from "../../components/VaccineForm/VaccineForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import OnePrescription from "../../components/OnePrescription/OnePrescription";
 
 const Prescriptions = () => {
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
-  const [vaccinations, setVaccinations] = useState([]);
+  const [prescriptions, setPrescriptions] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [reload, setReload] = useState(false);
   const [formType, setFormType] = useState("add");
-  const [vaccId, setVaccId] = useState("");
+  const [prescId, setPrescId] = useState("");
   const [direction, setDirection] = useState("asc");
   const [orderBy, setOrderBy] = useState("1");
   const sortByName = (prop) => {
     setDirection(direction === "desc" ? "asc" : "desc");
     if (prop === "date") {
-      const sorted = [...vaccinations].sort((a, b) => {
+      const sorted = [...prescriptions].sort((a, b) => {
         return direction === "desc" ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date);
       });
-      setVaccinations(sorted);
+      setPrescriptions(sorted);
     } else {
-      const sorted = [...vaccinations].sort((a, b) => {
+      const sorted = [...prescriptions].sort((a, b) => {
         if (a[prop] < b[prop]) {
           return direction === "desc" ? 1 : -1;
         }
@@ -43,13 +44,13 @@ const Prescriptions = () => {
         }
         return 0;
       });
-      setVaccinations(sorted);
+      setPrescriptions(sorted);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/vaccination/delete/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/prescription/delete/${id}`);
 
       setReload(!reload);
     } catch (err) {
@@ -60,7 +61,7 @@ const Prescriptions = () => {
   const handleEdit = async (id) => {
     try {
       setFormType("edit");
-      setVaccId(id);
+      setPrescId(id);
       setOpenForm(true);
     } catch (err) {
       console.log(err.message);
@@ -68,18 +69,18 @@ const Prescriptions = () => {
   };
 
   useEffect(() => {
-    const getVaccinations = async () => {
+    const getPrescriptions = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/vaccination/all/${patientId}`);
+        const response = await axios.get(`http://localhost:5000/api/prescription/all/${patientId}`);
 
-        setVaccinations(response.data);
+        setPrescriptions(response.data);
       } catch (err) {
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
-      getVaccinations();
+      getPrescriptions();
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
@@ -94,20 +95,27 @@ const Prescriptions = () => {
     const { row } = props;
     return (
       <StyledEngineProvider injectFirst>
-        <TableRow className="dataRow">
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2, height: "40px" }}>
-            <Typography className="tableContents">{row.name}</Typography>
+        <TableRow className="dataRow" onClick={() => setOpen(!open)}>
+          <TableCell scope="row" style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography className="tableContents">
+              <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconButton>
+            </Typography>
           </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2, height: "40px" }}>
             <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
-              {row.shots}/{row.doses}
-            </Typography>
+            <Typography className="tableContents">{row.location}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.notes}</Typography>
+            <Typography className="tableContents">{row.issuer}</Typography>
+          </TableCell>
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Typography noWrap={true} className="tableContents" sx={{ width: "200px" }}>
+              {row.description}
+            </Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">
@@ -118,6 +126,14 @@ const Prescriptions = () => {
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Typography>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell className="moreData" colSpan={6}>
+            <Collapse in={open} timeout="auto" unmountOnExit={false}>
+              <OnePrescription presc={row} />
+              {/* {show == "imagings" && <VisitImagings visitId={row._id} close={() => setShow("")} />} */}
+            </Collapse>
           </TableCell>
         </TableRow>
       </StyledEngineProvider>
@@ -131,7 +147,7 @@ const Prescriptions = () => {
           <PrescForm
             isOpen={openForm}
             type={formType}
-            id={vaccId}
+            id={prescId}
             close={() => {
               setFormType("add");
               setOpenForm(false);
@@ -155,6 +171,7 @@ const Prescriptions = () => {
                 <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
+                      <TableCell align="left" sx={{ width: "5px" }}></TableCell>
                       <TableCell align="left" sx={{ width: "18%" }} key="1">
                         <TableSortLabel
                           active={orderBy === "1"}
@@ -189,8 +206,8 @@ const Prescriptions = () => {
                           <Typography className="tableHeaders">Isuser</Typography>
                         </TableSortLabel>
                       </TableCell>
-                      <TableCell align="left" sx={{ width: "20%" }}>
-                        <Typography className="tableHeaders">Notes</Typography>
+                      <TableCell align="left" sx={{ width: "22%" }}>
+                        <Typography className="tableHeaders">Description</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography className="tableHeaders"></Typography>
@@ -198,7 +215,7 @@ const Prescriptions = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {vaccinations.map((item, index) => {
+                    {prescriptions.map((item, index) => {
                       return <DataModel key={index} row={item} />;
                     })}
                   </TableBody>
