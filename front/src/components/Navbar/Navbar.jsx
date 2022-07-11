@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from "react-redux";
 import ReplayIcon from "@mui/icons-material/Replay";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 
+import PatientUpdate from "../PatientUpdate/PatientUpdate";
+
 const Navbar = () => {
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
@@ -23,10 +25,12 @@ const Navbar = () => {
   const patient = useSelector((state) => state.patient.value);
   const [open, setOpen] = useState(false);
   const { show, setShow } = useContext(ShowContext);
+  const [openPatient, setOpenPatient] = useState(false);
   const auth = useContext(RegContext);
   return (
     <>
       <StyledEngineProvider injectFirst>
+        {openPatient && <PatientUpdate close={() => setOpenPatient(false)} />}
         <AppBar className="appbar" position="absolute">
           <Toolbar>
             <IconButton className="menuButton" onClick={() => setShow(!show)}>
@@ -65,7 +69,7 @@ const Navbar = () => {
                           <hr />
                         </>
                       )}
-                      <IconButton className="userButton" sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
+                      <IconButton className="userButton" sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }} onClick={() => setOpenPatient(!openPatient)}>
                         <AssignmentIndIcon sx={{ marginRight: "5px" }} fontSize="small" />
                         Patient
                       </IconButton>

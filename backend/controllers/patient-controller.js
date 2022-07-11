@@ -209,7 +209,32 @@ const updatePatient = async (req, res, next) => {
   } = req.body;
 
   try {
-    reseponse = await Patient.updateOne({ _id: _id }, { permanentMeds, chronicDisease, healthProblems, allergies });
+    reseponse = await Patient.updateOne(
+      { _id: _id },
+      {
+        firstName,
+        lastName,
+        fatherName,
+        motherName,
+        birthDate,
+        bloodGroup,
+        email,
+        address,
+        city,
+        region,
+        password,
+        phoneNumber,
+        idType,
+        idNumber,
+        gender,
+        weight,
+        height,
+        permanentMeds,
+        chronicDisease,
+        healthProblems,
+        allergies,
+      }
+    );
   } catch (err) {
     const error = new HttpError("could not update patient", 500);
     return next(error);
