@@ -154,16 +154,18 @@ const HospitalVisits = () => {
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.cause}</Typography>
           </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
-              <IconButton onClick={() => handleEdit(row._id)}>
-                <EditIcon fontSize="small" />
-              </IconButton>
-              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </Typography>
-          </TableCell>
+          {token !== "" && (
+            <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+              <Typography className="tableContents">
+                <IconButton onClick={() => handleEdit(row._id)}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+                <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Typography>
+            </TableCell>
+          )}
         </TableRow>
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
@@ -196,9 +198,11 @@ const HospitalVisits = () => {
           ) : (
             <>
               <h1 className="headTitle">Hospital Visits</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
-                <AddIcon fontSize="large" />
-              </IconButton>
+              {token !== "" && (
+                <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
+                  <AddIcon fontSize="large" />
+                </IconButton>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
                   <TableHead>

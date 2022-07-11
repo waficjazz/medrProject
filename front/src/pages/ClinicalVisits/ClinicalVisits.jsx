@@ -90,16 +90,18 @@ const ClinicalVisits = () => {
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.cause}</Typography>
           </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
-              <IconButton onClick={() => handleEdit(row._id)}>
-                <EditIcon fontSize="small" />
-              </IconButton>
-              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </Typography>
-          </TableCell>
+          {token !== "" && (
+            <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+              <Typography className="tableContents">
+                <IconButton onClick={() => handleEdit(row._id)}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+                <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Typography>
+            </TableCell>
+          )}
         </TableRow>
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
@@ -131,11 +133,13 @@ const ClinicalVisits = () => {
           ) : (
             <>
               <h1 className="headTitle">Clinical Visits</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
-                <AddIcon fontSize="large" />
-              </IconButton>
+              {token !== "" && (
+                <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
+                  <AddIcon fontSize="large" />
+                </IconButton>
+              )}
               <div className="tables">
-                <Table sx={{ minWidth: "100%" }} aria-label="customized table">
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "5px" }}></TableCell>

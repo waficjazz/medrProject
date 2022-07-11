@@ -97,16 +97,18 @@ const Imaging = () => {
               <Typography className="tableContents">imaging</Typography>
             </a>
           </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
-              <IconButton>
-                <EditIcon fontSize="small" />
-              </IconButton>
-              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </Typography>
-          </TableCell>
+          {token !== "" && (
+            <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+              <Typography className="tableContents">
+                <IconButton>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+                <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Typography>
+            </TableCell>
+          )}
         </TableRow>
       </StyledEngineProvider>
     );
@@ -127,9 +129,11 @@ const Imaging = () => {
           ) : (
             <>
               <h1 className="headTitle">Imaging</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px", marginBottom: "10px" }} onClick={() => setOpenForm(true)}>
-                <AddIcon fontSize="large" />
-              </IconButton>
+              {token !== "" && (
+                <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px", marginBottom: "10px" }} onClick={() => setOpenForm(true)}>
+                  <AddIcon fontSize="large" />
+                </IconButton>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
@@ -173,6 +177,7 @@ const Imaging = () => {
                       <TableCell align="left" sx={{ width: "18%" }}>
                         <Typography className="tableHeaders">Image</Typography>
                       </TableCell>
+
                       <TableCell>
                         <Typography className="tableHeaders"></Typography>
                       </TableCell>

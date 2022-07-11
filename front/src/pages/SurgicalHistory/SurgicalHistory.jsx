@@ -12,6 +12,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Surgery from "../../components/Surgery/Surgery";
 const SurgicalHistory = () => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [surgeries, setSurgeries] = useState([]);
@@ -55,7 +60,7 @@ const SurgicalHistory = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/surgery/delete/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/surgery/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
     } catch (err) {
@@ -143,16 +148,18 @@ const SurgicalHistory = () => {
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
-              <IconButton onClick={() => handleEdit(row._id)}>
-                <EditIcon fontSize="small" />
-              </IconButton>
-              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </Typography>
-          </TableCell>
+          {token !== "" && (
+            <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+              <Typography className="tableContents">
+                <IconButton onClick={() => handleEdit(row._id)}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+                <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Typography>
+            </TableCell>
+          )}
         </TableRow>
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
@@ -184,9 +191,11 @@ const SurgicalHistory = () => {
           ) : (
             <>
               <h1 className="headTitle">Surgeries</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
-                <AddIcon fontSize="large" />
-              </IconButton>
+              {token !== "" && (
+                <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
+                  <AddIcon fontSize="large" />
+                </IconButton>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: "100%" }} aria-label="customized table">
                   <TableHead>
@@ -220,6 +229,7 @@ const SurgicalHistory = () => {
                           <Typography className="tableHeaders">Date</Typography>
                         </TableSortLabel>
                       </TableCell>
+
                       <TableCell>
                         <Typography className="tableHeaders"></Typography>
                       </TableCell>

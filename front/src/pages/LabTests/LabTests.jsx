@@ -68,13 +68,15 @@ const LabTests = () => {
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.csv}</Typography>
           </TableCell>
-          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
-              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </Typography>
-          </TableCell>
+          {token !== "" && (
+            <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+              <Typography className="tableContents">
+                <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Typography>
+            </TableCell>
+          )}
         </TableRow>
       </StyledEngineProvider>
     );
@@ -97,9 +99,11 @@ const LabTests = () => {
           ) : (
             <>
               <h1 className="headTitle">Lab Tests</h1>
-              <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
-                <AddIcon fontSize="large" />
-              </IconButton>
+              {token !== "" && (
+                <IconButton sx={{ marginLeft: "94%", width: "5px", height: "5px" }} onClick={() => setOpenForm(true)}>
+                  <AddIcon fontSize="large" />
+                </IconButton>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
@@ -113,6 +117,7 @@ const LabTests = () => {
                       <TableCell align="left" sx={{ width: "22%" }}>
                         <Typography className="tableHeaders">CSV</Typography>
                       </TableCell>
+
                       <TableCell>
                         <Typography className="tableHeaders"></Typography>
                       </TableCell>
