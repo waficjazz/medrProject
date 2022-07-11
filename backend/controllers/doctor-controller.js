@@ -225,6 +225,23 @@ const getDoctorById = async (req, res, next) => {
   res.json(info);
 };
 
+const getVerifiedDoctorById = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  try {
+    info = await verifiedDoctor.findById($regex);
+  } catch (err) {
+    const error = new HttpError("Fetching doctor  info failed, please try again later", 500);
+    return next(error);
+  }
+
+  if (!info || info.length === 0) {
+    return next(new HttpError("Could not find doctor doctor", 404));
+  }
+
+  res.json(info);
+};
+
 const updateDoctor = async (req, res, next) => {
   const { name, email, phoneNumber, clinicAddress, proficiency, id } = req.body;
   try {
@@ -243,3 +260,4 @@ exports.signup = signup;
 exports.addDoctor = addDoctor;
 exports.getVerfiedDoctors = getVerfiedDoctors;
 exports.verifyCode = verifyCode;
+exports.getVerifiedDoctorById = getVerifiedDoctorById;

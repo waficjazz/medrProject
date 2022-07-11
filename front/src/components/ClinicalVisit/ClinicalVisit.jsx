@@ -13,7 +13,11 @@ const ClinicalVisit = ({ visit }) => {
           <div>
             <Typography className="internalText">
               Doctor's Name:
-              <span className="internalData">{visit.doctorName}</span>
+              <span className="internalData">{visit.firstName || visit.name}</span>
+            </Typography>
+            <Typography className="internalText">
+              Proficiency:
+              <span className="internalData">{visit.proficiency[0]}</span>
             </Typography>
             <Typography className="internalText">
               Phone Number:

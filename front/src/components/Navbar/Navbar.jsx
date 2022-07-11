@@ -14,6 +14,11 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 
 const Navbar = () => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const navigate = useNavigate();
   const patient = useSelector((state) => state.patient.value);
   const [open, setOpen] = useState(false);
@@ -51,27 +56,35 @@ const Navbar = () => {
                 <Collapse in={open}>
                   <div className="userAction">
                     <List>
-                      <IconButton className="userButton" sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
-                        <PersonIcon sx={{ marginRight: "5px" }} fontSize="small" />
-                        Account
-                      </IconButton>
-                      <hr />
+                      {token !== "" && (
+                        <>
+                          <IconButton className="userButton" sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
+                            <PersonIcon sx={{ marginRight: "5px" }} fontSize="small" />
+                            Account
+                          </IconButton>
+                          <hr />
+                        </>
+                      )}
                       <IconButton className="userButton" sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
                         <AssignmentIndIcon sx={{ marginRight: "5px" }} fontSize="small" />
                         Patient
                       </IconButton>
                       <hr />
-                      <IconButton
-                        className="userButton"
-                        sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}
-                        onClick={() => {
-                          auth.logout();
-                          setOpen(!open);
-                        }}>
-                        <ReplayIcon sx={{ marginRight: "5px" }} fontSize="small" />
-                        Switch Patient
-                      </IconButton>
-                      <hr />
+                      {token !== "" && (
+                        <>
+                          <IconButton
+                            className="userButton"
+                            sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}
+                            onClick={() => {
+                              auth.logout();
+                              setOpen(!open);
+                            }}>
+                            <ReplayIcon sx={{ marginRight: "5px" }} fontSize="small" />
+                            Switch Patient
+                          </IconButton>
+                          <hr />
+                        </>
+                      )}
                       <IconButton
                         className="userButton"
                         sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}

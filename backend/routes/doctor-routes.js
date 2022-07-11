@@ -10,5 +10,6 @@ router.post("/add", auth, doctorController.addDoctor);
 router.get("/verified/all", doctorController.getVerfiedDoctors);
 router.post("/verifyCode", doctorController.verifyCode);
 router.get("/one/:id", doctorController.getDoctorById);
+router.get("/verified/:id", doctorController.getVerifiedDoctorById);
 router.post("/update", auth, doctorController.updateDoctor);
 module.exports = router;

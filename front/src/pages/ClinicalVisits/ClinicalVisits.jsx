@@ -71,6 +71,40 @@ const ClinicalVisits = () => {
   const DataModel = (props) => {
     const [open, setOpen] = React.useState(false);
     const { row } = props;
+    const [doctor, setDoctor] = useState({});
+    const getDoctor = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/doctor/one/${id}`);
+        let doctor = await response.data;
+        setDoctor(doctor);
+        console.log(doctor);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    const getVerfiedDoctor = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/doctor/verified/${id}`);
+        let doctor = await response.data;
+        setDoctor(doctor);
+        console.log(doctor);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    useEffect(() => {
+      let isApiSubscribed = true;
+      if (isApiSubscribed) {
+        if (!row.verifiedDoctor) {
+          getDoctor(row.doctorId);
+        } else {
+          getVerfiedDoctor(row.doctorId);
+        }
+      }
+      return () => {
+        isApiSubscribed = false;
+      };
+    }, []);
     return (
       <StyledEngineProvider injectFirst>
         <TableRow className="dataRow" onClick={() => setOpen(!open)}>
@@ -82,7 +116,7 @@ const ClinicalVisits = () => {
             </Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.doctorName}</Typography>
+            <Typography className="tableContents">{doctor.name || doctor.firstName}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.visitDate?.toString().slice(0, 10)}</Typography>
@@ -106,7 +140,7 @@ const ClinicalVisits = () => {
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <ClinicalVisit visit={row} />
+              <ClinicalVisit visit={doctor} />
             </Collapse>
           </TableCell>
         </TableRow>

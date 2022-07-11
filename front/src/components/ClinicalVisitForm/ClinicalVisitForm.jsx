@@ -38,7 +38,7 @@ const ClinicalVisitForm = (props) => {
           setVisitCause(data.cause);
           setVisitDescription(data.description);
           setVisitDate(data.visitDate?.toString().slice(0, 10));
-
+          doctorId.current = data.doctorId;
           // setSurgeryDate(data.date?.toString().slice(0, 10));
           // setSurgeryName(data.name);
           // setSurgeryDescription(data.description);
@@ -51,7 +51,6 @@ const ClinicalVisitForm = (props) => {
             console.log(data);
             setProficiency(data.proficiency[0]);
             setDoctorName(data.name);
-            console.log(data.name);
             setClinicAddress(data.clinicAddress);
             setEmail(data.email);
             setPhoneNumber(data.phoneNumber);
@@ -70,6 +69,7 @@ const ClinicalVisitForm = (props) => {
     setClinicAddress("");
     setEmail("");
     setPhoneNumber("");
+    doctorId.current = "";
   }, [props]);
 
   useEffect(() => {
@@ -148,6 +148,7 @@ const ClinicalVisitForm = (props) => {
   const handleEdit = async () => {
     let visit = {
       patientId,
+      doctorId: doctorId.current,
       doctorName: doctorName,
       email: email,
       phoneNumber: phoneNumber,
@@ -155,14 +156,14 @@ const ClinicalVisitForm = (props) => {
       description: visitDescription,
       cause: visitCause,
       clinicAddress,
-      doctorName,
       id: props.id,
     };
+    console.log(visit.doctorId);
     try {
       const res = await axios.post("http://localhost:5000/api/clinical/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
       if (tabValue === "1") {
         let doctor = { id: doctorId.current, clinicAddress: clinicAddress, email: email, name: doctorName, phoneNumber: phoneNumber, proficiency: proficiency };
-        const res1 = await axios.post("http://localhost:5000/api/doctor/update", doctor);
+        const res1 = await axios.post("http://localhost:5000/api/doctor/update", doctor, { headers: { authorization: `Bearer ${token}` } });
 
         if (res1.statusText === "OK" && res.statusText === "OK") {
           props.close();

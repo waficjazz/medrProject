@@ -10,8 +10,12 @@ import { alpha, styled } from "@mui/material/styles";
 import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 const MiniForm = (props) => {
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
   const storedData = JSON.parse(localStorage.getItem("high"));
-  let token = storedData.token;
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient.value);
   const data = patient[props.name];
@@ -73,17 +77,23 @@ const MiniForm = (props) => {
               return (
                 <div className="listContainer">
                   <li key={index}>{item}</li>
-                  <IconButton onClick={() => handleDelete(index)}>
-                    <ClearIcon fontSize="small" className="deleteIcon" />
-                  </IconButton>
+                  {token !== "" && (
+                    <IconButton onClick={() => handleDelete(index)}>
+                      <ClearIcon fontSize="small" className="deleteIcon" />
+                    </IconButton>
+                  )}
                 </div>
               );
             })}
           </ul>
-          <input value={newData} className="addInput" size="small" onChange={(e) => setNewData(e.target.value)} />
-          <Button className="btnadd" sx={{ color: "white", backgroundColor: "var(--third-blue)", marginLeft: "5px" }} onClick={handleAdd}>
-            Add
-          </Button>
+          {token !== "" && (
+            <>
+              <input value={newData} className="addInput" size="small" onChange={(e) => setNewData(e.target.value)} />
+              <Button className="btnadd" sx={{ color: "white", backgroundColor: "var(--third-blue)", marginLeft: "5px" }} onClick={handleAdd}>
+                Add
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </StyledEngineProvider>
