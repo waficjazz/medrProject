@@ -85,9 +85,10 @@ const signin = async (req, res, next) => {
 const signup = async (req, res, next) => {
   const { email, hospitalName, phoneNumber, password, address, city, region } = req.body;
   let hashedPassword;
-  console.log(password);
+  let validationCode;
   try {
     hashedPassword = await bcrypt.hash(password, 12);
+    validationCode = makeid(5);
   } catch (err) {
     const error = new HttpError("Could not create hospital please try again", 500);
     return next(error);
@@ -100,8 +101,9 @@ const signup = async (req, res, next) => {
     address,
     city,
     region,
+    validationCode,
   });
-  console;
+
   try {
     await createdHospital.save();
   } catch (err) {

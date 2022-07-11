@@ -334,6 +334,9 @@ const SignUp = () => {
           {role === "singIn" && (
             <>
               <div className="signInform">
+                <IconButton className="exitSignIn" onClick={() => setRole("unset")}>
+                  <CloseIcon sx={{ marginLeft: "90px" }} />
+                </IconButton>
                 <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>SIGN IN</Typography>
                 <hr style={{ width: "100%", marginBottom: "30px" }} />
                 <div className="signInInputs">
@@ -436,7 +439,7 @@ const SignUp = () => {
                   disabled={
                     !validEmail.current ||
                     !validPassword.current ||
-                    !validPhone.current ||
+                    !validPhone ||
                     password !== confirmPassword ||
                     firstName.length < 2 ||
                     lastName.length < 2 ||
@@ -446,6 +449,9 @@ const SignUp = () => {
                   Next
                 </Button>
               </Box>
+              <IconButton className="finishStep" onClick={() => setRole("unset")}>
+                <CloseIcon />
+              </IconButton>
               <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
                 <InputLabel htmlFor="bd">Birth Date</InputLabel>
                 <FormControl className="bg" fullWidth>
@@ -516,7 +522,7 @@ const SignUp = () => {
                 </Button>
               </Box>
               <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
-                <Typography variant="h6" gutterBottom>
+                <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", marginBottom: "50px" }} variant="h6">
                   An verification code has been sent to your email.
                 </Typography>
                 <TextField label="code" size="small" onChange={(e) => setCode(e.target.value)} />
@@ -536,12 +542,6 @@ const SignUp = () => {
             <>
               <div className="stepper">
                 <Stepper activeStep={activeStep}>
-                  <Step>
-                    <StepLabel></StepLabel>
-                  </Step>
-                  <Step>
-                    <StepLabel></StepLabel>
-                  </Step>
                   <Step>
                     <StepLabel></StepLabel>
                   </Step>
@@ -626,7 +626,10 @@ const SignUp = () => {
                   Next
                 </Button>
               </Box>
-              <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+              <IconButton className="finishStep" onClick={() => setRole("unset")}>
+                <CloseIcon />
+              </IconButton>
+              {/* <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
                 <Typography variant="h3"> Identity proof</Typography>
                 <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
                 <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
@@ -635,8 +638,8 @@ const SignUp = () => {
                 <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
                   Previous
                 </Button>
-              </Box>
-              <Box className={swipe[2] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+              </Box> */}
+              {/* <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
                 <TextField className="bg" fullWidth label="Proficiency" variant="standard" size="small" required onChange={(e) => setProficiency(e.target.value)} />
                 <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={submitDoctor} disabled={gender === "" || bloodGroup === ""}>
                   Next
@@ -644,8 +647,8 @@ const SignUp = () => {
                 <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
                   Previous
                 </Button>
-              </Box>
-              <Box className={swipe[3] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
+              </Box> */}
+              <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
                 <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", marginBottom: "50px" }} variant="h6">
                   A verification code has been sent to your email.
                 </Typography>
@@ -654,7 +657,7 @@ const SignUp = () => {
                   className="nextIcon"
                   variant="contained"
                   onClick={() => {
-                    submitVerficationCode("doctor");
+                    submitVerficationCode("hospital");
                   }}>
                   Submit
                 </Button>

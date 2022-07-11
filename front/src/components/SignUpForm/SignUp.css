@@ -218,3 +218,12 @@
 .finishStep {
   margin-left: 65%;
 }
+
+.exitSignIn {
+  margin-left: 90%;
+  width: 0px;
+  height: 0px;
+}
+.exitSignIn :hover {
+  background-color: transparent;
+}
