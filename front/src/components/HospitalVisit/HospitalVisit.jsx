@@ -7,6 +7,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VisitLabs from "../VisitLabs/VisitLabs";
 import VisitImagings from "../VisitImagings/VisitImagings";
 import VisitSurgeries from "../VisitSurgeries/VisitSurgeries";
+import VisitPrescriptions from "../VisitPrescriptions/VisitPrescriptions";
 const HospitalVisit = ({ visit, hospital, close }) => {
   const [testShow, setTestShow] = useState("");
   return (
@@ -59,7 +60,7 @@ const HospitalVisit = ({ visit, hospital, close }) => {
                 Doctors:
                 <span className="internalData">doctor1 , doctor2 </span>
               </Typography>
-              <MuiLink className="internalLink " variant="button" onClick={() => console.log("clicked")}>
+              <MuiLink className="internalLink " variant="button" onClick={() => setTestShow("prescriptions")}>
                 Prescriptions
               </MuiLink>
               <MuiLink className="internalLink " variant="button" onClick={() => setTestShow("imagings")}>
@@ -75,6 +76,7 @@ const HospitalVisit = ({ visit, hospital, close }) => {
           </div>
         </div>
       )}
+      {testShow == "prescriptions" && <VisitPrescriptions visitId={visit._id} close={() => setTestShow("")} />}
       {testShow == "imagings" && <VisitImagings visitId={visit._id} close={() => setTestShow("")} />}
       {testShow == "labs" && <VisitLabs visitId={visit._id} close={() => setTestShow("")} />}
       {testShow == "surgeries" && <VisitSurgeries visitId={visit._id} close={() => setTestShow("")} />}
