@@ -1,11 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import { LoadingContext } from "../../context";
+
 const ClinicalVisitForm = (props) => {
+  const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -30,6 +33,7 @@ const ClinicalVisitForm = (props) => {
 
   useEffect(() => {
     if (props.type === "edit") {
+      loadingc.setIsLoading(true);
       const getOneVisit = async () => {
         try {
           const res = await axios.get(`http://localhost:5000/api/clinical/one/${props.id}`);
@@ -55,7 +59,9 @@ const ClinicalVisitForm = (props) => {
             setEmail(data.email);
             setPhoneNumber(data.phoneNumber);
           }
+          loadingc.setIsLoading(false);
         } catch (err) {
+          loadingc.setIsLoading(false);
           console.log(err.message);
         }
       };
@@ -70,6 +76,7 @@ const ClinicalVisitForm = (props) => {
     setEmail("");
     setPhoneNumber("");
     doctorId.current = "";
+    loadingc.setIsLoading(false);
   }, [props]);
 
   useEffect(() => {
@@ -81,16 +88,20 @@ const ClinicalVisitForm = (props) => {
 
     const getDoctors = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/doctor/verified/all`);
 
         setDoctors(response.data);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getDoctors();
+      loadingc.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
@@ -115,12 +126,12 @@ const ClinicalVisitForm = (props) => {
     let doctor = { clinicAddress: clinicAddress, email: email, name: doctorName, phoneNumber: phoneNumber, proficiency: proficiency };
 
     try {
+      loadingc.setIsLoading(true);
       if (tabValue === "1") {
         const res = await axios.post("http://localhost:5000/api/doctor/add", doctor, { headers: { authorization: `Bearer ${token}` } });
         let id = await res.data._id;
         let doc = await res.data;
         doctorId.current = id;
-        console.log(doc);
       }
 
       let visit = {
@@ -139,8 +150,12 @@ const ClinicalVisitForm = (props) => {
       const resp = await axios.post("http://localhost:5000/api/clinical/visits/add", visit, { headers: { authorization: `Bearer ${token}` } });
       if (resp.statusText === "Created") {
         props.close();
+        loadingc.setIsLoading(false);
       }
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
+
       console.log(err.message);
     }
   };
@@ -160,6 +175,7 @@ const ClinicalVisitForm = (props) => {
     };
     console.log(visit.doctorId);
     try {
+      loadingc.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/clinical/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
       if (tabValue === "1") {
         let doctor = { id: doctorId.current, clinicAddress: clinicAddress, email: email, name: doctorName, phoneNumber: phoneNumber, proficiency: proficiency };
@@ -170,7 +186,9 @@ const ClinicalVisitForm = (props) => {
         }
       } else if (res.statusText === "OK") {
         props.close();
+        loadingc.setIsLoading(false);
       }
+      loadingc.setIsLoading(false);
     } catch (err) {
       console.log(err.message);
     }

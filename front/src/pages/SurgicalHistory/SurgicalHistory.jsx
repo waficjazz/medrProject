@@ -1,5 +1,5 @@
-import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Table, TableSortLabel, TableHead, TableCell, TableRow, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -11,7 +11,9 @@ import SurgeryForm from "../../components/SurgeryForm/SurgeryForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Surgery from "../../components/Surgery/Surgery";
+import { LoadingContext } from "../../context";
 const SurgicalHistory = () => {
+  const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -60,10 +62,13 @@ const SurgicalHistory = () => {
 
   const handleDelete = async (id) => {
     try {
+      loadingc.setIsLoading(true);
       const response = await axios.delete(`http://localhost:5000/api/surgery/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -71,20 +76,22 @@ const SurgicalHistory = () => {
   useEffect(() => {
     const getSurgeries = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/surgery/all/${patientId}`);
         setSurgeries(response.data);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getSurgeries();
+      loadingc.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
-
-      console.log(surgeries);
     }
     return () => {
       isApiSubscribed = false;
@@ -97,19 +104,25 @@ const SurgicalHistory = () => {
     const [hospital, setHospital] = useState([]);
     const getHospital = async (id) => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     const getVerfiedHospital = async (id) => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/verified/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
@@ -118,8 +131,10 @@ const SurgicalHistory = () => {
       if (isApiSubscribed) {
         if (!row.verifiedHospital) {
           getHospital(row.hospitalId);
+          loadingc.setIsLoading(false);
         } else {
           getVerfiedHospital(row.hospitalId);
+          loadingc.setIsLoading(false);
         }
       }
       return () => {

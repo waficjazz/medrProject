@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import ImagingForm from "../../components/ImagingForm/ImagingForm";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { LoadingContext } from "../../context";
+
 import axios from "axios";
 const Imaging = () => {
+  const loadingc = useContext(LoadingContext);
+
   const storedData = JSON.parse(localStorage.getItem("userData"));
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
@@ -45,15 +48,19 @@ const Imaging = () => {
   useEffect(() => {
     const getImagings = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/imaging/all/${patientId}`);
         setImagings(response.data);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getImagings();
+      loadingc.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
@@ -65,10 +72,13 @@ const Imaging = () => {
 
   const handleDelete = async (id) => {
     try {
+      loadingc.setIsLoading(true);
       const response = await axios.delete(`http://localhost:5000/api/imaging/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };

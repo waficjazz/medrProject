@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
-import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
+import { TextField, Button, Autocomplete, IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
+import { LoadingContext } from "../../context";
 const ImagingForm = (props) => {
+  const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -19,13 +20,13 @@ const ImagingForm = (props) => {
   const [location, setLocation] = useState("");
   const [image, setImage] = useState("");
   const patientId = storedData.uid;
-  const inputName = useRef("");
   const [visits, setVisits] = useState([]);
   const [selectedImage, setSelectedImage] = useState();
   const [preview, setPreview] = useState();
+  const inputName = useRef("");
   const [namePreview, setNamePreview] = useState();
-  const [open, setOpen] = React.useState(false);
   const [selectedPDF, setSelectedPDF] = useState();
+  const [open, setOpen] = React.useState(false);
   const loading = open && visits.length === 0;
   const visitId = useRef();
 
@@ -38,16 +39,20 @@ const ImagingForm = (props) => {
 
     const getVisits = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
 
         setVisits(response.data);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getVisits();
+      loadingc.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
@@ -97,6 +102,7 @@ const ImagingForm = (props) => {
   const submit = async () => {
     // let imaging = { name, date, location, patientId };
     try {
+      loadingc.setIsLoading(true);
       const formData = new FormData();
       formData.append("name", name);
       formData.append("date", date);
@@ -114,8 +120,11 @@ const ImagingForm = (props) => {
       console.log(res.statusText);
       if (res.statusText === "Created") {
         props.close();
+        loadingc.setIsLoading(false);
       }
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };

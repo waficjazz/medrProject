@@ -1,5 +1,5 @@
-import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Table, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -12,7 +12,10 @@ import AddIcon from "@mui/icons-material/Add";
 import ClinicalVisitForm from "../../components/ClinicalVisitForm/ClinicalVisitForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { LoadingContext } from "../../context";
+
 const ClinicalVisits = () => {
+  const loading = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -39,10 +42,14 @@ const ClinicalVisits = () => {
 
   const handleDelete = async (id) => {
     try {
+      loading.setIsLoading(true);
       const response = await axios.delete(`http://localhost:5000/api/clinical/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
+      loading.setIsLoading(false);
       setReload(!reload);
     } catch (err) {
+      loading.setIsLoading(false);
+
       console.log(err.message);
     }
   };
@@ -50,9 +57,12 @@ const ClinicalVisits = () => {
   useEffect(() => {
     const getVisits = async () => {
       try {
+        loading.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/clinical/visits/${patientId}`);
         setVisits(response.data);
+        loading.setIsLoading(false);
       } catch (err) {
+        loading.setIsLoading(false);
         console.log(err.message);
       }
     };
@@ -74,21 +84,25 @@ const ClinicalVisits = () => {
     const [doctor, setDoctor] = useState({});
     const getDoctor = async (id) => {
       try {
+        loading.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/doctor/one/${id}`);
         let doctor = await response.data;
         setDoctor(doctor);
-        console.log(doctor);
+        loading.setIsLoading(false);
       } catch (err) {
+        loading.setIsLoading(false);
         console.log(err.message);
       }
     };
     const getVerfiedDoctor = async (id) => {
       try {
+        loading.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/doctor/verified/${id}`);
         let doctor = await response.data;
         setDoctor(doctor);
-        console.log(doctor);
+        loading.setIsLoading(false);
       } catch (err) {
+        loading.setIsLoading(false);
         console.log(err.message);
       }
     };
@@ -97,8 +111,10 @@ const ClinicalVisits = () => {
       if (isApiSubscribed) {
         if (!row.verifiedDoctor) {
           getDoctor(row.doctorId);
+          loading.setIsLoading(false);
         } else {
           getVerfiedDoctor(row.doctorId);
+          loading.setIsLoading(false);
         }
       }
       return () => {

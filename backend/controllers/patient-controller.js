@@ -89,7 +89,8 @@ const signup = async (req, res, next) => {
   let exist;
   try {
     exist = Patient.findOne({ email: email });
-    if (exist) {
+
+    if (exist == null) {
       const error = new HttpError("Email already exist please use different email or sign in ", 500);
       return next(error);
     }

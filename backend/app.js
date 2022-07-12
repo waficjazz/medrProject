@@ -48,7 +48,8 @@ app.use((error, req, res, next) => {
   res.send({ message: error.message || "An unknown error occurred!" });
 });
 mongoose
-  .connect(`mongodb://localhost:27017/medrecord`)
+  // .connect(`mongodb://localhost:27017/medrecord`)
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("connected");
     app.listen(process.env.PORT || 5000);

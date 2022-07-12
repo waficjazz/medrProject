@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Table, TableHead, TableCell, TableRow, TableBody, Typography, IconButton } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import "./LabTests.css";
-import CustomPaper from "../../components/Paper/CustomPaper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import LabTestForm from "../../components/LabTestForn/LabTestForm";
 import axios from "axios";
+import { LoadingContext } from "../../context";
+
 const LabTests = () => {
+  const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -37,9 +39,12 @@ const LabTests = () => {
 
   const handleDelete = async (id) => {
     try {
+      loadingc.setIsLoading(true);
       const response = await axios.delete(`http://localhost:5000/api/labtest/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
       setReload(!reload);
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -47,17 +52,21 @@ const LabTests = () => {
   useEffect(() => {
     const getLabTests = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/labtest/getall/${patientId}`);
-        console.log("entred");
+
         setLabTests(response.data);
+        loadingc.setIsLoading(false);
         // setChange(!change);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getLabTests();
+      loadingc.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }

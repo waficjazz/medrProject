@@ -1,5 +1,5 @@
 import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -14,8 +14,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Imaging from "../Imaging/Imaging";
 import VisitImagings from "../../components/VisitImagings/VisitImagings";
+import { LoadingContext } from "../../context";
 
 const HospitalVisits = () => {
+  const loading = useContext(LoadingContext);
+
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -67,10 +70,13 @@ const HospitalVisits = () => {
 
   const handleDelete = async (id) => {
     try {
+      loading.setIsLoading(true);
       const response = await axios.delete(`http://localhost:5000/api/hospital/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
+      loading.setIsLoading(false);
       setReload(!reload);
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -78,9 +84,12 @@ const HospitalVisits = () => {
   useEffect(() => {
     const getVisits = async () => {
       try {
+        loading.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
         setVisits(response.data);
+        loading.setIsLoading(false);
       } catch (err) {
+        loading.setIsLoading(false);
         console.log(err.message);
       }
     };
@@ -103,19 +112,25 @@ const HospitalVisits = () => {
     const { row } = props;
     const getHospital = async (id) => {
       try {
+        loading.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
+        loading.setIsLoading(false);
       } catch (err) {
+        loading.setIsLoading(false);
         console.log(err.message);
       }
     };
     const getVerfiedHospital = async (id) => {
       try {
+        // loading.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/verified/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
+        loading.setIsLoading(false);
       } catch (err) {
+        loading.setIsLoading(false);
         console.log(err.message);
       }
     };

@@ -1,12 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import "./HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector } from "react-redux";
+import { LoadingContext } from "../../context";
+
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
 const HospitalVisitForm = (props) => {
+  const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -35,6 +38,7 @@ const HospitalVisitForm = (props) => {
 
   useEffect(() => {
     if (props.type === "edit") {
+      loadingc.setIsLoading(true);
       const getOneVisit = async () => {
         try {
           const res = await axios.get(`http://localhost:5000/api/hospital/visit/one/${props.id}`);
@@ -43,6 +47,7 @@ const HospitalVisitForm = (props) => {
           setVisitDate(data.entryDate?.toString().slice(0, 10));
           setVisitCause(data.cause);
           setVisitTime(data.timeSpent);
+
           let i = data.hospitalId;
           if (data.verifiedHospital == false) {
             setTabValue("1");
@@ -53,7 +58,9 @@ const HospitalVisitForm = (props) => {
             setHName(data.hospitalName);
             setPhoneNumber(data.phoneNumber);
           }
+          loadingc.setIsLoading(false);
         } catch (err) {
+          loadingc.setIsLoading(false);
           console.log(err.message);
         }
       };
@@ -69,6 +76,7 @@ const HospitalVisitForm = (props) => {
     setHName("");
     setPhoneNumber("");
     setDoctors([]);
+    loadingc.setIsLoading(false);
   }, [props]);
 
   useEffect(() => {
@@ -80,11 +88,13 @@ const HospitalVisitForm = (props) => {
 
     const getHospitals = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/vhospitals/all`);
 
         setHospitals(response.data);
-        console.log(hospitals);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
@@ -124,6 +134,7 @@ const HospitalVisitForm = (props) => {
       id: props.id,
     };
     try {
+      loadingc.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/hospital/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
       if (tabValue === "1") {
         let hospital = { hospitalName: hName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber, id: hospitalId.current };
@@ -135,7 +146,9 @@ const HospitalVisitForm = (props) => {
       } else if (res.statusText === "OK") {
         props.close();
       }
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -144,6 +157,7 @@ const HospitalVisitForm = (props) => {
     let hospital = { hospitalName: hName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber };
 
     try {
+      loadingc.setIsLoading(true);
       if (tabValue === "1") {
         const res = await axios.post("http://localhost:5000/api/hospital/add", hospital, { headers: { authorization: `Bearer ${token}` } });
         console.log(res.data);
@@ -165,7 +179,9 @@ const HospitalVisitForm = (props) => {
       if (resp.statusText === "Created") {
         props.close();
       }
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };

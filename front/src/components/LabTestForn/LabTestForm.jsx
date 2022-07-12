@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
 import { StyledEngineProvider } from "@mui/material/styles";
 import DownloadIcon from "@mui/icons-material/Download";
-
+import { LoadingContext } from "../../context";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton, Typography } from "@mui/material";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
+import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 
 const LabTestForm = (props) => {
   let token = "";
@@ -31,7 +31,7 @@ const LabTestForm = (props) => {
   const inputName = useRef("");
   const [namePreview, setNamePreview] = useState();
   const [selectedPDF, setSelectedPDF] = useState();
-
+  const loadingc = useContext(LoadingContext);
   useEffect(() => {
     let active = true;
 
@@ -41,16 +41,20 @@ const LabTestForm = (props) => {
 
     const getVisits = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
 
         setVisits(response.data);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getVisits();
+      loadingc.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
@@ -72,6 +76,7 @@ const LabTestForm = (props) => {
 
   useEffect(() => {
     if (props.type === "edit") {
+      loadingc.setIsLoading(true);
       const getVaccination = async () => {
         try {
           const res = await axios.get(`http://localhost:5000/api/labtest/one/${props.id}`);
@@ -82,7 +87,9 @@ const LabTestForm = (props) => {
           setNotes(data.notes);
           setDate(data.date?.toString().slice(0, 10));
           visitId.current = data.HospitalVisit;
+          loadingc.setIsLoading(false);
         } catch (err) {
+          loadingc.setIsLoading(false);
           console.log(err.message);
         }
       };
@@ -94,6 +101,7 @@ const LabTestForm = (props) => {
     setNotes("");
     setDate("");
     visitId.current = "";
+    loadingc.setIsLoading(false);
   }, [props]);
 
   // const submit = async () => {
@@ -128,6 +136,7 @@ const LabTestForm = (props) => {
 
   const submit = async () => {
     // let imaging = { name, date, location, patientId };
+    loadingc.setIsLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -137,17 +146,21 @@ const LabTestForm = (props) => {
       formData.append("patientId", patientId);
       if (visitId != undefined) formData.append("HospitalVisit", visitId.current);
       formData.append("report", selectedPDF);
+
       const res = await axios.post("http://localhost:5000/api/labtest/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           authorization: `Bearer ${token}`,
         },
       });
-      console.log(res.statusText);
+
       if (res.statusText === "Created") {
+        loadingc.setIsLoading(false);
         props.close();
       }
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -162,13 +175,16 @@ const LabTestForm = (props) => {
       id: props.id,
     };
     try {
+      loadingc.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/labtest/update", lab, { headers: { authorization: `Bearer ${token}` } });
-      console.log("ee");
-      console.log(res.statusText);
+
       if (res.statusText === "OK") {
         props.close();
+        loadingc.setIsLoading(false);
       }
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };

@@ -22,6 +22,7 @@ const MainPage = () => {
         <SideBar />
 
         <Routes>
+          <Route path="/:id" element={<PersonalInfo />} />
           <Route path="/" element={<PersonalInfo />} />
           <Route path="/bs" element={<BChart />} />
           <Route path="/hospital" element={<HospitalVisits />} />

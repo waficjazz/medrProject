@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./MiniForm.css";
+import { LoadingContext } from "../../context";
+
 import { Typography, IconButton, TextField, Button, Input } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -22,6 +24,8 @@ const MiniForm = (props) => {
   const data = patient[props.name];
   const [newData, setNewData] = useState("");
   const navigate = useNavigate();
+  const loading = useContext(LoadingContext);
+
   // useEffect(() => {
   //   console.log(patient);
   // }, []);
@@ -32,13 +36,16 @@ const MiniForm = (props) => {
       obj[props.name] = [...obj[props.name], newData];
       dispatch(addInfo(obj));
       try {
+        loading.setIsLoading(true);
         const res = await axios.post("http://localhost:5000/api/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
         //   if (res.statusText === "OK") {
         //     props.close();
         //   }
         setNewData("");
+        loading.setIsLoading(false);
       } catch (err) {
         console.log(err.message);
+        loading.setIsLoading(false);
       }
     }
   };
@@ -51,12 +58,15 @@ const MiniForm = (props) => {
     obj[props.name] = tmp;
     dispatch(addInfo(obj));
     try {
+      loading.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
       //   if (res.statusText === "OK") {
       //     props.close();
       //   }
       setNewData("");
+      loading.setIsLoading(false);
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };

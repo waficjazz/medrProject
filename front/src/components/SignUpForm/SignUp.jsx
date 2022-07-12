@@ -15,10 +15,12 @@ import { RegContext } from "../../context";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
+import { LoadingContext } from "../../context";
 
 const SignUp = () => {
+  const loading = useContext(LoadingContext);
   const auth = useContext(RegContext);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState("patient");
   const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
@@ -111,28 +113,30 @@ const SignUp = () => {
       password,
     };
     try {
+      loading.setIsLoading(true);
       const res = await axios.post(`http://localhost:5000/api/${type}/signin`, data);
-      setIsLoading(true);
+
       if (res.status != 201) {
+        loading.setIsLoading(false);
         console.log(res.message);
       }
-
       const reponse = await res.data;
 
-      console.log(reponse);
       if (type == "patient") {
-        navigate("/personalinfo");
-        setIsLoading(false);
+        console.log(reponse);
+        navigate(`/${reponse.userId}`);
+        loading.setIsLoading(false);
         auth.login(reponse.userId, reponse.token);
         navigate("/");
       } else {
-        navigate("/personalinfo");
-        setIsLoading(false);
+        navigate("/");
+        loading.setIsLoading(false);
         auth.highLogin(reponse.userId, reponse.token);
         setRole("choosePatient");
       }
+      loading.setIsLoading(false);
     } catch (err) {
-      console.log(err.response.data.message);
+      loading.setIsLoading(false);
       setIsError(true);
       setError(err.response.data.message);
     }
@@ -145,29 +149,33 @@ const SignUp = () => {
     };
 
     try {
+      loading.setIsLoading(true);
       const res = await axios.post(`http://localhost:5000/api/${type}/verifyCode`, data);
-      setIsLoading(true);
+
       if (res.status != 201) {
+        loading.setIsLoading(false);
         console.log("error with verification code ");
       }
       const reponse = await res.data;
       if (type == "doctor") {
-        navigate("/personalinfo");
-        setIsLoading(false);
-        auth.highLogin(reponse.userId, reponse.token);
+        navigate("/");
+        loading.setIsLoading(false);
+        auth.highLogin(reponse.user._id, reponse.token);
         setRole("choosePatient");
       } else if (type == "hospital") {
         // navigate("/personalinfo");
-        setIsLoading(false);
-        auth.highLogin(reponse.userId, reponse.token);
+        loading.setIsLoading(false);
+        auth.highLogin(reponse.user._id, reponse.token);
         setRole("choosePatient");
       } else {
         // navigate("/personalinfo");
-        setIsLoading(false);
+        loading.setIsLoading(false);
         auth.login(reponse.user._id, reponse.token);
-        navigate("/");
+        navigate(`/${reponse.user._id}`);
       }
+      loading.setIsLoading(false);
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -193,17 +201,21 @@ const SignUp = () => {
       height,
     };
     try {
+      loading.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/patient/signup", data);
-      setIsLoading(true);
+
       if (res.status !== 201) {
+        loading.setIsLoading(false);
         console.log("error signin up");
       }
 
       // auth.login(reponse.user._id, reponse.token);
       // navigate("/");
-      setIsLoading(false);
+
+      loading.setIsLoading(false);
       handleNext();
     } catch (err) {
+      loading.setIsLoading(false);
       setIsError(true);
       setError(err.response.data.message);
       console.log(err.response.data.message);
@@ -231,17 +243,20 @@ const SignUp = () => {
       lisOfHospitals,
     };
     try {
+      loading.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/doctor/signup", data);
-      setIsLoading(true);
+
       if (res.status != 201) {
+        loading.setIsLoading(false);
         console.log("error signin up");
       }
       const reponse = await res.data;
       // auth.highLogin(reponse.userId, reponse.token);
       // setRole("choosePatient");
-      setIsLoading(false);
+      loading.setIsLoading(false);
       handleNext();
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -257,17 +272,20 @@ const SignUp = () => {
       phoneNumber,
     };
     try {
+      loading.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/hospital/signup", data);
-      setIsLoading(false);
+
       if (res.status != 201) {
+        loading.setIsLoading(false);
         console.log("error signin up");
       }
       const reponse = await res.data;
       // auth.highLogin(reponse.userId, reponse.token);
       // setRole("choosePatient");
-      setIsLoading(false);
+      loading.setIsLoading(false);
       handleNext();
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -279,12 +297,6 @@ const SignUp = () => {
   return (
     <>
       <StyledEngineProvider injectFirst>
-        {isLoading && (
-          <div className="loading">
-            <CircularProgress sx={{ color: "var(--second-blue)" }} size="50px" />
-          </div>
-        )}
-
         <div className={auth.token ? " hidef" : "curtain"}></div>
         <div className={auth.token ? "hidef" : "mainForm"}>
           {/* <button
@@ -318,11 +330,19 @@ const SignUp = () => {
           {role === "choosePatient" && (
             <>
               <div className="signInform">
+                <IconButton className="exitSignIn" onClick={() => setRole("unset")}>
+                  <CloseIcon sx={{ marginLeft: "90px" }} />
+                </IconButton>
                 <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>Enter A patient creds</Typography>
                 <hr style={{ width: "100%", marginBottom: "30px" }} />
                 <div className="signInInputs">
                   <TextField className="bg " label="Email" variant="standard" size="small" required fullWidth onChange={(e) => setEmail(e.target.value)} />
                   <TextField className="bg " label="Password" variant="standard" size="small" fullWidth required onChange={(e) => setPassword(e.target.value)} />
+                  {isError && (
+                    <Typography variant="body1" color="red">
+                      {error}
+                    </Typography>
+                  )}
                   <Button variant="contained" sx={{ width: "30%", left: "70%" }} onClick={() => handleSignIn("patient")}>
                     Sign In
                   </Button>

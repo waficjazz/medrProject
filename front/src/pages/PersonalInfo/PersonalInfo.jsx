@@ -1,18 +1,22 @@
 import React, { useContext } from "react";
 import { useState, useEffect } from "react";
-import { Checkbox, Typography, FormControlLabel, FormGroup } from "@mui/material";
+import { Checkbox, Typography, FormControlLabel } from "@mui/material";
 import "./PersonalInfo.css";
 import { StyledEngineProvider } from "@mui/material/styles";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { addInfo } from "../../reducers/patientReducer";
-import { ShowContext, RegContext } from "../../context";
+import { useParams } from "react-router-dom";
+import { ShowContext, RegContext, LoadingContext } from "../../context";
 import MiniForm from "../../components/MiniForm/MiniForm";
+import Loading from "../../components/Loading";
 const PersonalInfo = () => {
+  const { id } = useParams();
   const [openMini, setOpenMini] = useState(false);
   const { show, setShow } = useContext(ShowContext);
   const auth = useContext(RegContext);
+  const loading = useContext(LoadingContext);
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient.value);
   const boolArr = ["Medications:", "Chronic Disease:", "Allergies:", "Surgical History:", "Problems:"];
@@ -22,15 +26,23 @@ const PersonalInfo = () => {
   const [localPatient, setLocalPatient] = useState("");
 
   useEffect(() => {
+    let uid;
     if (!show) {
+      loading.setIsLoading(true);
       const storedData = JSON.parse(localStorage.getItem("userData"));
-      const uid = storedData.uid;
+      console.log(storedData);
+      if (storedData != null) {
+        uid = storedData.uid;
+      } else {
+        uid = id;
+      }
 
       const getPatientInfo = async () => {
         try {
           const response = await axios.get(`http://localhost:5000/api/patient/info/${uid}`);
           setLocalPatient(response.data);
           dispatch(addInfo(response.data));
+          loading.setIsLoading(false);
         } catch (err) {
           console.log(err.message);
         }
@@ -42,13 +54,12 @@ const PersonalInfo = () => {
   const testCheck = (index) => {
     if (Object.keys(localPatient).length > 0) {
       if (localPatient[boolArrExist[index]].length > 0) {
-        console.log("true");
         return true;
       }
-      console.log("false1");
+
       return false;
     }
-    console.log("false2");
+
     return false;
   };
   return (

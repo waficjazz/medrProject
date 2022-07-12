@@ -94,6 +94,7 @@ const Navbar = () => {
                         sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}
                         onClick={() => {
                           auth.highLogout();
+                          auth.logout();
                           setOpen(!open);
                         }}>
                         <LogoutIcon fontSize="small" sx={{ marginRight: "5px" }} />

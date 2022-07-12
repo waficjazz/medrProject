@@ -1,22 +1,21 @@
-import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography, Button, TableSortLabel } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Table, TableHead, TableCell, TableRow, TableBody, Collapse, IconButton, Typography, Button, TableSortLabel } from "@mui/material";
+import { useState, useEffect, useContext } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
-import HospitalVisit from "../../components/HospitalVisit/HospitalVisit";
 import React from "react";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import "../HospitalVisits/HospitalVisits.css";
 import AddIcon from "@mui/icons-material/Add";
-import { useSelector } from "react-redux";
 import PrescForm from "../../components/PrescriptionForm/PrescriptionForm";
 import axios from "axios";
-import VaccineForm from "../../components/VaccineForm/VaccineForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import OnePrescription from "../../components/OnePrescription/OnePrescription";
+import { LoadingContext } from "../../context";
 
 const Prescriptions = () => {
+  const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -55,20 +54,26 @@ const Prescriptions = () => {
 
   const handleDelete = async (id) => {
     try {
+      loadingc.setIsLoading(true);
       const response = await axios.delete(`http://localhost:5000/api/prescription/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };
 
   const handleEdit = async (id) => {
     try {
+      loadingc.setIsLoading(true);
       setFormType("edit");
       setPrescId(id);
       setOpenForm(true);
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -76,16 +81,20 @@ const Prescriptions = () => {
   useEffect(() => {
     const getPrescriptions = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/prescription/all/${patientId}`);
 
         setPrescriptions(response.data);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getPrescriptions();
+      loadingc.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }

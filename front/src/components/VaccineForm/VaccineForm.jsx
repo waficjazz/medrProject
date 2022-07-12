@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
-
+import { LoadingContext } from "../../context";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton, Typography } from "@mui/material";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const VaccineForm = (props) => {
+  const loading = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -29,6 +29,7 @@ const VaccineForm = (props) => {
 
   useEffect(() => {
     if (props.type === "edit") {
+      loading.setIsLoading(true);
       const getVaccination = async () => {
         try {
           const res = await axios.get(`http://localhost:5000/api/vaccination/one/${props.id}`);
@@ -39,7 +40,9 @@ const VaccineForm = (props) => {
           setDate(data.date?.toString().slice(0, 10));
           setShots(data.shots);
           setDoses(data.doses);
+          loading.setIsLoading(false);
         } catch (err) {
+          loading.setIsLoading(false);
           console.log(err.message);
         }
       };
@@ -52,6 +55,7 @@ const VaccineForm = (props) => {
     setDate("");
     setShots("");
     setDoses("");
+    loading.setIsLoading(false);
   }, [props]);
 
   const submit = async () => {
@@ -65,11 +69,14 @@ const VaccineForm = (props) => {
       location,
     };
     try {
+      loading.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/vaccination/add", vaccination, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "Created") {
         props.close();
+        loading.setIsLoading(false);
       }
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -86,11 +93,14 @@ const VaccineForm = (props) => {
       id: props.id,
     };
     try {
+      loading.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/vaccination/update", vaccination, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "OK") {
         props.close();
+        loading.setIsLoading(false);
       }
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };

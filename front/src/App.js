@@ -2,11 +2,13 @@ import React, { useState, useCallback, useEffect } from "react";
 import MainPage from "./pages/MainPage/MainPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUp from "./components/SignUpForm/SignUp";
-import { ShowContext, RegContext } from "./context";
+import { ShowContext, RegContext, LoadingContext } from "./context";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Loading from "./components/Loading";
 function App() {
   const [show, setShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState(false);
   const [token, setToken] = useState(false);
 
@@ -57,18 +59,21 @@ function App() {
   }, [login]);
 
   return (
-    <RegContext.Provider value={{ token: token, login: login, logout: logout, highLogin: highLogin, highLogout: highLogout }}>
-      <ShowContext.Provider value={{ show, setShow }}>
-        <BrowserRouter>
-          {/* <Routes>
+    <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+      <RegContext.Provider value={{ token: token, login: login, logout: logout, highLogin: highLogin, highLogout: highLogout }}>
+        <ShowContext.Provider value={{ show, setShow }}>
+          <BrowserRouter>
+            {/* <Routes>
             <Route path="/s" element={<SignUp />} />
           </Routes> */}
-          {!isLoggedIn && <SignUp />}
-          <Navbar />
-          {isLoggedIn && <MainPage />}
-        </BrowserRouter>
-      </ShowContext.Provider>
-    </RegContext.Provider>
+            {isLoading && <Loading />}
+            {!isLoggedIn && <SignUp />}
+            <Navbar />
+            {isLoggedIn && <MainPage />}
+          </BrowserRouter>
+        </ShowContext.Provider>
+      </RegContext.Provider>
+    </LoadingContext.Provider>
   );
 }
 

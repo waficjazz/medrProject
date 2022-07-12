@@ -221,12 +221,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
+  height: 100vh !important;
+  width: 100vw !important;
   background-color: rgba(0, 0, 0, 0.3);
-  z-index: 1199;
+  position: absolute !important;
+  z-index: 1000 !important;
 }
 .finishStep {
   margin-left: 65%;

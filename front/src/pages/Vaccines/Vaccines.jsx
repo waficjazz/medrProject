@@ -1,20 +1,18 @@
-import { Table, TableContainer, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography, Button, TableSortLabel } from "@mui/material";
-import { useState, useEffect } from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Table, TableHead, TableCell, TableRow, TableBody, IconButton, Typography, TableSortLabel } from "@mui/material";
+import { useState, useEffect, useContext } from "react";
 import { StyledEngineProvider } from "@mui/material/styles";
-import HospitalVisit from "../../components/HospitalVisit/HospitalVisit";
 import React from "react";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import "../HospitalVisits/HospitalVisits.css";
 import AddIcon from "@mui/icons-material/Add";
-import { useSelector } from "react-redux";
+import { LoadingContext } from "../../context";
 import axios from "axios";
 import VaccineForm from "../../components/VaccineForm/VaccineForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 const Vaccines = () => {
+  const loading = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -53,10 +51,13 @@ const Vaccines = () => {
 
   const handleDelete = async (id) => {
     try {
+      loading.setIsLoading(true);
       const response = await axios.delete(`http://localhost:5000/api/vaccination/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
+      loading.setIsLoading(false);
       setReload(!reload);
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -74,10 +75,15 @@ const Vaccines = () => {
   useEffect(() => {
     const getVaccinations = async () => {
       try {
+        loading.setIsLoading(true);
+
         const response = await axios.get(`http://localhost:5000/api/vaccination/all/${patientId}`);
 
         setVaccinations(response.data);
+        loading.setIsLoading(false);
       } catch (err) {
+        loading.setIsLoading(false);
+
         console.log(err.message);
       }
     };

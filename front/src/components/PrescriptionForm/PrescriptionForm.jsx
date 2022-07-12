@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
-
+import { LoadingContext } from "../../context";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton, Typography } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Description from "@mui/icons-material/Description";
@@ -12,6 +12,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const PrescForm = (props) => {
+  const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -43,16 +44,20 @@ const PrescForm = (props) => {
 
     const getVisits = async () => {
       try {
+        loadingc.setIsLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
 
         setVisits(response.data);
+        loadingc.setIsLoading(false);
       } catch (err) {
+        loadingc.setIsLoading(false);
         console.log(err.message);
       }
     };
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getVisits();
+      loadingc.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
@@ -88,6 +93,7 @@ const PrescForm = (props) => {
   };
   useEffect(() => {
     if (props.type === "edit") {
+      loadingc.setIsLoading(true);
       const getPrescription = async () => {
         try {
           const res = await axios.get(`http://localhost:5000/api/prescription/one/${props.id}`);
@@ -98,7 +104,9 @@ const PrescForm = (props) => {
           setIssuer(data.issuer);
           setMedications(data.medications);
           setLabs(data.labs);
+          loadingc.setIsLoading(false);
         } catch (err) {
+          loadingc.setIsLoading(false);
           console.log(err.message);
         }
       };
@@ -111,6 +119,7 @@ const PrescForm = (props) => {
     setIssuer("");
     setMedications([]);
     setLabs([]);
+    loadingc.setIsLoading(false);
   }, [props]);
 
   const submit = async () => {
@@ -125,11 +134,15 @@ const PrescForm = (props) => {
       hospitalVisit: visitId.current,
     };
     try {
+      loadingc.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/prescription/add", presc, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "Created") {
         props.close();
+        loadingc.setIsLoading(false);
       }
+      loadingc.setIsLoading(false);
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };
@@ -146,11 +159,14 @@ const PrescForm = (props) => {
       id: props.id,
     };
     try {
+      loadingc.setIsLoading(true);
       const res = await axios.post("http://localhost:5000/api/prescription/update", presc, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "OK") {
         props.close();
+        loadingc.setIsLoading(false);
       }
     } catch (err) {
+      loadingc.setIsLoading(false);
       console.log(err.message);
     }
   };
