@@ -29,9 +29,12 @@ const LabTestForm = (props) => {
   const loading = open && visits.length === 0;
   const visitId = useRef();
   const inputName = useRef("");
-  const [namePreview, setNamePreview] = useState();
+  const [namePreview, setNamePreview] = useState("");
   const [selectedPDF, setSelectedPDF] = useState();
   const loadingc = useContext(LoadingContext);
+  const testNames = (name) => {
+    return /[A-Za-z]{3,}/.test(name);
+  };
   useEffect(() => {
     let active = true;
 
@@ -211,8 +214,9 @@ const LabTestForm = (props) => {
                 setName(e.target.value);
               }}
             />
-            <TextField value={location} size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
+            <TextField required value={location} size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
             <TextField
+              required
               size="small"
               value={date}
               label="Date"
@@ -284,12 +288,22 @@ const LabTestForm = (props) => {
             </div>
           )}
           {props.type === "add" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={submit}
+              disabled={!testNames(location) || date == "" || namePreview == ""}>
               Submit
             </Button>
           )}
           {props.type === "edit" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={handleEdit}
+              disabled={!testNames(location) || date == "" || namePreview == ""}>
               Submit
             </Button>
           )}

@@ -21,15 +21,17 @@ const ImagingForm = (props) => {
   const [image, setImage] = useState("");
   const patientId = storedData.uid;
   const [visits, setVisits] = useState([]);
-  const [selectedImage, setSelectedImage] = useState();
+  const [selectedImage, setSelectedImage] = useState("");
   const [preview, setPreview] = useState();
   const inputName = useRef("");
-  const [namePreview, setNamePreview] = useState();
+  const [namePreview, setNamePreview] = useState("");
   const [selectedPDF, setSelectedPDF] = useState();
   const [open, setOpen] = React.useState(false);
   const loading = open && visits.length === 0;
   const visitId = useRef();
-
+  const testNames = (name) => {
+    return /[A-Za-z]{3,}/.test(name);
+  };
   useEffect(() => {
     let active = true;
 
@@ -137,9 +139,9 @@ const ImagingForm = (props) => {
           </IconButton>
           <hr />
           <div className="hopitalForm">
-            <TextField size="small" label="Name" variant="standard" className="hospitalInputs" onChange={(e) => setName(e.target.value)} />
-            <TextField size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
-            <TextField size="small" label="Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setDate(e.target.value)} />
+            <TextField required size="small" label="Name" variant="standard" className="hospitalInputs" onChange={(e) => setName(e.target.value)} />
+            <TextField required size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
+            <TextField required size="small" label="Date" variant="standard" type="date" focused className="hospitalInputs" onChange={(e) => setDate(e.target.value)} />
             <Autocomplete
               className="hospitalInputs"
               size="small"
@@ -213,7 +215,12 @@ const ImagingForm = (props) => {
               {selectedPDF && <h5>{namePreview}</h5>}
             </div>
           </div>
-          <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+          <Button
+            disabled={!testNames(location) || !testNames(name) || date == "" || namePreview == "" || selectedImage == ""}
+            variant="contained"
+            sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+            className="submitHospital"
+            onClick={submit}>
             Submit
           </Button>
         </div>

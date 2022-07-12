@@ -347,7 +347,23 @@ const HospitalVisitForm = (props) => {
             </Button>
           )}
           {props.type === "edit" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
+            <Button
+              disabled={
+                (tabValue == "0" && (!testNames(visitDescription) || !testNames(visitCause) || visitTime == "" || visitDate == "")) ||
+                (tabValue == "1" &&
+                  (!testNames(visitDescription) ||
+                    !testNames(visitCause) ||
+                    visitTime == "" ||
+                    visitDate == "" ||
+                    !validPhone ||
+                    !testNames(hName) ||
+                    !testNames(hospitalAddress) ||
+                    !validEmail))
+              }
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={handleEdit}>
               Submit
             </Button>
           )}

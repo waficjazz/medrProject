@@ -34,7 +34,9 @@ const PrescForm = (props) => {
   const [open, setOpen] = useState(false);
   const loading = open && visits.length === 0;
   const visitId = useRef();
-
+  const testNames = (name) => {
+    return /[A-Za-z]{3,}/.test(name);
+  };
   useEffect(() => {
     let active = true;
 
@@ -113,13 +115,13 @@ const PrescForm = (props) => {
 
       getPrescription();
     }
+    loadingc.setIsLoading(false);
     setDescription("");
     setLocation("");
     setDate("");
     setIssuer("");
     setMedications([]);
     setLabs([]);
-    loadingc.setIsLoading(false);
   }, [props]);
 
   const submit = async () => {
@@ -158,6 +160,7 @@ const PrescForm = (props) => {
       patientId,
       medications,
       labs,
+      issuer,
       description,
       date,
       location,
@@ -195,6 +198,7 @@ const PrescForm = (props) => {
           <hr />
           <div className="hopitalForm">
             <TextField
+              required
               // defaultValue={name}
               value={issuer}
               size="small"
@@ -205,8 +209,9 @@ const PrescForm = (props) => {
                 setIssuer(e.target.value);
               }}
             />
-            <TextField value={location} size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
+            <TextField required value={location} size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
             <TextField
+              required
               size="small"
               value={date}
               label="Date"
@@ -218,7 +223,7 @@ const PrescForm = (props) => {
                 setDate(e.target.value);
               }}
             />
-            <TextField size="small" value={description} label="Description" variant="standard" onChange={(e) => setDescription(e.target.value)} />
+            <TextField required size="small" value={description} label="Description" variant="standard" onChange={(e) => setDescription(e.target.value)} />
             <Autocomplete
               className="hospitalInputs"
               size="small"
@@ -242,6 +247,7 @@ const PrescForm = (props) => {
               }}
               renderInput={(params) => (
                 <TextField
+                  required
                   {...params}
                   label="Hospital Visit"
                   variant="standard"
@@ -317,12 +323,22 @@ const PrescForm = (props) => {
             </div>
           </div>
           {props.type === "add" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={submit}
+              disabled={!testNames(issuer) || !testNames(description) || !testNames(location) || date == "" || visitId.current == ""}>
               Submit
             </Button>
           )}
           {props.type === "edit" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={handleEdit}
+              disabled={!testNames(issuer) || !testNames(description) || !testNames(location) || date == "" || visitId.current == ""}>
               Submit
             </Button>
           )}

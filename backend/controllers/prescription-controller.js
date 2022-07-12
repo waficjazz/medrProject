@@ -75,10 +75,10 @@ const deletePrescription = async (req, res, next) => {
 };
 
 const updatePrescription = async (req, res, next) => {
-  const { hospitalVisit, clinicalVisit, patientId, medications, labs, description, date, location, id } = req.body;
+  const { hospitalVisit, clinicalVisit, patientId, medications, labs, description, date, location, id, issuer } = req.body;
 
   try {
-    reseponse = await Prescription.updateOne({ _id: id }, { patientId, medications, labs, description, date, location, hospitalVisit, clinicalVisit });
+    reseponse = await Prescription.updateOne({ _id: id }, { patientId, medications, labs, issuer, description, date, location, hospitalVisit, clinicalVisit });
   } catch (err) {
     const error = new HttpError("could not update prescription", 500);
     return next(error);

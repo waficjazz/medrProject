@@ -37,6 +37,20 @@ const SurgeryForm = (props) => {
   const [hospitals, setHospitals] = useState([]);
   const loading = open && visits.length === 0;
   const loadingHo = openHo && hospitals.length === 0;
+  const [validPhone, setValidPhone] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const testNames = (name) => {
+    return /[A-Za-z]{3,}/.test(name);
+  };
+
+  useEffect(() => {
+    // validPhone.current = /^\d{7}$/.test(phoneNumber);
+    setValidPhone(/^\d{8}$/.test(phoneNumber));
+  }, [phoneNumber]);
+
+  useEffect(() => {
+    setValidEmail(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(hospitalEmail));
+  }, [hospitalEmail]);
 
   const handleEdit = async () => {
     let surgery = {
@@ -242,6 +256,7 @@ const SurgeryForm = (props) => {
             {tabValue === "1" && (
               <>
                 <TextField
+                  required
                   size="small"
                   value={hospitalName}
                   label="Hospital Name"
@@ -249,9 +264,27 @@ const SurgeryForm = (props) => {
                   className="hospitalInputs"
                   onChange={(e) => setHospitalName(e.target.value)}
                 />
-                <TextField value={phoneNumber} size="small" label="Phone number" variant="standard" className="hospitalInputs" onChange={(e) => setPhoneNumber(e.target.value)} />
-                <TextField value={hospitalEmail} size="small" label="Email" variant="standard" className="hospitalInputs" onChange={(e) => setHospitalEmail(e.target.value)} />
-                <TextField value={hospitalAddress} size="small" label="Address" variant="standard" fullWidth onChange={(e) => setHospitalAddress(e.target.value)} />
+                <TextField
+                  required
+                  error={!validPhone}
+                  value={phoneNumber}
+                  size="small"
+                  label="Phone number"
+                  variant="standard"
+                  className="hospitalInputs"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+                <TextField
+                  required
+                  error={!validEmail}
+                  value={hospitalEmail}
+                  size="small"
+                  label="Email"
+                  variant="standard"
+                  className="hospitalInputs"
+                  onChange={(e) => setHospitalEmail(e.target.value)}
+                />
+                <TextField required value={hospitalAddress} size="small" label="Address" variant="standard" fullWidth onChange={(e) => setHospitalAddress(e.target.value)} />
               </>
             )}
             {tabValue === "0" && (
@@ -278,6 +311,7 @@ const SurgeryForm = (props) => {
                   }}
                   renderInput={(params) => (
                     <TextField
+                      required
                       {...params}
                       label="Hospitals"
                       variant="standard"
@@ -298,10 +332,20 @@ const SurgeryForm = (props) => {
           </div>
           <hr />
           <div className="hopitalForm">
-            <TextField size="small" value={surgeryName} label="Name" variant="standard" focused className="hospitalInputs" onChange={(e) => setSurgeryName(e.target.value)} />
-            <TextField size="small" value={surgeryCause} label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setSurgeryCause(e.target.value)} />
+            <TextField
+              required
+              size="small"
+              value={surgeryName}
+              label="Name"
+              variant="standard"
+              focused
+              className="hospitalInputs"
+              onChange={(e) => setSurgeryName(e.target.value)}
+            />
+            <TextField required size="small" value={surgeryCause} label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setSurgeryCause(e.target.value)} />
             <TextField
               size="small"
+              required
               value={surgeryDate}
               label="Date"
               variant="standard"
@@ -312,6 +356,7 @@ const SurgeryForm = (props) => {
             />
             <TextField
               size="small"
+              required
               value={surgeryDescription}
               label="Description"
               variant="standard"
@@ -343,6 +388,7 @@ const SurgeryForm = (props) => {
               }}
               renderInput={(params) => (
                 <TextField
+                  required
                   {...params}
                   label="Hospital Visit"
                   variant="standard"
@@ -361,12 +407,44 @@ const SurgeryForm = (props) => {
             <TextField size="small" label="Doctors" variant="standard" className="hospitalInputs" onChange={(e) => setDoctors(e.target.value)} />
           </div>
           {props.type === "add" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+            <Button
+              disabled={
+                (tabValue == "0" && (!testNames(surgeryCause) || !testNames(surgeryDescription) || !testNames(surgeryName) || surgeryDate == "")) ||
+                (tabValue == "1" &&
+                  (!testNames(surgeryCause) ||
+                    !testNames(surgeryDescription) ||
+                    !testNames(surgeryName) ||
+                    surgeryDate == "" ||
+                    !validPhone ||
+                    !testNames(hospitalName) ||
+                    !testNames(hospitalAddress) ||
+                    !validEmail))
+              }
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={submit}>
               Submit
             </Button>
           )}
           {props.type === "edit" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
+            <Button
+              disabled={
+                (tabValue == "0" && (!testNames(surgeryCause) || !testNames(surgeryDescription) || !testNames(surgeryName) || surgeryDate == "")) ||
+                (tabValue == "1" &&
+                  (!testNames(surgeryCause) ||
+                    !testNames(surgeryDescription) ||
+                    !testNames(surgeryName) ||
+                    surgeryDate == "" ||
+                    !validPhone ||
+                    !testNames(hospitalName) ||
+                    !testNames(hospitalAddress) ||
+                    !validEmail))
+              }
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={handleEdit}>
               Submit
             </Button>
           )}
