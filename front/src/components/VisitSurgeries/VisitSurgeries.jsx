@@ -94,8 +94,8 @@ const VisitSurgeries = ({ visitId, close }) => {
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
-          {/* <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}> */}
-          {/* <Typography className="tableContents">
+          <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
+            {/* <Typography className="tableContents">
               <IconButton>
                 <EditIcon fontSize="small" />
               </IconButton>
@@ -103,7 +103,7 @@ const VisitSurgeries = ({ visitId, close }) => {
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Typography> */}
-          {/* </TableCell> */}
+          </TableCell>
         </TableRow>
         <TableRow>
           {/* <TableCell className="moreData" colSpan={6}>

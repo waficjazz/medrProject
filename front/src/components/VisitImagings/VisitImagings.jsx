@@ -65,15 +65,15 @@ const VisitImagings = ({ visitId, close }) => {
             </a>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
+            {/* <Typography className="tableContents">
               <IconButton>
                 <EditIcon fontSize="small" />
               </IconButton>
               {/* onClick={() => handleDelete(row._id)} */}
-              <IconButton aria-label="delete row" sx={{ marginRight: "4px" }}>
+            {/* <IconButton aria-label="delete row" sx={{ marginRight: "4px" }}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
-            </Typography>
+            </Typography> */}{" "}
           </TableCell>
         </TableRow>
       </StyledEngineProvider>

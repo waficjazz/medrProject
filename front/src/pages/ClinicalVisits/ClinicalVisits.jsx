@@ -156,7 +156,7 @@ const ClinicalVisits = () => {
         <TableRow>
           <TableCell className="moreData" colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <ClinicalVisit visit={doctor} />
+              <ClinicalVisit visit={doctor} visitc={row} />
             </Collapse>
           </TableCell>
         </TableRow>

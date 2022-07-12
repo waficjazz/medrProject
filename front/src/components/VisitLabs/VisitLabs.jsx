@@ -55,11 +55,11 @@ const VisitImagings = ({ visitId, close }) => {
             <Typography className="tableContents">{row.csv}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">
+            {/* <Typography className="tableContents">
               <IconButton aria-label="delete row" sx={{ marginRight: "4px" }}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
-            </Typography>
+            </Typography> */}
           </TableCell>
         </TableRow>
       </StyledEngineProvider>

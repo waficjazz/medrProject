@@ -139,8 +139,9 @@ const LabTestForm = (props) => {
 
   const submit = async () => {
     // let imaging = { name, date, location, patientId };
-    loadingc.setIsLoading(true);
+
     try {
+      loadingc.setIsLoading(true);
       const formData = new FormData();
       formData.append("name", name);
       formData.append("date", date);

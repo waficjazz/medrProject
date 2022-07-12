@@ -85,7 +85,7 @@ const LabTests = () => {
             <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.name}</Typography>
+            <Typography className="tableContents">{row.location}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">

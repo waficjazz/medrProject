@@ -84,7 +84,7 @@ const HospitalVisits = () => {
   useEffect(() => {
     const getVisits = async () => {
       try {
-        // loading.setIsLoading(true);
+        loading.setIsLoading(true);
         const response = await axios.get(process.env.REACT_APP_URL + `/hospital/visits/${patientId}`);
         setVisits(response.data);
         loading.setIsLoading(false);
@@ -96,6 +96,7 @@ const HospitalVisits = () => {
     let isApiSubscribed = true;
     if (isApiSubscribed) {
       getVisits();
+      loading.setIsLoading(false);
       // if (visits.length === 0) {
       //   setEmpty(true);
       // }
@@ -112,7 +113,7 @@ const HospitalVisits = () => {
     const { row } = props;
     const getHospital = async (id) => {
       try {
-        // loading.setIsLoading(true);
+        loading.setIsLoading(true);
         const response = await axios.get(process.env.REACT_APP_URL + `/hospital/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
@@ -124,7 +125,7 @@ const HospitalVisits = () => {
     };
     const getVerfiedHospital = async (id) => {
       try {
-        // loading.setIsLoading(true);
+        loading.setIsLoading(true);
         const response = await axios.get(process.env.REACT_APP_URL + `/hospital/verified/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
@@ -139,8 +140,10 @@ const HospitalVisits = () => {
       if (isApiSubscribed) {
         if (!row.verifiedHospital) {
           getHospital(row.hospitalId);
+          loading.setIsLoading(false);
         } else {
           getVerfiedHospital(row.hospitalId);
+          loading.setIsLoading(false);
         }
       }
       return () => {
