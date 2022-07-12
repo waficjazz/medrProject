@@ -35,7 +35,20 @@ const HospitalVisitForm = (props) => {
   const [open, setOpen] = React.useState(false);
   const [hospitals, setHospitals] = React.useState([]);
   const loading = open && hospitals.length === 0;
+  const [validPhone, setValidPhone] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const testNames = (name) => {
+    return /[A-Za-z]{3,}/.test(name);
+  };
 
+  useEffect(() => {
+    // validPhone.current = /^\d{7}$/.test(phoneNumber);
+    setValidPhone(/^\d{8}$/.test(phoneNumber));
+  }, [phoneNumber]);
+
+  useEffect(() => {
+    setValidEmail(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(hospitalEmail));
+  }, [hospitalEmail]);
   useEffect(() => {
     if (props.type === "edit") {
       loadingc.setIsLoading(true);
@@ -157,12 +170,13 @@ const HospitalVisitForm = (props) => {
     let hospital = { hospitalName: hName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber };
 
     try {
-      loadingc.setIsLoading(true);
       if (tabValue === "1") {
+        loadingc.setIsLoading(true);
         const res = await axios.post(process.env.REACT_APP_URL + "/hospital/add", hospital, { headers: { authorization: `Bearer ${token}` } });
         console.log(res.data);
         let id = await res.data._id;
         hospitalId.current = id;
+        loadingc.setIsLoading(false);
       }
       let visit = {
         patientId,
@@ -175,8 +189,10 @@ const HospitalVisitForm = (props) => {
         description: visitDescription,
       };
 
+      loadingc.setIsLoading(true);
       const resp = await axios.post(process.env.REACT_APP_URL + "/hospital/visits/add", visit, { headers: { authorization: `Bearer ${token}` } });
       if (resp.statusText === "Created") {
+        loadingc.setIsLoading(false);
         props.close();
       }
       loadingc.setIsLoading(false);
@@ -201,10 +217,28 @@ const HospitalVisitForm = (props) => {
           <div className="hopitalForm">
             {tabValue === "1" && (
               <>
-                <TextField size="small" value={hName} label="Hospital Name" variant="standard" className="hospitalInputs" onChange={(e) => setHName(e.target.value)} />
-                <TextField size="small" value={phoneNumber} label="Phone number" variant="standard" className="hospitalInputs" onChange={(e) => setPhoneNumber(e.target.value)} />
-                <TextField size="small" value={hospitalEmail} label="Email" variant="standard" className="hospitalInputs" onChange={(e) => setHospitalEmail(e.target.value)} />
-                <TextField size="small" value={hospitalAddress} label="Address" variant="standard" fullWidth onChange={(e) => setHospitalAddress(e.target.value)} />
+                <TextField size="small" required value={hName} label="Hospital Name" variant="standard" className="hospitalInputs" onChange={(e) => setHName(e.target.value)} />
+                <TextField
+                  error={!validPhone}
+                  size="small"
+                  required
+                  value={phoneNumber}
+                  label="Phone number"
+                  variant="standard"
+                  className="hospitalInputs"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+                <TextField
+                  error={!validEmail}
+                  size="small"
+                  required
+                  value={hospitalEmail}
+                  label="Email"
+                  variant="standard"
+                  className="hospitalInputs"
+                  onChange={(e) => setHospitalEmail(e.target.value)}
+                />
+                <TextField size="small" required value={hospitalAddress} label="Address" variant="standard" fullWidth onChange={(e) => setHospitalAddress(e.target.value)} />
               </>
             )}
             {tabValue === "0" && (
@@ -231,6 +265,7 @@ const HospitalVisitForm = (props) => {
                   }}
                   renderInput={(params) => (
                     <TextField
+                      required
                       {...params}
                       label="Hospitals"
                       variant="standard"
@@ -251,8 +286,9 @@ const HospitalVisitForm = (props) => {
           </div>
           <hr />
           <div className="hopitalForm">
-            <TextField size="small" value={visitCause} label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setVisitCause(e.target.value)} />
+            <TextField required size="small" value={visitCause} label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setVisitCause(e.target.value)} />
             <TextField
+              required
               size="small"
               value={visitDate}
               label="Entry Date"
@@ -264,6 +300,7 @@ const HospitalVisitForm = (props) => {
             />
             <TextField
               size="small"
+              required
               label="Time Spent"
               variant="standard"
               type="number"
@@ -276,6 +313,7 @@ const HospitalVisitForm = (props) => {
               onChange={(e) => setVisitTime(e.target.value)}
             />
             <TextField
+              required
               size="small"
               value={visitDescription}
               label="Description"
@@ -288,7 +326,23 @@ const HospitalVisitForm = (props) => {
             <TextField size="small" label="Doctors" variant="standard" className="hospitalInputs" onChange={(e) => setDoctors(e.target.value)} />
           </div>
           {props.type === "add" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={submit}
+              disabled={
+                (tabValue == "0" && (!testNames(visitDescription) || !testNames(visitCause) || visitTime == "" || visitDate == "")) ||
+                (tabValue == "1" &&
+                  (!testNames(visitDescription) ||
+                    !testNames(visitCause) ||
+                    visitTime == "" ||
+                    visitDate == "" ||
+                    !validPhone ||
+                    !testNames(hName) ||
+                    !testNames(hospitalAddress) ||
+                    !validEmail))
+              }>
               Submit
             </Button>
           )}

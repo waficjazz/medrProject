@@ -177,7 +177,12 @@ const VaccineForm = (props) => {
             </Button>
           )}
           {props.type === "edit" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={handleEdit}
+              disabled={doses == "" || shots == "" || !testNames(name) || date == "" || !testNames(location)}>
               Submit
             </Button>
           )}

@@ -8,6 +8,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { LoadingContext } from "../../context";
 
 const ClinicalVisitForm = (props) => {
+  const testNames = (name) => {
+    return /[A-Za-z]{3,}/.test(name);
+  };
+
   const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
@@ -30,7 +34,17 @@ const ClinicalVisitForm = (props) => {
   const doctorId = useRef();
   const [open, setOpen] = React.useState(false);
   const loading = open && doctors.length === 0;
+  const [validPhone, setValidPhone] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
 
+  useEffect(() => {
+    // validPhone.current = /^\d{7}$/.test(phoneNumber);
+    setValidPhone(/^\d{8}$/.test(phoneNumber));
+  }, [phoneNumber]);
+
+  useEffect(() => {
+    setValidEmail(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email));
+  }, [email]);
   useEffect(() => {
     if (props.type === "edit") {
       loadingc.setIsLoading(true);
@@ -73,6 +87,7 @@ const ClinicalVisitForm = (props) => {
     setVisitDate("");
     setDoctorName("");
     setClinicAddress("");
+    setProficiency("");
     setEmail("");
     setPhoneNumber("");
     doctorId.current = "";
@@ -209,8 +224,17 @@ const ClinicalVisitForm = (props) => {
           <div className="hopitalForm">
             {tabValue === "1" && (
               <>
-                <TextField value={doctorName} size="small" label="Doctor's Name" variant="standard" className="hospitalInputs" onChange={(e) => setDoctorName(e.target.value)} />
                 <TextField
+                  required
+                  value={doctorName}
+                  size="small"
+                  label="Doctor's Name"
+                  variant="standard"
+                  className="hospitalInputs"
+                  onChange={(e) => setDoctorName(e.target.value)}
+                />
+                <TextField
+                  required
                   value={proficiency}
                   size="small"
                   label="Doctor's proficiency"
@@ -218,9 +242,27 @@ const ClinicalVisitForm = (props) => {
                   className="hospitalInputs"
                   onChange={(e) => setProficiency(e.target.value)}
                 />
-                <TextField value={phoneNumber} size="small" label="Phone number" variant="standard" className="hospitalInputs" onChange={(e) => setPhoneNumber(e.target.value)} />
-                <TextField value={email} size="small" label="Email" variant="standard" className="hospitalInputs" onChange={(e) => setEmail(e.target.value)} />
-                <TextField value={clinicAddress} size="small" label="Clinic Address" variant="standard" fullWidth onChange={(e) => setClinicAddress(e.target.value)} />
+                <TextField
+                  required
+                  value={phoneNumber}
+                  error={!validPhone}
+                  size="small"
+                  label="Phone number"
+                  variant="standard"
+                  className="hospitalInputs"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+                <TextField
+                  required
+                  error={!validEmail}
+                  value={email}
+                  size="small"
+                  label="Email"
+                  variant="standard"
+                  className="hospitalInputs"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField required value={clinicAddress} size="small" label="Clinic Address" variant="standard" fullWidth onChange={(e) => setClinicAddress(e.target.value)} />
               </>
             )}
             {tabValue === "0" && (
@@ -261,6 +303,7 @@ const ClinicalVisitForm = (props) => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
+                      required
                       label="Doctors"
                       variant="standard"
                       InputProps={{
@@ -282,6 +325,7 @@ const ClinicalVisitForm = (props) => {
           <div className="hopitalForm">
             <TextField value={visitCause} size="small" label="Cause" variant="standard" className="hospitalInputs" onChange={(e) => setVisitCause(e.target.value)} />
             <TextField
+              required
               value={visitDate}
               size="small"
               label="Visit Date"
@@ -293,6 +337,7 @@ const ClinicalVisitForm = (props) => {
             />
 
             <TextField
+              required
               value={visitDescription}
               size="small"
               label="Description"
@@ -304,12 +349,28 @@ const ClinicalVisitForm = (props) => {
             />
           </div>
           {props.type === "add" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={submit}
+              disabled={
+                (tabValue == "0" && (!testNames(visitCause) || !testNames(visitDescription) || visitDate == "")) ||
+                (tabValue == "1" && (!validPhone || !validEmail || !testNames(proficiency) || !testNames(clinicAddress) || !testNames(doctorName)))
+              }>
               Submit
             </Button>
           )}
           {props.type === "edit" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={handleEdit}
+              disabled={
+                (tabValue == "0" && (!testNames(visitCause) || !testNames(visitDescription) || visitDate == "")) ||
+                (tabValue == "1" && (!validPhone || !validEmail || !testNames(proficiency) || !testNames(clinicAddress) || !testNames(doctorName)))
+              }>
               Submit
             </Button>
           )}

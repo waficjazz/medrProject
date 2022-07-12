@@ -84,7 +84,7 @@ const HospitalVisits = () => {
   useEffect(() => {
     const getVisits = async () => {
       try {
-        loading.setIsLoading(true);
+        // loading.setIsLoading(true);
         const response = await axios.get(process.env.REACT_APP_URL + `/hospital/visits/${patientId}`);
         setVisits(response.data);
         loading.setIsLoading(false);
@@ -112,7 +112,7 @@ const HospitalVisits = () => {
     const { row } = props;
     const getHospital = async (id) => {
       try {
-        loading.setIsLoading(true);
+        // loading.setIsLoading(true);
         const response = await axios.get(process.env.REACT_APP_URL + `/hospital/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
