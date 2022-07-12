@@ -23,6 +23,17 @@ const LabTests = () => {
   const [openForm, setOpenForm] = useState(false);
   const [formType, setFormType] = useState("add");
   const [reload, setReload] = useState(false);
+  const [labId, setLabId] = useState("");
+  // const [change, setChange] = useState(false);
+  const handleEdit = async (id) => {
+    try {
+      setFormType("edit");
+      setLabId(id);
+      setOpenForm(true);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -37,8 +48,9 @@ const LabTests = () => {
     const getLabTests = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/labtest/getall/${patientId}`);
-
+        console.log("entred");
         setLabTests(response.data);
+        // setChange(!change);
       } catch (err) {
         console.log(err.message);
       }
@@ -54,6 +66,7 @@ const LabTests = () => {
       isApiSubscribed = false;
     };
   }, [reload]);
+
   const DataModel = (props) => {
     const { row } = props;
     return (
@@ -75,6 +88,9 @@ const LabTests = () => {
           {token !== "" && (
             <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
               <Typography className="tableContents">
+                <IconButton onClick={() => handleEdit(row._id)}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
                 <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
                   <DeleteIcon fontSize="small" />
                 </IconButton>
@@ -93,9 +109,11 @@ const LabTests = () => {
           <LabTestForm
             isOpen={openForm}
             type={formType}
+            id={labId}
             close={() => {
               setOpenForm(false);
               setReload(!reload);
+              setFormType("add");
             }}
           />
           {empty ? (

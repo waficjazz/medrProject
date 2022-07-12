@@ -96,6 +96,23 @@ const getLabTests = async (req, res, next) => {
   res.json(info);
 };
 
+const getOneLab = async (req, res, next) => {
+  let info;
+  const $regex = req.params.id;
+  try {
+    info = await LabTest.findById($regex);
+  } catch (err) {
+    const error = new HttpError("Fetching lab test info failed, please try again later", 500);
+    return next(error);
+  }
+
+  if (!info || info.length === 0) {
+    return next(new HttpError("Could not find lab test ", 404));
+  }
+
+  res.json(info);
+};
+
 const deleteLabTest = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
@@ -110,7 +127,20 @@ const deleteLabTest = async (req, res, next) => {
   res.json(info);
 };
 
+const updateLab = async (req, res, next) => {
+  const { patientId, name, notes, date, location, csv, id } = req.body;
+
+  try {
+    reseponse = await LabTest.updateOne({ _id: id }, { patientId, name, notes, date, location, csv });
+  } catch (err) {
+    const error = new HttpError("could not update lab", 500);
+    return next(error);
+  }
+  res.status(200).json("updated");
+};
+exports.getOneLab = getOneLab;
 exports.deleteLabTest = deleteLabTest;
 exports.getLabTests = getLabTests;
 exports.addLabTest = addLabTest;
 exports.getLabByVisit = getLabByVisit;
+exports.updateLab = updateLab;

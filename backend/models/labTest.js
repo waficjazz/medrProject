@@ -9,7 +9,7 @@ const labTestSchema = new Schema({
   name: { type: String, required: true },
   location: { type: String, required: true },
   notes: { type: String, required: false },
-  csv: { type: String, required: true },
+  csv: { type: String, required: false },
 });
 
 module.exports = mongoose.model("LabTest", labTestSchema);

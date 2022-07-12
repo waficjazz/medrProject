@@ -70,30 +70,31 @@ const LabTestForm = (props) => {
     setTabValue(newValue);
   };
 
-  // useEffect(() => {
-  //   if (props.type === "edit") {
-  //     const getVaccination = async () => {
-  //       try {
-  //         const res = await axios.get(`http://localhost:5000/api/vaccination/one/${props.id}`);
-  //         const data = await res.data[0];
-  //         setName(data.name);
-  //         setLocation(data.location);
-  //         setNotes(data.notes);
-  //         setDate(data.date?.toString().slice(0, 10));
-  //         setShots(data.shots);
-  //       } catch (err) {
-  //         console.log(err.message);
-  //       }
-  //     };
+  useEffect(() => {
+    if (props.type === "edit") {
+      const getVaccination = async () => {
+        try {
+          const res = await axios.get(`http://localhost:5000/api/labtest/one/${props.id}`);
+          const data = await res.data;
+          setCsv(data.csv);
+          setName(data.name);
+          setLocation(data.location);
+          setNotes(data.notes);
+          setDate(data.date?.toString().slice(0, 10));
+          visitId.current = data.HospitalVisit;
+        } catch (err) {
+          console.log(err.message);
+        }
+      };
 
-  //     getVaccination();
-  //   }
-  //   setName("");
-  //   setLocation("");
-  //   setNotes("");
-  //   setDate("");
-  //   setShots("");
-  // }, [props]);
+      getVaccination();
+    }
+    setName("");
+    setLocation("");
+    setNotes("");
+    setDate("");
+    visitId.current = "";
+  }, [props]);
 
   // const submit = async () => {
   //   let labTest = {
@@ -150,25 +151,27 @@ const LabTestForm = (props) => {
       console.log(err.message);
     }
   };
-  // const handleEdit = async () => {
-  //   let vaccination = {
-  //     patientId,
-  //     name,
-  //     notes,
-  //     shots,
-  //     date,
-  //     location,
-  //     id: props.id,
-  //   };
-  //   try {
-  //     const res = await axios.post("http://localhost:5000/api/vaccination/update", vaccination);
-  //     if (res.statusText === "ok") {
-  //       props.close();
-  //     }
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
+  const handleEdit = async () => {
+    let lab = {
+      patientId,
+      name,
+      notes,
+      date,
+      location,
+      csv,
+      id: props.id,
+    };
+    try {
+      const res = await axios.post("http://localhost:5000/api/labtest/update", lab, { headers: { authorization: `Bearer ${token}` } });
+      console.log("ee");
+      console.log(res.statusText);
+      if (res.statusText === "OK") {
+        props.close();
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <StyledEngineProvider injectFirst>
       <div className={props.isOpen ? "hVisitForm" : "notOpen"}>
@@ -226,7 +229,7 @@ const LabTestForm = (props) => {
               loading={loading}
               onChange={(event, newValue) => {
                 visitId.current = newValue._id;
-                console.log(visitId.current);
+                // console.log(visitId.current);
               }}
               renderInput={(params) => (
                 <TextField
@@ -246,32 +249,34 @@ const LabTestForm = (props) => {
               )}
             />
           </div>
-          <div className="imgPreviewDiv">
-            <Button variant="contained" sx={{ backgroundColor: "var(--third-blue)", color: "white", width: "50%" }} component="label" className="submitHospital">
-              Upload Labs
-              <input
-                type="file"
-                accept="pdf/*"
-                hidden
-                onChange={
-                  onSelectPDF
-                  // setImage(e.target.files[0]);
-                }
-              />
-              <DownloadIcon fontSize="small" />
+          {props.type === "add" && (
+            <div className="imgPreviewDiv">
+              <Button variant="contained" sx={{ backgroundColor: "var(--third-blue)", color: "white", width: "50%" }} component="label" className="submitHospital">
+                Upload Labs
+                <input
+                  type="file"
+                  accept="pdf/*"
+                  hidden
+                  onChange={
+                    onSelectPDF
+                    // setImage(e.target.files[0]);
+                  }
+                />
+                <DownloadIcon fontSize="small" />
+              </Button>
+              {selectedPDF && <h5>{namePreview}</h5>}
+            </div>
+          )}
+          {props.type === "add" && (
+            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+              Submit
             </Button>
-            {selectedPDF && <h5>{namePreview}</h5>}
-          </div>
-          {/* {props.type === "add" && ( */}
-          <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
-            Submit
-          </Button>
-          {/* // )} */}
-          {/* {props.type === "edit" && (
+          )}
+          {props.type === "edit" && (
             <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={handleEdit}>
               Submit
             </Button>
-          )} */}
+          )}
         </div>
       </div>
     </StyledEngineProvider>
