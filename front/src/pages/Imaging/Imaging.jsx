@@ -100,9 +100,9 @@ const Imaging = () => {
           {token !== "" && (
             <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
               <Typography className="tableContents">
-                <IconButton>
+                {/* <IconButton>
                   <EditIcon fontSize="small" />
-                </IconButton>
+                </IconButton> */}
                 <IconButton aria-label="delete row" sx={{ marginRight: "4px" }} onClick={() => handleDelete(row._id)}>
                   <DeleteIcon fontSize="small" />
                 </IconButton>
