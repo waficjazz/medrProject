@@ -12,8 +12,9 @@ import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
-
+import { LoadingContext } from "../../context";
 const PatientUpdate = ({ close }) => {
+  const loading = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
@@ -22,7 +23,6 @@ const PatientUpdate = ({ close }) => {
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient.value);
   const auth = useContext(RegContext);
-  const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState("patient");
   const [role, setRole] = useState("unset");
   const [showPassword, setShowPassword] = useState(false);
@@ -79,24 +79,26 @@ const PatientUpdate = ({ close }) => {
       height,
     };
     try {
-      const res = await axios.post("http://localhost:5000/api/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
+      loading.setIsLoading(true);
+      const res = await axios.post(process.env.REACT_APP_URL + "/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
       close();
+      loading.setIsLoading(false);
       navigate("/a");
       navigate("/");
     } catch (err) {
+      loading.setIsLoading(false);
       console.log(err.message);
     }
   };
-
-  useEffect(() => {
-    console.log(birthDate);
-  }, []);
 
   return (
     <StyledEngineProvider injectFirst>
       <div className="curtain"></div>
       <div className="mainForm">
         <Box className="updateform" component="form" noValidate>
+          <IconButton className="exitSignIn" onClick={close}>
+            <CloseIcon sx={{ marginLeft: "90px" }} />
+          </IconButton>
           <TextField value={firstName} className="sm" label="First Name" variant="standard" size="small" required onChange={(e) => setFirstName(e.target.value)} />
           <TextField value={lastName} className="sm" label="Last Name" variant="standard" size="small" required onChange={(e) => setLastName(e.target.value)} />
           <TextField value={fatherName} className="sm" label="Father Name" variant="standard" size="small" required onChange={(e) => setFatherName(e.target.value)} />
@@ -179,7 +181,11 @@ const PatientUpdate = ({ close }) => {
             </Typography>
           )}
 
-          <Button className="nextIcon" variant="contained" onClick={updatePatient}>
+          <Button
+            className="nextIcon"
+            variant="contained"
+            onClick={updatePatient}
+            disabled={firstName.length < 2 || lastName.length < 2 || motherName.length < 2 || fatherName.length < 2 || weight < 10 || weight > 200 || height < 30 || height > 220}>
             Update
           </Button>
         </Box>

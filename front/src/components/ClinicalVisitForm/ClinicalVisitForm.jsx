@@ -36,7 +36,7 @@ const ClinicalVisitForm = (props) => {
       loadingc.setIsLoading(true);
       const getOneVisit = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/clinical/one/${props.id}`);
+          const res = await axios.get(process.env.REACT_APP_URL + `/clinical/one/${props.id}`);
           const data = await res.data[0];
           console.log(data);
           setVisitCause(data.cause);
@@ -50,7 +50,7 @@ const ClinicalVisitForm = (props) => {
           let i = data.doctorId;
           if (data.verifiedDoctor == false) {
             setTabValue("1");
-            const res1 = await axios.get(`http://localhost:5000/api/doctor/one/${i}`);
+            const res1 = await axios.get(process.env.REACT_APP_URL + `/doctor/one/${i}`);
             const data = await res1.data;
             console.log(data);
             setProficiency(data.proficiency[0]);
@@ -89,7 +89,7 @@ const ClinicalVisitForm = (props) => {
     const getDoctors = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/doctor/verified/all`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/doctor/verified/all`);
 
         setDoctors(response.data);
         loadingc.setIsLoading(false);
@@ -128,7 +128,7 @@ const ClinicalVisitForm = (props) => {
     try {
       loadingc.setIsLoading(true);
       if (tabValue === "1") {
-        const res = await axios.post("http://localhost:5000/api/doctor/add", doctor, { headers: { authorization: `Bearer ${token}` } });
+        const res = await axios.post(process.env.REACT_APP_URL + "/doctor/add", doctor, { headers: { authorization: `Bearer ${token}` } });
         let id = await res.data._id;
         let doc = await res.data;
         doctorId.current = id;
@@ -147,7 +147,7 @@ const ClinicalVisitForm = (props) => {
         clinicAddress,
         doctorName,
       };
-      const resp = await axios.post("http://localhost:5000/api/clinical/visits/add", visit, { headers: { authorization: `Bearer ${token}` } });
+      const resp = await axios.post(process.env.REACT_APP_URL + "/clinical/visits/add", visit, { headers: { authorization: `Bearer ${token}` } });
       if (resp.statusText === "Created") {
         props.close();
         loadingc.setIsLoading(false);
@@ -176,10 +176,10 @@ const ClinicalVisitForm = (props) => {
     console.log(visit.doctorId);
     try {
       loadingc.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/clinical/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
+      const res = await axios.post(process.env.REACT_APP_URL + "/clinical/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
       if (tabValue === "1") {
         let doctor = { id: doctorId.current, clinicAddress: clinicAddress, email: email, name: doctorName, phoneNumber: phoneNumber, proficiency: proficiency };
-        const res1 = await axios.post("http://localhost:5000/api/doctor/update", doctor, { headers: { authorization: `Bearer ${token}` } });
+        const res1 = await axios.post(process.env.REACT_APP_URL + "/doctor/update", doctor, { headers: { authorization: `Bearer ${token}` } });
 
         if (res1.statusText === "OK" && res.statusText === "OK") {
           props.close();

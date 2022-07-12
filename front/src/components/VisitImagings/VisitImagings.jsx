@@ -22,7 +22,7 @@ const VisitImagings = ({ visitId, close }) => {
   useEffect(() => {
     const getVisitImagings = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/imaging/visit/${patientId}/${visitId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/imaging/visit/${patientId}/${visitId}`);
         setImagings(response.data);
       } catch (err) {
         console.log(err.message);

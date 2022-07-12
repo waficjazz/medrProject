@@ -45,7 +45,7 @@ const PrescForm = (props) => {
     const getVisits = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/visits/${patientId}`);
 
         setVisits(response.data);
         loadingc.setIsLoading(false);
@@ -96,7 +96,7 @@ const PrescForm = (props) => {
       loadingc.setIsLoading(true);
       const getPrescription = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/prescription/one/${props.id}`);
+          const res = await axios.get(process.env.REACT_APP_URL + `/prescription/one/${props.id}`);
           const data = await res.data;
           setDescription(data.description);
           setLocation(data.location);
@@ -135,7 +135,7 @@ const PrescForm = (props) => {
     };
     try {
       loadingc.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/prescription/add", presc, { headers: { authorization: `Bearer ${token}` } });
+      const res = await axios.post(process.env.REACT_APP_URL + "/prescription/add", presc, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "Created") {
         props.close();
         loadingc.setIsLoading(false);
@@ -160,7 +160,7 @@ const PrescForm = (props) => {
     };
     try {
       loadingc.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/prescription/update", presc, { headers: { authorization: `Bearer ${token}` } });
+      const res = await axios.post(process.env.REACT_APP_URL + "/prescription/update", presc, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "OK") {
         props.close();
         loadingc.setIsLoading(false);

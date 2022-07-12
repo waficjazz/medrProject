@@ -49,7 +49,7 @@ const Imaging = () => {
     const getImagings = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/imaging/all/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/imaging/all/${patientId}`);
         setImagings(response.data);
         loadingc.setIsLoading(false);
       } catch (err) {
@@ -73,7 +73,7 @@ const Imaging = () => {
   const handleDelete = async (id) => {
     try {
       loadingc.setIsLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/imaging/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const response = await axios.delete(process.env.REACT_APP_URL + `/imaging/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
       loadingc.setIsLoading(false);

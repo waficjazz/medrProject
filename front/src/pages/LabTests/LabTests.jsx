@@ -40,7 +40,7 @@ const LabTests = () => {
   const handleDelete = async (id) => {
     try {
       loadingc.setIsLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/labtest/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const response = await axios.delete(process.env.REACT_APP_URL + `/labtest/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
       setReload(!reload);
       loadingc.setIsLoading(false);
     } catch (err) {
@@ -53,7 +53,7 @@ const LabTests = () => {
     const getLabTests = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/labtest/getall/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/labtest/getall/${patientId}`);
 
         setLabTests(response.data);
         loadingc.setIsLoading(false);

@@ -32,7 +32,7 @@ const VaccineForm = (props) => {
       loading.setIsLoading(true);
       const getVaccination = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/vaccination/one/${props.id}`);
+          const res = await axios.get(process.env.REACT_APP_URL + `/vaccination/one/${props.id}`);
           const data = await res.data[0];
           setName(data.name);
           setLocation(data.location);
@@ -70,7 +70,7 @@ const VaccineForm = (props) => {
     };
     try {
       loading.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/vaccination/add", vaccination, { headers: { authorization: `Bearer ${token}` } });
+      const res = await axios.post(process.env.REACT_APP_URL + "/vaccination/add", vaccination, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "Created") {
         props.close();
         loading.setIsLoading(false);
@@ -94,7 +94,7 @@ const VaccineForm = (props) => {
     };
     try {
       loading.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/vaccination/update", vaccination, { headers: { authorization: `Bearer ${token}` } });
+      const res = await axios.post(process.env.REACT_APP_URL + "/vaccination/update", vaccination, { headers: { authorization: `Bearer ${token}` } });
       if (res.statusText === "OK") {
         props.close();
         loading.setIsLoading(false);

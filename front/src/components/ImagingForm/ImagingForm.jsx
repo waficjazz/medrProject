@@ -40,7 +40,7 @@ const ImagingForm = (props) => {
     const getVisits = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/visits/${patientId}`);
 
         setVisits(response.data);
         loadingc.setIsLoading(false);
@@ -111,7 +111,7 @@ const ImagingForm = (props) => {
       if (visitId != undefined) formData.append("HospitalVisit", visitId.current);
       formData.append("image", image);
       formData.append("report", selectedPDF);
-      const res = await axios.post("http://localhost:5000/api/imaging/add", formData, {
+      const res = await axios.post(process.env.REACT_APP_URL + "/imaging/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           authorization: `Bearer ${token}`,

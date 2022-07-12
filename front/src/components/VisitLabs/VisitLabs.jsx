@@ -22,7 +22,7 @@ const VisitImagings = ({ visitId, close }) => {
   useEffect(() => {
     const getVisitLabs = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/labtest/visit/${patientId}/${visitId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/labtest/visit/${patientId}/${visitId}`);
         setLabs(response.data);
       } catch (err) {
         console.log(err.message);

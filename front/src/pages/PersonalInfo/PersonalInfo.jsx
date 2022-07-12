@@ -28,9 +28,8 @@ const PersonalInfo = () => {
   useEffect(() => {
     let uid;
     if (!show) {
-      loading.setIsLoading(true);
       const storedData = JSON.parse(localStorage.getItem("userData"));
-      console.log(storedData);
+
       if (storedData != null) {
         uid = storedData.uid;
       } else {
@@ -39,7 +38,8 @@ const PersonalInfo = () => {
 
       const getPatientInfo = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/patient/info/${uid}`);
+          loading.setIsLoading(true);
+          const response = await axios.get(process.env.REACT_APP_URL + `/patient/info/${uid}`);
           setLocalPatient(response.data);
           dispatch(addInfo(response.data));
           loading.setIsLoading(false);

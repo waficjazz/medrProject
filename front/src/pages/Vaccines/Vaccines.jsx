@@ -52,7 +52,7 @@ const Vaccines = () => {
   const handleDelete = async (id) => {
     try {
       loading.setIsLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/vaccination/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const response = await axios.delete(process.env.REACT_APP_URL + `/vaccination/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       loading.setIsLoading(false);
       setReload(!reload);
@@ -77,7 +77,7 @@ const Vaccines = () => {
       try {
         loading.setIsLoading(true);
 
-        const response = await axios.get(`http://localhost:5000/api/vaccination/all/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/vaccination/all/${patientId}`);
 
         setVaccinations(response.data);
         loading.setIsLoading(false);

@@ -51,7 +51,7 @@ const VisitPrescriptions = ({ visitId, close }) => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/prescription/delete/${id}`);
+      const response = await axios.delete(process.env.REACT_APP_URL + `/prescription/delete/${id}`);
 
       setReload(!reload);
     } catch (err) {
@@ -72,7 +72,7 @@ const VisitPrescriptions = ({ visitId, close }) => {
   useEffect(() => {
     const getPrescriptions = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/prescription/all/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/prescription/all/${patientId}`);
 
         setPrescriptions(response.data);
       } catch (err) {

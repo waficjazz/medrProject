@@ -13,7 +13,6 @@ import patientSvg from "./patient.svg";
 import axios from "axios";
 import { RegContext } from "../../context";
 import { useNavigate } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 import { LoadingContext } from "../../context";
 
@@ -114,7 +113,7 @@ const SignUp = () => {
     };
     try {
       loading.setIsLoading(true);
-      const res = await axios.post(`http://localhost:5000/api/${type}/signin`, data);
+      const res = await axios.post(process.env.REACT_APP_URL + `/${type}/signin`, data);
 
       if (res.status != 201) {
         loading.setIsLoading(false);
@@ -150,7 +149,7 @@ const SignUp = () => {
 
     try {
       loading.setIsLoading(true);
-      const res = await axios.post(`http://localhost:5000/api/${type}/verifyCode`, data);
+      const res = await axios.post(process.env.REACT_APP_URL + `/${type}/verifyCode`, data);
 
       if (res.status != 201) {
         loading.setIsLoading(false);
@@ -202,7 +201,7 @@ const SignUp = () => {
     };
     try {
       loading.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/patient/signup", data);
+      const res = await axios.post(process.env.REACT_APP_URL + "/patient/signup", data);
 
       if (res.status !== 201) {
         loading.setIsLoading(false);
@@ -244,7 +243,7 @@ const SignUp = () => {
     };
     try {
       loading.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/doctor/signup", data);
+      const res = await axios.post(process.env.REACT_APP_URL + "/doctor/signup", data);
 
       if (res.status != 201) {
         loading.setIsLoading(false);
@@ -273,7 +272,7 @@ const SignUp = () => {
     };
     try {
       loading.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/hospital/signup", data);
+      const res = await axios.post(process.env.REACT_APP_URL + "/hospital/signup", data);
 
       if (res.status != 201) {
         loading.setIsLoading(false);
@@ -832,7 +831,7 @@ const SignUp = () => {
                   variant="standard"
                   size="small"
                   type="number"
-                  error={height < 90 || height > 220}
+                  error={height < 30 || height > 220}
                   onChange={(e) => setHeight(e.target.value)}
                   InputProps={{ startAdornment: <InputAdornment position="start">cm</InputAdornment> }}
                 />

@@ -1,10 +1,10 @@
 const express = require("express");
-
+const { check } = require("express-validator");
 const doctorController = require("../controllers/doctor-controller");
 const { auth } = require("../middleware/rbac");
 const router = express.Router();
 
-router.post("/signup", doctorController.signup);
+router.post("/signup", [check("email").normalizeEmail().isEmail(), check("password").isLength({ min: 5 })], doctorController.signup);
 router.post("/signin", doctorController.signin);
 router.post("/add", auth, doctorController.addDoctor);
 router.get("/verified/all", doctorController.getVerfiedDoctors);

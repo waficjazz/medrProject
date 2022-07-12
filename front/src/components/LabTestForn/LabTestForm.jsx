@@ -42,7 +42,7 @@ const LabTestForm = (props) => {
     const getVisits = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/visits/${patientId}`);
 
         setVisits(response.data);
         loadingc.setIsLoading(false);
@@ -79,7 +79,7 @@ const LabTestForm = (props) => {
       loadingc.setIsLoading(true);
       const getVaccination = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/labtest/one/${props.id}`);
+          const res = await axios.get(process.env.REACT_APP_URL + `/labtest/one/${props.id}`);
           const data = await res.data;
           setCsv(data.csv);
           setName(data.name);
@@ -115,7 +115,7 @@ const LabTestForm = (props) => {
   //     HospitalVisit: visitId.current,
   //   };
   //   try {
-  //     const res = await axios.post("http://localhost:5000/api/labtest/add", labTest, { headers: { authorization: `Bearer ${token}` } });
+  //     const res = await axios.post(process.env.REACT_APP_URL + "/labtest/add", labTest, { headers: { authorization: `Bearer ${token}` } });
   //     if (res.statusText === "Created") {
   //       props.close();
   //     }
@@ -147,7 +147,7 @@ const LabTestForm = (props) => {
       if (visitId != undefined) formData.append("HospitalVisit", visitId.current);
       formData.append("report", selectedPDF);
 
-      const res = await axios.post("http://localhost:5000/api/labtest/add", formData, {
+      const res = await axios.post(process.env.REACT_APP_URL + "/labtest/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           authorization: `Bearer ${token}`,
@@ -176,7 +176,7 @@ const LabTestForm = (props) => {
     };
     try {
       loadingc.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/labtest/update", lab, { headers: { authorization: `Bearer ${token}` } });
+      const res = await axios.post(process.env.REACT_APP_URL + "/labtest/update", lab, { headers: { authorization: `Bearer ${token}` } });
 
       if (res.statusText === "OK") {
         props.close();

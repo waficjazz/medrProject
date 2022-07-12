@@ -55,7 +55,7 @@ const Prescriptions = () => {
   const handleDelete = async (id) => {
     try {
       loadingc.setIsLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/prescription/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const response = await axios.delete(process.env.REACT_APP_URL + `/prescription/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       setReload(!reload);
       loadingc.setIsLoading(false);
@@ -82,7 +82,7 @@ const Prescriptions = () => {
     const getPrescriptions = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/prescription/all/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/prescription/all/${patientId}`);
 
         setPrescriptions(response.data);
         loadingc.setIsLoading(false);

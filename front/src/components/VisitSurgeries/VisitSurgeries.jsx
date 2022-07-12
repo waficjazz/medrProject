@@ -22,7 +22,7 @@ const VisitSurgeries = ({ visitId, close }) => {
   useEffect(() => {
     const getVisitSurgeries = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/surgery/visit/${patientId}/${visitId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/surgery/visit/${patientId}/${visitId}`);
         setSurgeries(response.data);
       } catch (err) {
         console.log(err.message);
@@ -46,7 +46,7 @@ const VisitSurgeries = ({ visitId, close }) => {
     const [hospital, setHospital] = useState([]);
     const getHospital = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/hospital/${id}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
       } catch (err) {
@@ -55,7 +55,7 @@ const VisitSurgeries = ({ visitId, close }) => {
     };
     const getVerfiedHospital = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/hospital/verified/${id}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/verified/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
       } catch (err) {

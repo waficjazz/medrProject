@@ -37,7 +37,7 @@ const MiniForm = (props) => {
       dispatch(addInfo(obj));
       try {
         loading.setIsLoading(true);
-        const res = await axios.post("http://localhost:5000/api/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
+        const res = await axios.post(process.env.REACT_APP_URL + "/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
         //   if (res.statusText === "OK") {
         //     props.close();
         //   }
@@ -59,7 +59,7 @@ const MiniForm = (props) => {
     dispatch(addInfo(obj));
     try {
       loading.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
+      const res = await axios.post(process.env.REACT_APP_URL + "/patient/update", obj, { headers: { authorization: `Bearer ${token}` } });
       //   if (res.statusText === "OK") {
       //     props.close();
       //   }

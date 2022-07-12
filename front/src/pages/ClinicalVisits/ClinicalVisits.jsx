@@ -43,7 +43,7 @@ const ClinicalVisits = () => {
   const handleDelete = async (id) => {
     try {
       loading.setIsLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/clinical/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const response = await axios.delete(process.env.REACT_APP_URL + `/clinical/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       loading.setIsLoading(false);
       setReload(!reload);
@@ -58,7 +58,7 @@ const ClinicalVisits = () => {
     const getVisits = async () => {
       try {
         loading.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/clinical/visits/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/clinical/visits/${patientId}`);
         setVisits(response.data);
         loading.setIsLoading(false);
       } catch (err) {
@@ -85,7 +85,7 @@ const ClinicalVisits = () => {
     const getDoctor = async (id) => {
       try {
         loading.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/doctor/one/${id}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/doctor/one/${id}`);
         let doctor = await response.data;
         setDoctor(doctor);
         loading.setIsLoading(false);
@@ -97,7 +97,7 @@ const ClinicalVisits = () => {
     const getVerfiedDoctor = async (id) => {
       try {
         loading.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/doctor/verified/${id}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/doctor/verified/${id}`);
         let doctor = await response.data;
         setDoctor(doctor);
         loading.setIsLoading(false);

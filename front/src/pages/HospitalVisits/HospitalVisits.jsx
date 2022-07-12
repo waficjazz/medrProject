@@ -71,7 +71,7 @@ const HospitalVisits = () => {
   const handleDelete = async (id) => {
     try {
       loading.setIsLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/hospital/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const response = await axios.delete(process.env.REACT_APP_URL + `/hospital/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
       loading.setIsLoading(false);
       setReload(!reload);
@@ -85,7 +85,7 @@ const HospitalVisits = () => {
     const getVisits = async () => {
       try {
         loading.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/visits/${patientId}`);
         setVisits(response.data);
         loading.setIsLoading(false);
       } catch (err) {
@@ -113,7 +113,7 @@ const HospitalVisits = () => {
     const getHospital = async (id) => {
       try {
         loading.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/hospital/${id}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
         loading.setIsLoading(false);
@@ -125,7 +125,7 @@ const HospitalVisits = () => {
     const getVerfiedHospital = async (id) => {
       try {
         // loading.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/hospital/verified/${id}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/verified/${id}`);
         let hospital = await response.data;
         setHospital(hospital);
         loading.setIsLoading(false);

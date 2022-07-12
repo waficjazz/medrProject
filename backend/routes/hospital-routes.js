@@ -1,5 +1,5 @@
 const express = require("express");
-
+const { check } = require("express-validator");
 const hospitalController = require("../controllers/hospital-controller");
 const { auth } = require("../middleware/rbac");
 const router = express.Router();
@@ -14,7 +14,7 @@ router.get("/:id", hospitalController.getHospitalById);
 router.get("/verified/:id", hospitalController.getVerifiedHospitalById);
 router.post("/visits/add", auth, hospitalController.addHospitalVisit);
 router.post("/add", auth, hospitalController.addHospital);
-router.post("/signup", hospitalController.signup);
+router.post("/signup", [check("email").normalizeEmail().isEmail(), check("password").isLength({ min: 5 })], hospitalController.signup);
 router.post("/signin", hospitalController.signin);
 router.delete("/delete/visit/:id", auth, hospitalController.deleteHopitalVisit);
 router.post("/verifyCode", hospitalController.verifyCode);

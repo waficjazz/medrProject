@@ -52,10 +52,10 @@ const SurgeryForm = (props) => {
     };
     try {
       loadingc.setIsLoading(true);
-      const res = await axios.post("http://localhost:5000/api/surgery/update", surgery, { headers: { authorization: `Bearer ${token}` } });
+      const res = await axios.post(process.env.REACT_APP_URL + "/surgery/update", surgery, { headers: { authorization: `Bearer ${token}` } });
       if (tabValue === "1") {
         let hospital = { hospitalName: hospitalName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber, id: hospitalId.current };
-        const res1 = await axios.post("http://localhost:5000/api/hospital/update", hospital, { headers: { authorization: `Bearer ${token}` } });
+        const res1 = await axios.post(process.env.REACT_APP_URL + "/hospital/update", hospital, { headers: { authorization: `Bearer ${token}` } });
 
         if (res1.statusText === "OK" && res.statusText === "OK") {
           props.close();
@@ -76,7 +76,7 @@ const SurgeryForm = (props) => {
       const getOneSurgery = async () => {
         try {
           loadingc.setIsLoading(true);
-          const res = await axios.get(`http://localhost:5000/api/surgery/one/${props.id}`);
+          const res = await axios.get(process.env.REACT_APP_URL + `/surgery/one/${props.id}`);
           const data = await res.data[0];
           console.log(data);
           setSurgeryCause(data.cause);
@@ -87,7 +87,7 @@ const SurgeryForm = (props) => {
           let i = data.hospitalId;
           if (data.verifiedHospital == false) {
             setTabValue("1");
-            const res1 = await axios.get(`http://localhost:5000/api/hospital/${i}`);
+            const res1 = await axios.get(process.env.REACT_APP_URL + `/hospital/${i}`);
             const data = await res1.data;
             setHospitalAddress(data.address);
             setHospitalEmail(data.email);
@@ -124,7 +124,7 @@ const SurgeryForm = (props) => {
     const getHospitals = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/hospital/vhospitals/all`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/vhospitals/all`);
 
         setHospitals(response.data);
         loadingc.setIsLoading(false);
@@ -162,7 +162,7 @@ const SurgeryForm = (props) => {
     const getVisits = async () => {
       try {
         loadingc.setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/hospital/visits/${patientId}`);
+        const response = await axios.get(process.env.REACT_APP_URL + `/hospital/visits/${patientId}`);
         setVisits(response.data);
         loadingc.setIsLoading(false);
       } catch (err) {
@@ -199,7 +199,7 @@ const SurgeryForm = (props) => {
     try {
       loadingc.setIsLoading(true);
       if (tabValue === "1") {
-        const res = await axios.post("http://localhost:5000/api/hospital/add", hospital, { headers: { authorization: `Bearer ${token}` } });
+        const res = await axios.post(process.env.REACT_APP_URL + "/hospital/add", hospital, { headers: { authorization: `Bearer ${token}` } });
         let id = await res.data._id;
         hospitalId.current = id;
       }
@@ -214,7 +214,7 @@ const SurgeryForm = (props) => {
         name: surgeryName,
       };
 
-      const resp = await axios.post("http://localhost:5000/api/surgery/add", surgery, { headers: { authorization: `Bearer ${token}` } });
+      const resp = await axios.post(process.env.REACT_APP_URL + "/surgery/add", surgery, { headers: { authorization: `Bearer ${token}` } });
       if (resp.statusText === "Created") {
         props.close();
         loadingc.setIsLoading(false);
