@@ -4,6 +4,7 @@ import "../HopitalVisitForm/HopitalVisitForm.css";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
 import { StyledEngineProvider } from "@mui/material/styles";
+import DownloadIcon from "@mui/icons-material/Download";
 
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton, Typography } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -27,6 +28,9 @@ const LabTestForm = (props) => {
   const [open, setOpen] = React.useState(false);
   const loading = open && visits.length === 0;
   const visitId = useRef();
+  const inputName = useRef("");
+  const [namePreview, setNamePreview] = useState();
+  const [selectedPDF, setSelectedPDF] = useState();
 
   useEffect(() => {
     let active = true;
@@ -91,18 +95,54 @@ const LabTestForm = (props) => {
   //   setShots("");
   // }, [props]);
 
+  // const submit = async () => {
+  //   let labTest = {
+  //     patientId,
+  //     name,
+  //     notes,
+  //     csv,
+  //     date,
+  //     location,
+  //     HospitalVisit: visitId.current,
+  //   };
+  //   try {
+  //     const res = await axios.post("http://localhost:5000/api/labtest/add", labTest, { headers: { authorization: `Bearer ${token}` } });
+  //     if (res.statusText === "Created") {
+  //       props.close();
+  //     }
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
+  const onSelectPDF = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedPDF(undefined);
+      return;
+    }
+    setNamePreview(e.target.files[0].name);
+    inputName.current = e.target.files[0].name;
+    console.log(inputName.current);
+    setSelectedPDF(e.target.files[0]);
+  };
+
   const submit = async () => {
-    let labTest = {
-      patientId,
-      name,
-      notes,
-      csv,
-      date,
-      location,
-      HospitalVisit: visitId.current,
-    };
+    // let imaging = { name, date, location, patientId };
     try {
-      const res = await axios.post("http://localhost:5000/api/labtest/add", labTest, { headers: { authorization: `Bearer ${token}` } });
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("date", date);
+      formData.append("notes", notes);
+      formData.append("location", location);
+      formData.append("patientId", patientId);
+      if (visitId != undefined) formData.append("HospitalVisit", visitId.current);
+      formData.append("report", selectedPDF);
+      const res = await axios.post("http://localhost:5000/api/labtest/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.statusText);
       if (res.statusText === "Created") {
         props.close();
       }
@@ -110,7 +150,6 @@ const LabTestForm = (props) => {
       console.log(err.message);
     }
   };
-
   // const handleEdit = async () => {
   //   let vaccination = {
   //     patientId,
@@ -167,7 +206,7 @@ const LabTestForm = (props) => {
               }}
             />
             <TextField size="small" value={notes} className="bg" label="Notes" fullWidth variant="standard" onChange={(e) => setNotes(e.target.value)} />
-            <TextField size="small" value={csv} className="bg" label="CSV" fullWidth variant="standard" onChange={(e) => setCsv(e.target.value)} />
+            {/* <TextField size="small" value={csv} className="bg" label="CSV" fullWidth variant="standard" onChange={(e) => setCsv(e.target.value)} /> */}
             <Autocomplete
               className="hospitalInputs"
               size="small"
@@ -206,6 +245,22 @@ const LabTestForm = (props) => {
                 />
               )}
             />
+          </div>
+          <div className="imgPreviewDiv">
+            <Button variant="contained" sx={{ backgroundColor: "var(--third-blue)", color: "white", width: "50%" }} component="label" className="submitHospital">
+              Upload Labs
+              <input
+                type="file"
+                accept="pdf/*"
+                hidden
+                onChange={
+                  onSelectPDF
+                  // setImage(e.target.files[0]);
+                }
+              />
+              <DownloadIcon fontSize="small" />
+            </Button>
+            {selectedPDF && <h5>{namePreview}</h5>}
           </div>
           {/* {props.type === "add" && ( */}
           <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>

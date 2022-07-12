@@ -8,6 +8,7 @@ import { addInfo } from "../../reducers/patientReducer";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { alpha, styled } from "@mui/material/styles";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const MiniForm = (props) => {
   let token = "";
@@ -20,6 +21,7 @@ const MiniForm = (props) => {
   const patient = useSelector((state) => state.patient.value);
   const data = patient[props.name];
   const [newData, setNewData] = useState("");
+  const navigate = useNavigate();
   // useEffect(() => {
   //   console.log(patient);
   // }, []);
@@ -63,7 +65,11 @@ const MiniForm = (props) => {
     <StyledEngineProvider injectFirst>
       <div className="MiniFormW">
         <div className="MiniForm">
-          <IconButton sx={{ marginLeft: "95%", float: "left" }} onClick={props.close}>
+          <IconButton
+            sx={{ marginLeft: "95%", float: "left" }}
+            onClick={() => {
+              props.close();
+            }}>
             <CloseIcon fontSize="medium" />
           </IconButton>
           <Typography

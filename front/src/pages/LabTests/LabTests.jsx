@@ -66,7 +66,11 @@ const LabTests = () => {
             <Typography className="tableContents">{row.name}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.csv}</Typography>
+            <Typography className="tableContents">
+              <a href={row.csv} target="__blank">
+                <Typography className="tableContents">Lab</Typography>
+              </a>
+            </Typography>
           </TableCell>
           {token !== "" && (
             <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>

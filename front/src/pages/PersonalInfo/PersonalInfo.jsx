@@ -19,6 +19,7 @@ const PersonalInfo = () => {
   const [boolArrExist, setBoolArrExist] = useState(["permanentMeds", "chronicDisease", "allergies", "surgicalHistory", "healthProblems"]);
   const [props, setProps] = useState("");
   const diseases = ["dinoma ", "insuline", "sdfsdf", "dinoma ", "insuline", "sdfsdf"];
+  const [localPatient, setLocalPatient] = useState("");
 
   useEffect(() => {
     if (!show) {
@@ -28,7 +29,7 @@ const PersonalInfo = () => {
       const getPatientInfo = async () => {
         try {
           const response = await axios.get(`http://localhost:5000/api/patient/info/${uid}`);
-
+          setLocalPatient(response.data);
           dispatch(addInfo(response.data));
         } catch (err) {
           console.log(err.message);
@@ -36,7 +37,20 @@ const PersonalInfo = () => {
       };
       getPatientInfo();
     }
-  }, [show]);
+  }, [show, openMini]);
+
+  const testCheck = (index) => {
+    if (Object.keys(localPatient).length > 0) {
+      if (localPatient[boolArrExist[index]].length > 0) {
+        console.log("true");
+        return true;
+      }
+      console.log("false1");
+      return false;
+    }
+    console.log("false2");
+    return false;
+  };
   return (
     <>
       <StyledEngineProvider injectFirst>
@@ -99,8 +113,8 @@ const PersonalInfo = () => {
                   <Typography className="internalText " key={index}>
                     {item}
                     <span className="internalData">
-                      <FormControlLabel control={<Checkbox defaultChecked size="small" sx={{ padding: 0 }} disabled />} label="Yes" sx={{ marginX: "2px" }} />
-                      <FormControlLabel control={<Checkbox size="small" checked={false} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
+                      <FormControlLabel control={<Checkbox checked={testCheck(index)} size="small" sx={{ padding: 0 }} disabled />} label="Yes" sx={{ marginX: "2px" }} />
+                      <FormControlLabel control={<Checkbox size="small" checked={!testCheck(index)} disabled sx={{ padding: 0 }} />} label="No" sx={{ marginX: "2px" }} />
                     </span>
                   </Typography>
                 );
