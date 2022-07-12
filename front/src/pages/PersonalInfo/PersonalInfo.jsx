@@ -26,6 +26,7 @@ const PersonalInfo = () => {
   const [localPatient, setLocalPatient] = useState("");
 
   useEffect(() => {
+    console.log(process.env.REACT_APP_URL);
     let uid;
     if (!show) {
       const storedData = JSON.parse(localStorage.getItem("userData"));

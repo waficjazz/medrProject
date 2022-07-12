@@ -141,6 +141,12 @@ const PrescForm = (props) => {
         loadingc.setIsLoading(false);
       }
       loadingc.setIsLoading(false);
+      setDescription("");
+      setLocation("");
+      setDate("");
+      setIssuer("");
+      setMedications([]);
+      setLabs([]);
     } catch (err) {
       loadingc.setIsLoading(false);
       console.log(err.message);
@@ -165,6 +171,12 @@ const PrescForm = (props) => {
         props.close();
         loadingc.setIsLoading(false);
       }
+      setDescription("");
+      setLocation("");
+      setDate("");
+      setIssuer("");
+      setMedications([]);
+      setLabs([]);
     } catch (err) {
       loadingc.setIsLoading(false);
       console.log(err.message);

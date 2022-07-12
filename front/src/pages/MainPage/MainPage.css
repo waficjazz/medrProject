@@ -22,8 +22,26 @@ body {
   width: 100vw;
   background-color: var(--main-white);
   box-sizing: border-box;
+
+  -moz-transform: scale(0.8, 0.8);
+  zoom: 0.8;
+  zoom: 80%;
 }
 
+@media screen and (min-width: 1920px) {
+  body {
+    -moz-transform: scale(1, 1);
+    zoom: 1;
+    zoom: 100%;
+  }
+}
+@media screen and (min-width: 1920px) {
+  body {
+    -moz-transform: scale(1, 1);
+    zoom: 1;
+    zoom: 100%;
+  }
+}
 .mainPage {
   position: fixed;
   width: 100%;

@@ -35,10 +35,10 @@ const SignUp = () => {
   const [email, setEmail] = useState("wafic@gmail.com");
   const [password, setPassword] = useState("dsafasdfasd123");
   const [confirmPassword, setConfirmPassword] = useState("dsafasdfasd123");
-  const [phoneNumber, setPhoneNumber] = useState("6223223");
-  const [address, setAddress] = useState("asdfasd");
+  const [phoneNumber, setPhoneNumber] = useState("62232232");
+  const [address, setAddress] = useState("");
   const [birthDate, setBirthDate] = useState("");
-  const [region, setRegion] = useState("asdf");
+  const [region, setRegion] = useState("");
   const [city, setCity] = useState("");
   const [idType, setIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");
@@ -55,6 +55,19 @@ const SignUp = () => {
   const [validPhone, setValidPhone] = useState(false);
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   const navigate = useNavigate();
+  const testNames = (name) => {
+    return /[A-Za-z]{3,}/.test(name);
+  };
+  const reset = () => {
+    setEmail("");
+    setPassword("");
+    setCity("");
+    setRegion("");
+    setAddress("");
+    setActiveStep(0);
+    setSwipe([true, false, false, false]);
+    setRole("unset");
+  };
   useEffect(() => {
     if (highStoredData && highStoredData.token) {
       setRole("choosePatient");
@@ -62,7 +75,7 @@ const SignUp = () => {
   }, []);
   const [hide, setHide] = useState(false);
   useEffect(() => {
-    validPassword.current = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
+    validPassword.current = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password);
   }, [password]);
 
   useEffect(() => {
@@ -127,10 +140,15 @@ const SignUp = () => {
         loading.setIsLoading(false);
         auth.login(reponse.userId, reponse.token);
         navigate("/");
+      } else if (type == "doctor") {
+        navigate("/");
+        loading.setIsLoading(false);
+        auth.highLogin(reponse.userId, reponse.token, "doctor");
+        setRole("choosePatient");
       } else {
         navigate("/");
         loading.setIsLoading(false);
-        auth.highLogin(reponse.userId, reponse.token);
+        auth.highLogin(reponse.userId, reponse.token, "hospital");
         setRole("choosePatient");
       }
       loading.setIsLoading(false);
@@ -159,12 +177,12 @@ const SignUp = () => {
       if (type == "doctor") {
         navigate("/");
         loading.setIsLoading(false);
-        auth.highLogin(reponse.user._id, reponse.token);
+        auth.highLogin(reponse.user._id, reponse.token, "doctor");
         setRole("choosePatient");
       } else if (type == "hospital") {
         // navigate("/personalinfo");
         loading.setIsLoading(false);
-        auth.highLogin(reponse.user._id, reponse.token);
+        auth.highLogin(reponse.user._id, reponse.token, "hospital");
         setRole("choosePatient");
       } else {
         // navigate("/personalinfo");
@@ -329,9 +347,9 @@ const SignUp = () => {
           {role === "choosePatient" && (
             <>
               <div className="signInform">
-                <IconButton className="exitSignIn" onClick={() => setRole("unset")}>
+                {/* <IconButton className="exitSignIn" onClick={reset}>
                   <CloseIcon sx={{ marginLeft: "90px" }} />
-                </IconButton>
+                </IconButton> */}
                 <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>Enter A patient creds</Typography>
                 <hr style={{ width: "100%", marginBottom: "30px" }} />
                 <div className="signInInputs">
@@ -353,7 +371,7 @@ const SignUp = () => {
           {role === "singIn" && (
             <>
               <div className="signInform">
-                <IconButton className="exitSignIn" onClick={() => setRole("unset")}>
+                <IconButton className="exitSignIn" onClick={reset}>
                   <CloseIcon sx={{ marginLeft: "90px" }} />
                 </IconButton>
                 <Typography sx={{ color: "var(--main-blue)", fontWeight: "bold", fontSize: "x-large" }}>SIGN IN</Typography>
@@ -446,7 +464,7 @@ const SignUp = () => {
                     }
                   />
                 </FormControl>
-                <FormControl className="bg" variant="standard" error={!validPhone.current}>
+                <FormControl className="bg" variant="standard" error={!validPhone}>
                   <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
                   <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} onChange={(e) => setPhoneNumber(e.target.value)} />
                 </FormControl>
@@ -460,15 +478,15 @@ const SignUp = () => {
                     !validPassword.current ||
                     !validPhone ||
                     password !== confirmPassword ||
-                    firstName.length < 2 ||
-                    lastName.length < 2 ||
-                    motherName.length < 2 ||
-                    fatherName.length < 2
+                    !testNames(firstName) ||
+                    !testNames(lastName) ||
+                    !testNames(motherName) ||
+                    !testNames(fatherName)
                   }>
                   Next
                 </Button>
               </Box>
-              <IconButton className="finishStep" onClick={() => setRole("unset")}>
+              <IconButton className="finishStep" onClick={reset}>
                 <CloseIcon />
               </IconButton>
               <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
@@ -504,8 +522,13 @@ const SignUp = () => {
                   onChange={(e, evalue) => setIdType(evalue)}
                   renderInput={(params) => <TextField {...params} label="ID Document" />}
                 />
-                <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
-                <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+                <TextField className="bg" type="number" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  endIcon={<SendIcon fontSize="large" />}
+                  onClick={handleNext}
+                  disabled={birthDate == "" || region == "" || city == "" || idNumber == "" || idType == "" || address == ""}>
                   Next
                 </Button>
                 <Button className="previousIcon" variant="contained" onClick={handlePrevious}>
@@ -637,15 +660,15 @@ const SignUp = () => {
                     !validPassword ||
                     !validPhone ||
                     password !== confirmPassword ||
-                    hospitalName.length < 2 ||
-                    region.length < 2 ||
-                    city.length < 2 ||
-                    address.length < 2
+                    !testNames(hospitalName) ||
+                    !testNames(region) ||
+                    !testNames(city) ||
+                    !testNames(address)
                   }>
                   Next
                 </Button>
               </Box>
-              <IconButton className="finishStep" onClick={() => setRole("unset")}>
+              <IconButton className="finishStep" onClick={reset}>
                 <CloseIcon />
               </IconButton>
               {/* <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
@@ -748,7 +771,7 @@ const SignUp = () => {
                     }
                   />
                 </FormControl>
-                <FormControl className="bg" variant="standard" error={!validPhone.current}>
+                <FormControl className="bg" variant="standard" error={!validPhone}>
                   <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
                   <Input type="text" id="phone-number" startAdornment={<InputAdornment position="start">+961</InputAdornment>} onChange={(e) => setPhoneNumber(e.target.value)} />
                 </FormControl>
@@ -763,15 +786,15 @@ const SignUp = () => {
                     !validPassword.current ||
                     !validPhone ||
                     password !== confirmPassword ||
-                    firstName.length < 2 ||
-                    lastName.length < 2 ||
-                    motherName.length < 2 ||
-                    fatherName.length < 2
+                    !testNames(firstName) ||
+                    !testNames(lastName) ||
+                    !testNames(motherName) ||
+                    !testNames(fatherName)
                   }>
                   Next
                 </Button>
               </Box>
-              <IconButton className="finishStep" onClick={() => setRole("unset")}>
+              <IconButton className="finishStep" onClick={reset}>
                 <CloseIcon />
               </IconButton>
               <Box className={swipe[1] ? "signform slide" : "signform fade"} component="form" noValidate={false}>
@@ -806,8 +829,13 @@ const SignUp = () => {
                   onChange={(e, evalue) => setIdType(evalue)}
                   renderInput={(params) => <TextField {...params} label="ID Document" />}
                 />
-                <TextField className="bg" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
-                <Button className="nextIcon" variant="contained" endIcon={<SendIcon fontSize="large" />} onClick={handleNext}>
+                <TextField className="bg" type="number" label="ID Number" size="small" onChange={(e) => setIdNumber(e.target.value)} />
+                <Button
+                  className="nextIcon"
+                  variant="contained"
+                  endIcon={<SendIcon fontSize="large" />}
+                  onClick={handleNext}
+                  disabled={birthDate == "" || region == "" || city == "" || idNumber == "" || idType == "" || address == ""}>
                   Next
                 </Button>
                 <Button className="previousIcon" variant="contained" onClick={handlePrevious}>

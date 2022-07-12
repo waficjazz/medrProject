@@ -253,6 +253,17 @@ const updateDoctor = async (req, res, next) => {
   res.status(200).json("updated");
 };
 
+const updateVerfiedDoctor = async (req, res, next) => {
+  const { id, clinicAddress, firstName, lastName, fatherName, motherName, hospital, proficiency } = req.body;
+  try {
+    await verifiedDoctor.updateOne({ _id: id }, { clinicAddress, firstName, lastName, fatherName, motherName, hospital, proficiency });
+  } catch (err) {
+    const error = new HttpError("could not update verified doctor", 500);
+    return next(error);
+  }
+  res.status(200).json("updated");
+};
+
 exports.updateDoctor = updateDoctor;
 exports.getDoctorById = getDoctorById;
 exports.signin = signin;
@@ -261,3 +272,4 @@ exports.addDoctor = addDoctor;
 exports.getVerfiedDoctors = getVerfiedDoctors;
 exports.verifyCode = verifyCode;
 exports.getVerifiedDoctorById = getVerifiedDoctorById;
+exports.updateVerfiedDoctor = updateVerfiedDoctor;

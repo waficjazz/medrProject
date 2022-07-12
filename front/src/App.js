@@ -19,8 +19,8 @@ function App() {
     setShow(false);
   }, []);
 
-  const highLogin = useCallback((uid, token) => {
-    localStorage.setItem("high", JSON.stringify({ uid: uid, token: token }));
+  const highLogin = useCallback((uid, token, type) => {
+    localStorage.setItem("high", JSON.stringify({ uid: uid, token: token, type: type }));
     // setIsLoggedIn(true);
     // setShow(false);
   }, []);
@@ -49,7 +49,7 @@ function App() {
     const storedData = JSON.parse(localStorage.getItem("userData"));
     const highStoredData = JSON.parse(localStorage.getItem("high"));
     if (highStoredData && highStoredData.token) {
-      highLogin(highStoredData.uid, highStoredData.token);
+      highLogin(highStoredData.uid, highStoredData.token, highStoredData.type);
     }
     if (storedData && storedData.token) {
       login(storedData.uid, storedData.token);
@@ -62,7 +62,7 @@ function App() {
     <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
       <RegContext.Provider value={{ token: token, login: login, logout: logout, highLogin: highLogin, highLogout: highLogout }}>
         <ShowContext.Provider value={{ show, setShow }}>
-          <BrowserRouter>
+          <BrowserRouter basename="/">
             {/* <Routes>
             <Route path="/s" element={<SignUp />} />
           </Routes> */}

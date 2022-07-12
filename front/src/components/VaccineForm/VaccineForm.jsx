@@ -26,7 +26,9 @@ const VaccineForm = (props) => {
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
+  const testNames = (name) => {
+    return /[A-Za-z]{3,}/.test(name);
+  };
   useEffect(() => {
     if (props.type === "edit") {
       loading.setIsLoading(true);
@@ -118,6 +120,7 @@ const VaccineForm = (props) => {
           <div className="hopitalForm">
             <TextField
               // defaultValue={name}
+              required
               value={name}
               size="small"
               label="Name"
@@ -127,8 +130,9 @@ const VaccineForm = (props) => {
                 setName(e.target.value);
               }}
             />
-            <TextField value={location} size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
+            <TextField required value={location} size="small" label="Location" variant="standard" className="hospitalInputs" onChange={(e) => setLocation(e.target.value)} />
             <TextField
+              required
               size="small"
               value={date}
               label="Date"
@@ -141,11 +145,34 @@ const VaccineForm = (props) => {
               }}
             />
             <TextField size="small" value={notes} className="bg" label="Notes" fullWidth variant="standard" onChange={(e) => setNotes(e.target.value)} />
-            <TextField value={shots} size="small" type="number" label="Dose Number" variant="standard" className="hospitalInputs" onChange={(e) => setShots(e.target.value)} />
-            <TextField value={doses} type="number" size="small" label="Total Doses" variant="standard" className="hospitalInputs" onChange={(e) => setDoses(e.target.value)} />
+            <TextField
+              required
+              value={shots}
+              size="small"
+              type="number"
+              label="Dose Number"
+              variant="standard"
+              className="hospitalInputs"
+              onChange={(e) => setShots(e.target.value)}
+            />
+            <TextField
+              required
+              value={doses}
+              type="number"
+              size="small"
+              label="Total Doses"
+              variant="standard"
+              className="hospitalInputs"
+              onChange={(e) => setDoses(e.target.value)}
+            />
           </div>
           {props.type === "add" && (
-            <Button variant="contained" sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }} className="submitHospital" onClick={submit}>
+            <Button
+              variant="contained"
+              sx={{ marginLeft: "85%", backgroundColor: "var(--third-blue)" }}
+              className="submitHospital"
+              onClick={submit}
+              disabled={doses == "" || shots == "" || !testNames(name) || date == "" || !testNames(location)}>
               Submit
             </Button>
           )}

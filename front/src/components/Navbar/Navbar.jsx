@@ -14,23 +14,29 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 
 import PatientUpdate from "../PatientUpdate/PatientUpdate";
+import DoctorUpdate from "../DoctorUpdate/DoctorUpdate";
 
 const Navbar = () => {
   let token = "";
+  let type = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    type = highStoredData.type;
   }
   const navigate = useNavigate();
   const patient = useSelector((state) => state.patient.value);
   const [open, setOpen] = useState(false);
   const { show, setShow } = useContext(ShowContext);
   const [openPatient, setOpenPatient] = useState(false);
+  const [openDoctor, setOpenDoctor] = useState(false);
+
   const auth = useContext(RegContext);
   return (
     <>
       <StyledEngineProvider injectFirst>
         {openPatient && <PatientUpdate close={() => setOpenPatient(false)} />}
+        {openDoctor && <DoctorUpdate close={() => setOpenDoctor(false)} />}
         <AppBar className="appbar" position="absolute">
           <Toolbar>
             <IconButton className="menuButton" onClick={() => setShow(!show)}>
@@ -62,7 +68,16 @@ const Navbar = () => {
                     <List>
                       {token !== "" && (
                         <>
-                          <IconButton className="userButton" sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}>
+                          <IconButton
+                            className="userButton"
+                            sx={{ fontSize: "1rem", fontWeight: "bolder", color: "var(--third-blue)" }}
+                            onClick={() => {
+                              if (type == "doctor") {
+                                setOpenDoctor(!openDoctor);
+                              } else {
+                                console.log("not doctor");
+                              }
+                            }}>
                             <PersonIcon sx={{ marginRight: "5px" }} fontSize="small" />
                             Account
                           </IconButton>

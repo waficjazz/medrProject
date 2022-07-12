@@ -54,7 +54,6 @@ const Vaccines = () => {
       loading.setIsLoading(true);
       const response = await axios.delete(process.env.REACT_APP_URL + `/vaccination/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
 
-      loading.setIsLoading(false);
       setReload(!reload);
     } catch (err) {
       loading.setIsLoading(false);

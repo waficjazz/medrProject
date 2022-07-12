@@ -117,7 +117,7 @@ const ImagingForm = (props) => {
           authorization: `Bearer ${token}`,
         },
       });
-      console.log(res.statusText);
+
       if (res.statusText === "Created") {
         props.close();
         loadingc.setIsLoading(false);

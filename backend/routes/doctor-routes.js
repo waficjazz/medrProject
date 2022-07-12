@@ -8,6 +8,7 @@ router.post("/signup", [check("email").normalizeEmail().isEmail(), check("passwo
 router.post("/signin", doctorController.signin);
 router.post("/add", auth, doctorController.addDoctor);
 router.get("/verified/all", doctorController.getVerfiedDoctors);
+router.post("/verified/update", doctorController.updateVerfiedDoctor);
 router.post("/verifyCode", doctorController.verifyCode);
 router.get("/one/:id", doctorController.getDoctorById);
 router.get("/verified/:id", doctorController.getVerifiedDoctorById);

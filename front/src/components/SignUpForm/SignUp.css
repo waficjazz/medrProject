@@ -34,6 +34,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+
   /* background-color: rgba(187, 104, 104, 0.7); */
   margin-top: 0.2%;
   width: 62%;
@@ -221,8 +222,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh !important;
-  width: 100vw !important;
+  height: 100% !important;
+  width: 100% !important;
   background-color: rgba(0, 0, 0, 0.3);
   position: absolute !important;
   z-index: 1000 !important;
