@@ -28,12 +28,11 @@ body {
   zoom: 80%;
 }
 
-@media screen and (min-width: 1920px) {
-  body {
-    -moz-transform: scale(1, 1);
-    zoom: 1;
-    zoom: 100%;
-  }
+.chartWrapper {
+  width: 45%;
+  height: 45%;
+  border-radius: 4px;
+  box-shadow: 3px 0px 8px #888888;
 }
 @media screen and (min-width: 1920px) {
   body {
