@@ -1,8 +1,11 @@
 const express = require("express");
 const { check } = require("express-validator");
 const hospitalController = require("../controllers/hospital-controller");
+const analytics = require("../controllers/analytics-controller");
 const { auth } = require("../middleware/rbac");
 const router = express.Router();
+
+router.get("/test", analytics.test);
 
 router.get("/vhospitals/all", hospitalController.getVerfiedHospitals);
 router.get("/visits/:id", hospitalController.gethospitalVisits);

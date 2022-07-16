@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useRef, useEffect, useContext } from "react";
 import "./SignUp.css";
-import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, Input, Box, IconButton, InputAdornment, Autocomplete, Typography } from "@mui/material";
+import { Step, Stepper, StepLabel, TextField, FormControl, InputLabel, FormHelperText, Input, Box, IconButton, InputAdornment, Autocomplete, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -75,7 +75,7 @@ const SignUp = () => {
   }, []);
   const [hide, setHide] = useState(false);
   useEffect(() => {
-    validPassword.current = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password);
+    validPassword.current = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
   }, [password]);
 
   useEffect(() => {
@@ -448,6 +448,11 @@ const SignUp = () => {
                       </InputAdornment>
                     }
                   />
+                  {!validPassword.current && (
+                    <Typography variant="body1" color="red" sx={{ fontSize: ".9rem" }}>
+                      At least 8 charachters with numbers
+                    </Typography>
+                  )}
                 </FormControl>
                 <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
                   <InputLabel htmlFor="standard-adornment-confirmpassword">Confirm Password</InputLabel>
@@ -463,6 +468,11 @@ const SignUp = () => {
                       </InputAdornment>
                     }
                   />
+                  {confirmPassword !== password && (
+                    <Typography variant="body1" color="red" sx={{ fontSize: ".9rem" }}>
+                      Password should match
+                    </Typography>
+                  )}
                 </FormControl>
                 <FormControl className="bg" variant="standard" error={!validPhone}>
                   <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
@@ -622,6 +632,11 @@ const SignUp = () => {
                       </InputAdornment>
                     }
                   />
+                  {!validPassword.current && (
+                    <Typography variant="body1" color="red" sx={{ fontSize: ".9rem" }}>
+                      At least 8 charachters with numbers
+                    </Typography>
+                  )}
                 </FormControl>
                 <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
                   <InputLabel htmlFor="standard-adornment-confirmpassword">Confirm Password</InputLabel>
@@ -637,6 +652,11 @@ const SignUp = () => {
                       </InputAdornment>
                     }
                   />
+                  {confirmPassword !== password && (
+                    <Typography variant="body1" color="red" sx={{ fontSize: ".9rem" }}>
+                      Passwords should match
+                    </Typography>
+                  )}
                 </FormControl>
                 <Autocomplete
                   className="sm"
@@ -755,6 +775,11 @@ const SignUp = () => {
                       </InputAdornment>
                     }
                   />
+                  {!validPassword.current && (
+                    <Typography variant="body1" color="red" sx={{ fontSize: ".9rem" }}>
+                      At least 8 charachters with numbers
+                    </Typography>
+                  )}
                 </FormControl>
                 <FormControl className="sm" variant="standard" error={confirmPassword !== password}>
                   <InputLabel htmlFor="standard-adornment-confirmpassword">Confirm Password</InputLabel>
@@ -770,6 +795,11 @@ const SignUp = () => {
                       </InputAdornment>
                     }
                   />
+                  {confirmPassword !== password && (
+                    <Typography variant="body1" color="red" sx={{ fontSize: ".9rem" }}>
+                      Password should match
+                    </Typography>
+                  )}
                 </FormControl>
                 <FormControl className="bg" variant="standard" error={!validPhone}>
                   <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
