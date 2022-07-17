@@ -1,14 +1,16 @@
 const HospitalVisit = require("../models/hospitalVisit");
+const ClinicalVisit = require("../models/clinicalVisit");
 const Vacc = require("../models/vaccinations");
 const HttpError = require("../models/http-error");
 const Patient = require("../models/patient");
-const hospitalVisitsFemale = async (req, res, next) => {
-  let countFemale = 0;
-
+const Surg = require("../models/surgery");
+const hospitalVisits = async (req, res, next) => {
+  let gender = req.params.gender;
+  let count = 0;
   try {
     Patient.aggregate([
       {
-        $match: { gender: "Female" },
+        $match: { gender: gender },
       },
       {
         $lookup: {
@@ -20,35 +22,9 @@ const hospitalVisitsFemale = async (req, res, next) => {
       },
     ]).exec(function (err, patient) {
       patient.map((s) => {
-        countFemale += s.visit.length;
+        count += s.visit.length;
       });
-      res.json({ countFemale: countFemale });
-    });
-  } catch (err) {
-    const error = new HttpError("Countin visits  failed, please try again later", 500);
-    return next(error);
-  }
-};
-const hospitalVisitsMale = async (req, res, next) => {
-  let countMale = 0;
-  try {
-    Patient.aggregate([
-      {
-        $match: { gender: "Male" },
-      },
-      {
-        $lookup: {
-          from: HospitalVisit.collection.name,
-          localField: "_id",
-          foreignField: "patientId",
-          as: "visit",
-        },
-      },
-    ]).exec(function (err, patient) {
-      patient.map((s) => {
-        countMale += s.visit.length;
-      });
-      res.json({ countMale: countMale });
+      res.json({ count: count });
     });
   } catch (err) {
     const error = new HttpError("Countin visits  failed, please try again later", 500);
@@ -84,6 +60,91 @@ const vaccines = async (req, res, next) => {
   }
 };
 
+const surgeries = async (req, res, next) => {
+  let gender = req.params.gender;
+  let count = 0;
+  try {
+    Patient.aggregate([
+      {
+        $match: { gender: gender },
+      },
+      {
+        $lookup: {
+          from: Surg.collection.name,
+          localField: "_id",
+          foreignField: "patientId",
+          as: "visit",
+        },
+      },
+    ]).exec(function (err, patient) {
+      patient.map((s) => {
+        count += s.visit.length;
+      });
+      res.json({ count: count });
+    });
+  } catch (err) {
+    const error = new HttpError("Countin visits  failed, please try again later", 500);
+    return next(error);
+  }
+};
+
+const clinicalVisits = async (req, res, next) => {
+  let gender = req.params.gender;
+  let count = 0;
+  try {
+    Patient.aggregate([
+      {
+        $match: { gender: gender },
+      },
+      {
+        $lookup: {
+          from: ClinicalVisit.collection.name,
+          localField: "_id",
+          foreignField: "patientId",
+          as: "visit",
+        },
+      },
+    ]).exec(function (err, patient) {
+      patient.map((s) => {
+        count += s.visit.length;
+      });
+      res.json({ count: count });
+    });
+  } catch (err) {
+    const error = new HttpError("Countin visits  failed, please try again later", 500);
+    return next(error);
+  }
+};
+
+// const chronicDisease = async (req, res, next) => {
+//   let gender = req.params.gender;
+//   let count = 0;
+//   try {
+//     Patient.match([
+//       {
+//         $match: { gender: gender },
+//       },
+//       {
+//         $lookup: {
+//           from: ClinicalVisit.collection.name,
+//           localField: "_id",
+//           foreignField: "patientId",
+//           as: "visit",
+//         },
+//       },
+//     ]).exec(function (err, patient) {
+//       patient.map((s) => {
+//         count += s.visit.length;
+//       });
+//       res.json({ count: count });
+//     });
+//   } catch (err) {
+//     const error = new HttpError("Countin visits  failed, please try again later", 500);
+//     return next(error);
+//   }
+// };
+
+exports.clinicalVisits = clinicalVisits;
 exports.vaccines = vaccines;
-exports.hospitalVisitsFemale = hospitalVisitsFemale;
-exports.hospitalVisitsMale = hospitalVisitsMale;
+exports.hospitalVisits = hospitalVisits;
+exports.surgeries = surgeries;

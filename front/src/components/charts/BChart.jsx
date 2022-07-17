@@ -46,11 +46,11 @@ const data = [
   },
 ];
 
-const BChart = () => {
+const BChart = (props) => {
   return (
     <>
-      <ResponsiveContainer draggable="true" width="20%" debounce="1" height="20%"  className="chartstyle">
-        <BarChart width={10} height={20} data={data}>
+      <ResponsiveContainer draggable="true" width="20%" debounce="1" height="20%" className="chartstyle">
+        <BarChart width={10} height={20} data={props.data}>
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <YAxis />
