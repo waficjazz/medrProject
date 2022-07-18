@@ -22,8 +22,23 @@ const Charts = () => {
   const [clinicalVisits, setClinicalVisits] = useState([]);
   const [vaccines, setVaccines] = useState([]);
   const [surgeries, setSurgeries] = useState([]);
+  const [cd, setCd] = useState([]);
 
   useEffect(() => {
+    const chronicDisease = async () => {
+      let obj = [];
+      try {
+        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/chronicDisease/Female`);
+        const response1 = await axios.get(process.env.REACT_APP_URL + `/analytics/chronicDisease/Male`);
+        obj[0] = { name: "Female", value: response.data.count };
+        obj[1] = { name: "Male", value: response1.data.count };
+
+        setCd([...obj]);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
     const clinicalVisits = async () => {
       let obj = [];
       try {
@@ -81,6 +96,7 @@ const Charts = () => {
     getVaccines();
     getSurgeries();
     clinicalVisits();
+    chronicDisease();
   }, []);
 
   return (
@@ -110,18 +126,18 @@ const Charts = () => {
           </Typography>
           <PChart main={surgeries} />
         </div>
-        {/* <div className="chartWrapper">
+        <div className="chartWrapper">
           <Typography variant="h6" sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>
-            Surgeries
+            Chronic Disease
           </Typography>
-          <PChart main={surgeries} />
+          <PChart main={cd} />
         </div>
         <div className="chartWrapper">
           <Typography variant="h6" sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>
-            Surgeries
+            Chronic Disease
           </Typography>
-          <PChart main={surgeries} />
-        </div> */}
+          <PChart main={cd} />
+        </div>
       </div>
     </StyledEngineProvider>
   );
