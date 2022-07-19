@@ -148,23 +148,25 @@ const allergies = async (req, res, next) => {
 
 const monthSurgeries = async (req, res, next) => {
   let month = req.params.month;
-
+  const arr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
   let monthone;
-  if (month < 10) {
-    monthone = "0" + (parseInt(month) + 1).toString();
-    month = "0" + month;
-  } else {
-    monthone = parseInt(month) + 1;
-  }
+  let ress = [];
   let a;
-  console.log(month, monthone);
+
   try {
-    a = await Surg.count({ date: { $gt: new Date(`2020-${month}-01`), $lt: new Date(`2022-${monthone}-03`) } });
+    // await Promise.all(
+    // arr.map((s, i) => {
+    // console.log(s);
+
+    a = Surg.count({ date: { $gt: new Date(`2020-${arr[1]}-01`), $lt: new Date(`2022-${arr[2]}-03`) } });
+    // ress.push(a);
+    // })
+    // );
   } catch (err) {
     const error = new HttpError("Countin visits  failed, please try again later", 500);
     return next(error);
   }
-  res.json(a);
+  res.json(ress);
 };
 
 exports.allergies = allergies;

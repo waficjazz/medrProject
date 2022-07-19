@@ -99,12 +99,11 @@ const Charts = () => {
         const response1 = await axios.get(process.env.REACT_APP_URL + `/analytics/hospitalVisits/Male`);
         obj[0] = { name: "Female", value: response.data.count };
         obj[1] = { name: "Male", value: response1.data.count };
-
+        console.log(response1);
         setHospitalVisits([...obj]);
       } catch (err) {
         console.log(err.message);
       }
-      console.log(hospitalVisits.current);
     };
     getHospitalVisits();
     getVaccines();
