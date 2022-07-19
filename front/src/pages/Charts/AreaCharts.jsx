@@ -17,7 +17,7 @@ import VisitImagings from "../../components/VisitImagings/VisitImagings";
 import BChart from "../../components/charts/BChart";
 import AChart from "../../components/charts/AChart";
 import PChart from "../../components/charts/PChart";
-const Charts = () => {
+const AreaCharts = () => {
   const [hospitalVisits, setHospitalVisits] = useState([]);
   const [clinicalVisits, setClinicalVisits] = useState([]);
   const [vaccines, setVaccines] = useState([]);
@@ -117,45 +117,10 @@ const Charts = () => {
   return (
     <StyledEngineProvider injectFirst>
       <div className="chartPage">
-        <div className="chartWrapper">
-          <Typography variant="h6" sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>
-            Hospital Visits
-          </Typography>
-          <PChart main={hospitalVisits} />
-        </div>
-        <div className="chartWrapper">
-          <Typography variant="h6" sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>
-            Vaccines
-          </Typography>
-          <PChart main={vaccines} />
-        </div>
-        <div className="chartWrapper">
-          <Typography variant="h6" sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>
-            Clinical Visits
-          </Typography>
-          <PChart main={clinicalVisits} />
-        </div>
-        <div className="chartWrapper">
-          <Typography variant="h6" sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>
-            Surgeries
-          </Typography>
-          <PChart main={surgeries} />
-        </div>
-        <div className="chartWrapper">
-          <Typography variant="h6" sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>
-            Chronic Disease
-          </Typography>
-          <PChart main={cd} />
-        </div>
-        <div className="chartWrapper">
-          <Typography variant="h6" sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>
-            Allergies
-          </Typography>
-          <PChart main={allergies} />
-        </div>
+        <AChart />
       </div>
     </StyledEngineProvider>
   );
 };
 
-export default Charts;
+export default AreaCharts;

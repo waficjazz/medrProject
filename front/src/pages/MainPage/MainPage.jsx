@@ -9,6 +9,7 @@ import Vaccines from "../Vaccines/Vaccines";
 import LabTests from "../LabTests/LabTests";
 import Imaging from "../Imaging/Imaging";
 import Charts from "../Charts/Charts";
+import AreaCharts from "../Charts/AreaCharts";
 import BChart from "../../components/charts/BChart";
 import { Routes, Route } from "react-router-dom";
 import { ShowContext, RegContext } from "../../context";
@@ -32,6 +33,7 @@ const MainPage = () => {
           <Route path="/vaccines" element={<Vaccines />} />
           <Route path="/surgical" element={<SurgicalHistory />} />
           <Route path="/charts" element={<Charts />} />
+          <Route path="/Acharts" element={<AreaCharts />} />
           <Route path="/presc" element={<Prescriptions />} />
         </Routes>
       </div>
