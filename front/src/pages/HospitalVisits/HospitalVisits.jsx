@@ -164,7 +164,7 @@ const HospitalVisits = () => {
             <Typography className="tableContents">{hospital.hospitalName}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
-            <Typography className="tableContents">{row.entryDate?.toString().slice(0, 10)}</Typography>
+            <Typography className="tableContents">{row.date?.toString().slice(0, 10)}</Typography>
           </TableCell>
           <TableCell style={{ paddingBottom: 2, paddingTop: 2 }}>
             <Typography className="tableContents">{row.timeSpent}</Typography>
@@ -222,7 +222,7 @@ const HospitalVisits = () => {
                 </IconButton>
               )}
               <div className="tables">
-                <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
                       <TableCell align="left" sx={{ width: "5px" }}></TableCell>

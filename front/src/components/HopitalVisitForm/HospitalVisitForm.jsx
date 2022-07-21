@@ -57,7 +57,7 @@ const HospitalVisitForm = (props) => {
           const res = await axios.get(process.env.REACT_APP_URL + `/hospital/visit/one/${props.id}`);
           const data = await res.data[0];
           setVisitDescription(data.description);
-          setVisitDate(data.entryDate?.toString().slice(0, 10));
+          setVisitDate(data.date?.toString().slice(0, 10));
           setVisitCause(data.cause);
           setVisitTime(data.timeSpent);
 
@@ -139,7 +139,7 @@ const HospitalVisitForm = (props) => {
       patientId,
       verifiedHospital,
       hospitalId: hospitalId.current,
-      entryDate: visitDate,
+      date: visitDate,
       timeSpent: visitTime,
       cause: visitCause,
       doctors: doctors,
@@ -182,7 +182,7 @@ const HospitalVisitForm = (props) => {
         patientId,
         verifiedHospital,
         hospitalId: hospitalId.current,
-        entryDate: visitDate,
+        date: visitDate,
         timeSpent: visitTime,
         cause: visitCause,
         doctors: doctors,

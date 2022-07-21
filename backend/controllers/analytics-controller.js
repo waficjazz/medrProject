@@ -146,22 +146,34 @@ const allergies = async (req, res, next) => {
   res.json({ count: count });
 };
 
-const monthSurgeries = async (req, res, next) => {
-  let month = req.params.month;
+const months = async (req, res, next) => {
+  let year = req.params.year;
+  let type = req.params.type;
+
+  let month = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
   const arr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-  let monthone;
-  let ress = [];
+  let ress = {};
   let a;
+  let m;
+  if (type === "surgery") {
+    m = Surg;
+  }
+  if (type === "hospitalVisit") {
+    m = HospitalVisit;
+  }
 
   try {
-    // await Promise.all(
-    // arr.map((s, i) => {
-    // console.log(s);
-
-    a = Surg.count({ date: { $gt: new Date(`2020-${arr[1]}-01`), $lt: new Date(`2022-${arr[2]}-03`) } });
-    // ress.push(a);
-    // })
-    // );
+    await Promise.all(
+      arr.map(async (s, i) => {
+        if (i < arr.length - 1) {
+          a = await m.count({ date: { $gt: new Date(`${year}-${s}-01`), $lt: new Date(`${year}-${arr[i + 1]}-01`) } });
+          ress[month[i]] = a;
+        } else {
+          a = await m.count({ date: { $gt: new Date(`${year}-12-01`) } });
+          ress[month[i]] = a;
+        }
+      })
+    );
   } catch (err) {
     const error = new HttpError("Countin visits  failed, please try again later", 500);
     return next(error);
@@ -175,4 +187,4 @@ exports.clinicalVisits = clinicalVisits;
 exports.vaccines = vaccines;
 exports.hospitalVisits = hospitalVisits;
 exports.surgeries = surgeries;
-exports.monthSurgeries = monthSurgeries;
+exports.months = months;

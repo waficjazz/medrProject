@@ -10,5 +10,5 @@ router.get("/surgeries/:gender", analyticsController.surgeries);
 router.get("/chronicDisease/:gender", analyticsController.chronicDisease);
 router.get("/clinicalVisits/:gender", analyticsController.clinicalVisits);
 router.get("/allergies/:gender", analyticsController.allergies);
-router.get("/monthSuargeries", analyticsController.monthSurgeries);
+router.get("/months/:type/:year", analyticsController.months);
 module.exports = router;

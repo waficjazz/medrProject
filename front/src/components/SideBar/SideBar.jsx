@@ -12,6 +12,8 @@ import AirlineSeatFlatIcon from "@mui/icons-material/AirlineSeatFlat";
 import CropPortraitIcon from "@mui/icons-material/CropPortrait";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { ShowContext } from "../../context";
+import WcIcon from "@mui/icons-material/Wc";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import "./SideBar.css";
 const SideBar = () => {
   const navigate = useNavigate();
@@ -20,7 +22,6 @@ const SideBar = () => {
   const handleSelect = (event, index, path) => {
     event.preventDefault();
     setSelectedIndex(index);
-
     navigate(path);
     setShow(false);
   };
@@ -76,6 +77,18 @@ const SideBar = () => {
               <AirlineSeatFlatIcon className="icon" />
             </ListItemIcon>
             Surgical History
+          </ListItemButton>
+          <ListItemButton selected={selectedIndex === 8} onClick={(e) => handleSelect(e, 8, "/gendercharts")}>
+            <ListItemIcon>
+              <WcIcon className="icon" />
+            </ListItemIcon>
+            Statistics by gender
+          </ListItemButton>
+          <ListItemButton selected={selectedIndex === 9} onClick={(e) => handleSelect(e, 8, "/monthscharts")}>
+            <ListItemIcon>
+              <CalendarMonthIcon className="icon" />
+            </ListItemIcon>
+            Statistics by months
           </ListItemButton>
         </List>
       </div>

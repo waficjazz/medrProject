@@ -1,123 +1,71 @@
 import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { StyledEngineProvider } from "@mui/material/styles";
-import HospitalVisit from "../../components/HospitalVisit/HospitalVisit";
 import React from "react";
-import EmptyData from "../../components/EmpyData/EmptyData";
 import "../HospitalVisits/HospitalVisits.css";
-import AddIcon from "@mui/icons-material/Add";
-import HospitalVisitForm from "../../components/HopitalVisitForm/HospitalVisitForm";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import Imaging from "../Imaging/Imaging";
-import VisitImagings from "../../components/VisitImagings/VisitImagings";
 import BChart from "../../components/charts/BChart";
-import AChart from "../../components/charts/AChart";
-import PChart from "../../components/charts/PChart";
+
 const AreaCharts = () => {
+  const [a, setA] = useState([]);
   const [hospitalVisits, setHospitalVisits] = useState([]);
-  const [clinicalVisits, setClinicalVisits] = useState([]);
-  const [vaccines, setVaccines] = useState([]);
-  const [surgeries, setSurgeries] = useState([]);
-  const [cd, setCd] = useState([]);
-  const [allergies, setAllergies] = useState([]);
 
+  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const obj = useRef();
+  const obj1 = useRef();
+  let data;
   useEffect(() => {
-    const allergies = async () => {
-      let obj = [];
+    const surgeriesMonth = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/allergies/Female`);
-        const response1 = await axios.get(process.env.REACT_APP_URL + `/analytics/allergies/Male`);
-        obj[0] = { name: "Female", value: response.data.count };
-        obj[1] = { name: "Male", value: response1.data.count };
-
-        setAllergies([...obj]);
+        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/months/surgery/:2022`);
+        data = await response.data;
       } catch (err) {
         console.log(err.message);
       }
-    };
-    const chronicDisease = async () => {
-      let obj = [];
-      try {
-        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/chronicDisease/Female`);
-        const response1 = await axios.get(process.env.REACT_APP_URL + `/analytics/chronicDisease/Male`);
-        obj[0] = { name: "Female", value: response.data.count };
-        obj[1] = { name: "Male", value: response1.data.count };
 
-        setCd([...obj]);
+      months.map((month) => {
+        obj.current = {};
+        obj.current["name"] = month;
+        obj.current["Surgeries"] = data[month];
+        setA((prev) => [...prev, obj.current]);
+      });
+    };
+    const hospitalMonths = async () => {
+      try {
+        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/months/hospitalVisit/:2022`);
+        data = await response.data;
       } catch (err) {
         console.log(err.message);
       }
-    };
 
-    const clinicalVisits = async () => {
-      let obj = [];
-      try {
-        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/clinicalVisits/Female`);
-        const response1 = await axios.get(process.env.REACT_APP_URL + `/analytics/clinicalVisits/Male`);
-        obj[0] = { name: "Female", value: response.data.count };
-        obj[1] = { name: "Male", value: response1.data.count };
-
-        setClinicalVisits([...obj]);
-      } catch (err) {
-        console.log(err.message);
-      }
+      months.map((month) => {
+        obj1.current = {};
+        obj1.current["name"] = month;
+        obj1.current["Hospital-Visits"] = data[month];
+        setHospitalVisits((prev) => [...prev, obj1.current]);
+      });
     };
-    const getSurgeries = async () => {
-      let obj = [];
-      try {
-        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/surgeries/Female`);
-        const response1 = await axios.get(process.env.REACT_APP_URL + `/analytics/surgeries/Male`);
-        obj[0] = { name: "Female", value: response.data.count };
-        obj[1] = { name: "Male", value: response1.data.count };
-
-        setSurgeries([...obj]);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    const getVaccines = async () => {
-      let obj = [];
-      try {
-        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/vaccines/Female`);
-        const response1 = await axios.get(process.env.REACT_APP_URL + `/analytics/vaccines/Male`);
-        obj[0] = { name: "Female", value: response.data.count };
-        obj[1] = { name: "Male", value: response1.data.count };
-
-        setVaccines([...obj]);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    const getHospitalVisits = async () => {
-      let obj = [];
-      try {
-        const response = await axios.get(process.env.REACT_APP_URL + `/analytics/hospitalVisits/Female`);
-        const response1 = await axios.get(process.env.REACT_APP_URL + `/analytics/hospitalVisits/Male`);
-        obj[0] = { name: "Female", value: response.data.count };
-        obj[1] = { name: "Male", value: response1.data.count };
-
-        setHospitalVisits([...obj]);
-      } catch (err) {
-        console.log(err.message);
-      }
-      console.log(hospitalVisits.current);
-    };
-    getHospitalVisits();
-    getVaccines();
-    getSurgeries();
-    clinicalVisits();
-    chronicDisease();
-    allergies();
+    hospitalMonths();
+    surgeriesMonth();
   }, []);
 
   return (
     <StyledEngineProvider injectFirst>
       <div className="chartPage">
-        <AChart />
+        <div className="AChartWarpper">
+          <Typography sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>Surgeries in 2022</Typography>
+          <BChart data={a} k="Surgeries" />
+        </div>
+        <div className="AChartWarpper">
+          <Typography sx={{ textAlign: "center", width: "100%", color: "var(--third-blue)", fontWeight: "bold" }}>Hospital Visits in 2022</Typography>
+          <BChart data={hospitalVisits} k="Hospital-Visits" />
+        </div>
+        <div className="AChartWarpper">
+          <BChart data={a} />
+        </div>
+        <div className="AChartWarpper">
+          <BChart data={a} />
+        </div>
       </div>
     </StyledEngineProvider>
   );

@@ -8,10 +8,26 @@
   justify-content: center;
   align-items: center;
   padding-right: 10px;
-  height: 30%;
+  /* height: 30%;
   max-height: 30%;
   min-height: 30%;
   max-width: 48%;
-  min-width: 48%;
+  min-width: 48%; */
   margin-inline: 5px;
+}
+
+.AChartWarpper {
+  padding-top: 10px;
+  width: 45%;
+  height: 48%;
+  box-shadow: 3px 0px 8px #888888;
+  border-radius: 4px;
+}
+
+.chartWrapper {
+  width: 30%;
+  height: 45%;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 3px 0px 8px #888888;
 }

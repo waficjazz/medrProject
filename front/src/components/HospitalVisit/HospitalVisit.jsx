@@ -46,7 +46,7 @@ const HospitalVisit = ({ visit, hospital, close }) => {
               </Typography>
               <Typography className="internalText">
                 Entry Date:
-                <span className="internalData">{visit.entryDate?.toString().slice(0, 10)}</span>
+                <span className="internalData">{visit.date?.toString().slice(0, 10)}</span>
               </Typography>
               <Typography className="internalText">
                 Time Spent:

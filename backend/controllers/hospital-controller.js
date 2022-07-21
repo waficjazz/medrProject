@@ -174,11 +174,11 @@ const gethospitalVisits = async (req, res, next) => {
 };
 
 const addHospitalVisit = async (req, res, next) => {
-  const { verifiedHospital, patientId, entryDate, timeSpent, cause, hospitalId, doctors, prescription, description } = req.body;
+  const { verifiedHospital, patientId, date, timeSpent, cause, hospitalId, doctors, prescription, description } = req.body;
   const hospitalVisit = new HospitalVisit({
     verifiedHospital,
     patientId,
-    entryDate,
+    date,
     timeSpent,
     cause,
     doctors,
@@ -300,10 +300,10 @@ const getOneVisit = async (req, res, next) => {
 };
 
 const updateVisit = async (req, res, next) => {
-  const { verifiedHospital, patientId, entryDate, timeSpent, cause, hospitalId, doctors, prescription, description, id } = req.body;
+  const { verifiedHospital, patientId, date, timeSpent, cause, hospitalId, doctors, prescription, description, id } = req.body;
   console.log(req.body);
   try {
-    await HospitalVisit.updateOne({ _id: id }, { verifiedHospital, patientId, entryDate, timeSpent, cause, hospitalId, doctors, prescription, description });
+    await HospitalVisit.updateOne({ _id: id }, { verifiedHospital, patientId, date, timeSpent, cause, hospitalId, doctors, prescription, description });
   } catch (err) {
     const error = new HttpError("could not update vaccination", 500);
     return next(error);

@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import React, { PureComponent } from "react";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import "./BChart.css";
@@ -44,18 +45,56 @@ const data = [
     pv: 4300,
     amt: 2100,
   },
+  {
+    name: "Page s",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Page s",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Page s",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Page s",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Page s",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100,
+  },
 ];
 
 const BChart = (props) => {
   return (
     <>
-      <ResponsiveContainer draggable="true" width="20%" debounce="1" height="20%" className="chartstyle">
-        <BarChart width={10} height={20} data={props.data}>
+      <ResponsiveContainer draggable="true" width="100%" debounce="1" height="100%">
+        <BarChart
+          data={props.data}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 30,
+            bottom: 30,
+          }}>
+          <Legend />
           <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
           <YAxis />
-          <XAxis />
-          <Bar dataKey="uv" fill="#8884d8" />
+          <XAxis dataKey={"name"} />
+          <Tooltip />
+          <Bar dataKey={props.k} fill="var(--second-blue)" />
         </BarChart>
       </ResponsiveContainer>
     </>

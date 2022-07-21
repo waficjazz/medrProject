@@ -32,8 +32,8 @@ const MainPage = () => {
           <Route path="/imaging" element={<Imaging />} />
           <Route path="/vaccines" element={<Vaccines />} />
           <Route path="/surgical" element={<SurgicalHistory />} />
-          <Route path="/charts" element={<Charts />} />
-          <Route path="/Acharts" element={<AreaCharts />} />
+          <Route path="/gendercharts" element={<Charts />} />
+          <Route path="/monthscharts" element={<AreaCharts />} />
           <Route path="/presc" element={<Prescriptions />} />
         </Routes>
       </div>
