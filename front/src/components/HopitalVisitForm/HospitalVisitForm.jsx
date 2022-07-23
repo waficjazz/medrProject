@@ -7,8 +7,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector } from "react-redux";
 import { LoadingContext } from "../../context";
 
-import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
+import { Tab, Tabs, Button, Autocomplete, InputAdornment, IconButton, TextField } from "@mui/material";
 const HospitalVisitForm = (props) => {
+  const [input, setInput] = useState("");
+  const [openFilter, setOpenFilter] = useState(false);
   const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));

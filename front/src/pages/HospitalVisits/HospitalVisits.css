@@ -93,5 +93,5 @@
   cursor: pointer;
 }
 .tables {
-  overflow-y: scroll;
+  overflow-y: auto;
 }

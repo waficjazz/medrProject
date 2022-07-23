@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Table, TableHead, TableCell, TableRow, TableBody, Typography, IconButton } from "@mui/material";
+import { Table, TableHead, TableCell, TableRow, TableBody, Typography, IconButton, TextField } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import "./LabTests.css";
@@ -9,8 +9,12 @@ import AddIcon from "@mui/icons-material/Add";
 import LabTestForm from "../../components/LabTestForn/LabTestForm";
 import axios from "axios";
 import { LoadingContext } from "../../context";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import CloseIcon from "@mui/icons-material/Close";
 
 const LabTests = () => {
+  const [input, setInput] = useState("");
+  const [openFilter, setOpenFilter] = useState(false);
   const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
@@ -135,6 +139,24 @@ const LabTests = () => {
                   <AddIcon fontSize="large" />
                 </IconButton>
               )}
+              {!openFilter && (
+                <IconButton onClick={() => setOpenFilter(true)} sx={{ marginLeft: "3%", width: "5px", height: "5px" }}>
+                  <FilterListIcon />
+                </IconButton>
+              )}
+              {openFilter && (
+                <div className="filterDiv">
+                  <TextField size="small" placeholder="Filter" variant="standard" sx={{ width: "90%" }} onChange={(e) => setInput(e.target.value)}></TextField>
+                  <IconButton>
+                    <CloseIcon
+                      onClick={() => {
+                        setOpenFilter(false);
+                        setInput("");
+                      }}
+                    />
+                  </IconButton>
+                </div>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
@@ -155,9 +177,21 @@ const LabTests = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {labTests.map((item, index) => {
-                      return <DataModel key={index} row={item} />;
-                    })}
+                    {labTests
+                      .filter((val) => {
+                        if (input === "") {
+                          return true;
+                        }
+                        return (
+                          val.date.toLowerCase().includes(input.toLowerCase()) ||
+                          val.location.toLowerCase().includes(input.toLowerCase()) ||
+                          val._id.includes(input.toLowerCase()) ||
+                          val.HospitalVisit.includes(input.toLowerCase())
+                        );
+                      })
+                      .map((item, index) => {
+                        return <DataModel key={index} row={item} />;
+                      })}
                   </TableBody>
                 </Table>
               </div>

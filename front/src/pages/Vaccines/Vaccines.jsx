@@ -1,4 +1,4 @@
-import { Table, TableHead, TableCell, TableRow, TableBody, IconButton, Typography, TableSortLabel } from "@mui/material";
+import { Table, TableHead, TableCell, TableRow, TableBody, IconButton, Typography, TextField, TableSortLabel } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import { StyledEngineProvider } from "@mui/material/styles";
 import React from "react";
@@ -10,8 +10,12 @@ import axios from "axios";
 import VaccineForm from "../../components/VaccineForm/VaccineForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-
+import FilterListIcon from "@mui/icons-material/FilterList";
+import CloseIcon from "@mui/icons-material/Close";
 const Vaccines = () => {
+  const [input, setInput] = useState("");
+  const [openFilter, setOpenFilter] = useState(false);
+
   const loading = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
@@ -164,6 +168,24 @@ const Vaccines = () => {
                   <AddIcon fontSize="large" />
                 </IconButton>
               )}
+              {!openFilter && (
+                <IconButton onClick={() => setOpenFilter(true)} sx={{ marginLeft: "3%", width: "5px", height: "5px" }}>
+                  <FilterListIcon />
+                </IconButton>
+              )}
+              {openFilter && (
+                <div className="filterDiv">
+                  <TextField size="small" placeholder="Filter" variant="standard" sx={{ width: "90%" }} onChange={(e) => setInput(e.target.value)}></TextField>
+                  <IconButton>
+                    <CloseIcon
+                      onClick={() => {
+                        setOpenFilter(false);
+                        setInput("");
+                      }}
+                    />
+                  </IconButton>
+                </div>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
                   <TableHead>
@@ -212,9 +234,23 @@ const Vaccines = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {vaccinations.map((item, index) => {
-                      return <DataModel key={index} row={item} />;
-                    })}
+                    {vaccinations
+                      .filter((val) => {
+                        if (input === "") {
+                          return true;
+                        }
+                        return (
+                          val.date.toLowerCase().includes(input.toLowerCase()) ||
+                          val.notes.toLowerCase().includes(input.toLowerCase()) ||
+                          val.location.toLowerCase().includes(input.toLowerCase()) ||
+                          val.name.toLowerCase().includes(input.toLowerCase()) ||
+                          val.shots.toString().toLowerCase().includes(input.toLowerCase()) ||
+                          val.doses.toString().toLowerCase().includes(input.toLowerCase())
+                        );
+                      })
+                      .map((item, index) => {
+                        return <DataModel key={index} row={item} />;
+                      })}
                   </TableBody>
                 </Table>
               </div>

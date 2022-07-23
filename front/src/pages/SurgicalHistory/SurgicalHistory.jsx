@@ -1,4 +1,4 @@
-import { Table, TableSortLabel, TableHead, TableCell, TableRow, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { Table, TableSortLabel, TableHead, TableCell, TableRow, TableBody, Collapse, IconButton, Typography, TextField } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -12,13 +12,17 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Surgery from "../../components/Surgery/Surgery";
 import { LoadingContext } from "../../context";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import CloseIcon from "@mui/icons-material/Close";
 const SurgicalHistory = () => {
+  const [openFilter, setOpenFilter] = useState(false);
   const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
   }
+  const [input, setInput] = useState("");
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [surgeries, setSurgeries] = useState([]);
@@ -29,6 +33,24 @@ const SurgicalHistory = () => {
   const [reload, setReload] = useState(false);
   const [surgeryId, setSurgeryId] = useState("");
   const [formType, setFormType] = useState("add");
+
+  // useEffect(() => {
+  //   const fileterSurgeries = () => {
+  //     let arr = [...surgeries];
+
+  //     arr = arr.filter((surgery) => {
+  //       return surgery.name == input;
+  //     });
+
+  //     // if (arr.length === 0) {
+  //     //   setSurgeries([...backup]);
+  //     // } else {
+  //     console.log(arr);
+  //     setSurgeries([...arr]);
+  //     // }
+  //   };
+  //   fileterSurgeries(input);
+  // }, [input]);
   const sortByName = (prop) => {
     setDirection(direction === "desc" ? "asc" : "desc");
     if (prop === "date") {
@@ -211,6 +233,24 @@ const SurgicalHistory = () => {
                   <AddIcon fontSize="large" />
                 </IconButton>
               )}
+              {!openFilter && (
+                <IconButton onClick={() => setOpenFilter(true)} sx={{ marginLeft: "3%", width: "5px", height: "5px" }}>
+                  <FilterListIcon />
+                </IconButton>
+              )}
+              {openFilter && (
+                <div className="filterDiv">
+                  <TextField size="small" placeholder="Filter" variant="standard" sx={{ width: "90%" }} onChange={(e) => setInput(e.target.value)}></TextField>
+                  <IconButton>
+                    <CloseIcon
+                      onClick={() => {
+                        setOpenFilter(false);
+                        setInput("");
+                      }}
+                    />
+                  </IconButton>
+                </div>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: "100%" }} aria-label="customized table">
                   <TableHead>
@@ -251,9 +291,23 @@ const SurgicalHistory = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {surgeries.map((item, index) => {
-                      return <DataModel key={index} row={item} />;
-                    })}
+                    {surgeries
+                      .filter((val) => {
+                        if (input === "") {
+                          return true;
+                        }
+                        return (
+                          val.name.toLowerCase().includes(input.toLowerCase()) ||
+                          val.cause.toLowerCase().includes(input.toLowerCase()) ||
+                          val.date.toLowerCase().includes(input.toLowerCase()) ||
+                          val.description.toLowerCase().includes(input.toLowerCase()) ||
+                          val.HospitalVisit.includes(input.toLowerCase()) ||
+                          val._id === input.toLowerCase()
+                        );
+                      })
+                      .map((item, index) => {
+                        return <DataModel key={index} row={item} />;
+                      })}
                   </TableBody>
                 </Table>
               </div>

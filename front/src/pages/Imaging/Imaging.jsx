@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
+import { Table, TableSortLabel, TableHead, TableCell, TableRow, TextField, TableBody, Collapse, IconButton, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import EmptyData from "../../components/EmpyData/EmptyData";
 import ImagingForm from "../../components/ImagingForm/ImagingForm";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadingContext } from "../../context";
-
+import FilterListIcon from "@mui/icons-material/FilterList";
+import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-const Imaging = () => {
-  const loadingc = useContext(LoadingContext);
 
+const Imaging = () => {
+  const [input, setInput] = useState("");
+  const loadingc = useContext(LoadingContext);
+  const [openFilter, setOpenFilter] = useState(false);
   const storedData = JSON.parse(localStorage.getItem("userData"));
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
@@ -144,6 +147,24 @@ const Imaging = () => {
                   <AddIcon fontSize="large" />
                 </IconButton>
               )}
+              {!openFilter && (
+                <IconButton onClick={() => setOpenFilter(true)} sx={{ marginLeft: "3%", width: "5px", height: "5px" }}>
+                  <FilterListIcon />
+                </IconButton>
+              )}
+              {openFilter && (
+                <div className="filterDiv">
+                  <TextField size="small" placeholder="Filter" variant="standard" sx={{ width: "90%" }} onChange={(e) => setInput(e.target.value)}></TextField>
+                  <IconButton>
+                    <CloseIcon
+                      onClick={() => {
+                        setOpenFilter(false);
+                        setInput("");
+                      }}
+                    />
+                  </IconButton>
+                </div>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
@@ -194,9 +215,22 @@ const Imaging = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {imagings.map((item, index) => {
-                      return <DataModel key={index} row={item} />;
-                    })}
+                    {imagings
+                      .filter((val) => {
+                        if (input === "") {
+                          return true;
+                        }
+                        return (
+                          val.name.toLowerCase().includes(input.toLowerCase()) ||
+                          val.date.toLowerCase().includes(input.toLowerCase()) ||
+                          val.location.toLowerCase().includes(input.toLowerCase()) ||
+                          val._id.includes(input.toLowerCase()) ||
+                          val.HospitalVisit.includes(input.toLowerCase())
+                        );
+                      })
+                      .map((item, index) => {
+                        return <DataModel key={index} row={item} />;
+                      })}
                   </TableBody>
                 </Table>
               </div>

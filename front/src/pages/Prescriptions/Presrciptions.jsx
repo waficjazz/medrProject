@@ -1,4 +1,4 @@
-import { Table, TableHead, TableCell, TableRow, TableBody, Collapse, IconButton, Typography, Button, TableSortLabel } from "@mui/material";
+import { Table, TableHead, TableCell, TableRow, TableBody, Collapse, IconButton, Typography, TextField, TableSortLabel } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -13,8 +13,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import OnePrescription from "../../components/OnePrescription/OnePrescription";
 import { LoadingContext } from "../../context";
-
+import FilterListIcon from "@mui/icons-material/FilterList";
+import CloseIcon from "@mui/icons-material/Close";
 const Prescriptions = () => {
+  const [input, setInput] = useState("");
+  const [openFilter, setOpenFilter] = useState(false);
   const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
@@ -185,6 +188,24 @@ const Prescriptions = () => {
                   <AddIcon fontSize="large" />
                 </IconButton>
               )}
+              {!openFilter && (
+                <IconButton onClick={() => setOpenFilter(true)} sx={{ marginLeft: "3%", width: "5px", height: "5px" }}>
+                  <FilterListIcon />
+                </IconButton>
+              )}
+              {openFilter && (
+                <div className="filterDiv">
+                  <TextField size="small" placeholder="Filter" variant="standard" sx={{ width: "90%" }} onChange={(e) => setInput(e.target.value)}></TextField>
+                  <IconButton>
+                    <CloseIcon
+                      onClick={() => {
+                        setOpenFilter(false);
+                        setInput("");
+                      }}
+                    />
+                  </IconButton>
+                </div>
+              )}
               <div className="tables">
                 <Table sx={{ minWidth: 700, overflowY: "scroll" }} aria-label="customized table">
                   <TableHead>
@@ -234,9 +255,25 @@ const Prescriptions = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {prescriptions.map((item, index) => {
-                      return <DataModel key={index} row={item} />;
-                    })}
+                    {prescriptions
+                      .filter((val) => {
+                        if (input === "") {
+                          return true;
+                        }
+                        return (
+                          val.date.toLowerCase().includes(input.toLowerCase()) ||
+                          val.location.toLowerCase().includes(input.toLowerCase()) ||
+                          val.description.toLowerCase().includes(input.toLowerCase()) ||
+                          val.medications.includes(input.toLowerCase()) ||
+                          val.labs.includes(input.toLowerCase()) ||
+                          val.issuer.toLowerCase().includes(input.toLowerCase()) ||
+                          val._id.includes(input.toLowerCase()) ||
+                          val.hospitalVisit.includes(input.toLowerCase())
+                        );
+                      })
+                      .map((item, index) => {
+                        return <DataModel key={index} row={item} />;
+                      })}
                   </TableBody>
                 </Table>
               </div>
