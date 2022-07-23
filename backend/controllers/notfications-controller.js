@@ -38,5 +38,18 @@ const addNotification = async (req, res, next) => {
   res.status(201).json(ntf);
 };
 
+const updateNotification = async (req, res, next) => {
+  const { id, seen } = req.body;
+  try {
+    await Notifications.updateOne({ _id: id }, { $push: { seenBy: seen } });
+  } catch (err) {
+    const error = new HttpError("Adding notifications failed, please try again later", 500);
+    return next(error);
+  }
+
+  res.status(201).json("updated");
+};
+
 exports.addNotification = addNotification;
 exports.getNotifications = getNotifications;
+exports.updateNotification = updateNotification;

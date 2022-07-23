@@ -19,44 +19,50 @@ import { useEffect } from "react";
 import axios from "axios";
 const Navbar = () => {
   let patientId = 0;
+  const [badge, setBadge] = useState(0);
   const storedData = JSON.parse(localStorage.getItem("userData"));
   if (storedData) {
     patientId = storedData.uid;
   }
   const [notfications, setNotifications] = useState([]);
   const [computedNot, setComputedNot] = useState([]);
+  let id = "";
   let token = "";
   let type = "";
   let uid = " ";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
+  id = patientId;
   if (highStoredData) {
     token = highStoredData.token;
     type = highStoredData.type;
     uid = highStoredData.uid;
+    id = uid;
   }
+  const getNotifications = async () => {
+    try {
+      const response = await axios.get(process.env.REACT_APP_URL + `/notifications/${patientId}`);
+      setNotifications(response.data);
+      console.log(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   useEffect(() => {
-    const getNotifications = async () => {
-      try {
-        const response = await axios.get(process.env.REACT_APP_URL + `/notifications/${patientId}`);
-        setNotifications(response.data);
-        console.log(response.data);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-
     getNotifications();
   }, []);
-
+  useEffect(() => {
+    getNotifications();
+  }, [badge]);
   useEffect(() => {
     let inter = [];
     let arr = [...notfications];
-    console.log(notfications);
+
     inter = arr.filter((a) => {
-      return a.issuerId != uid;
+      return (a.issuerId != uid) & !a.seenBy.includes(id);
     });
-    console.log(inter);
+
     setComputedNot([...inter]);
+    setBadge(computedNot.length);
   }, [notfications]);
 
   const navigate = useNavigate();
@@ -94,7 +100,7 @@ const Navbar = () => {
                       setOpen("notfications");
                     }
                   }}>
-                  <Badge className="badge" badgeContent={computedNot.length} color="error" overlap="circular" />
+                  <Badge className="badge" badgeContent={badge} color="error" overlap="circular" />
                   <NotificationsIcon />
                 </IconButton>
                 <Collapse in={open === "notfications"}>
@@ -107,7 +113,7 @@ const Navbar = () => {
                       {notfications.map((notf) => {
                         return (
                           <>
-                            <Notification issuer={notf.issuer} action={notf.action} date={notf.createdAt} item={notf.item} />
+                            <Notification not={notf} updateB={() => setBadge(badge - 1)} />
                           </>
                         );
                       })}
