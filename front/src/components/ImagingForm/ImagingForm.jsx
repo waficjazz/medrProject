@@ -43,7 +43,7 @@ const ImagingForm = (props) => {
       try {
         loadingc.setIsLoading(true);
         const response = await axios.get(process.env.REACT_APP_URL + `/hospital/visits/${patientId}`);
-
+        console.log(response);
         setVisits(response.data);
         loadingc.setIsLoading(false);
       } catch (err) {
@@ -63,6 +63,10 @@ const ImagingForm = (props) => {
       isApiSubscribed = false;
     };
   }, [loading]);
+
+  useEffect(() => {
+    console.log(visits);
+  }, [visits]);
 
   useEffect(() => {
     if (!open) {
@@ -156,7 +160,7 @@ const ImagingForm = (props) => {
               }}
               noOptionsText="No Such Hospital"
               isOptionEqualToValue={(option, value) => option.entryDate === value.entryDate}
-              getOptionLabel={(option) => option.entryDate?.toString().slice(0, 10)}
+              getOptionLabel={(option) => option.date?.toString().slice(0, 10)}
               options={visits}
               loading={loading}
               onChange={(event, newValue) => {

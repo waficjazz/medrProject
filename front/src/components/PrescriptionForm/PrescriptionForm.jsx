@@ -238,7 +238,7 @@ const PrescForm = (props) => {
               }}
               noOptionsText="No Such Hospital"
               isOptionEqualToValue={(option, value) => option.entryDate === value.entryDate}
-              getOptionLabel={(option) => option.entryDate?.toString().slice(0, 10)}
+              getOptionLabel={(option) => option.date?.toString().slice(0, 10)}
               options={visits}
               loading={loading}
               onChange={(event, newValue) => {

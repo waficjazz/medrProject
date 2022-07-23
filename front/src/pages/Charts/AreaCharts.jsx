@@ -1,12 +1,20 @@
-import { Table, TableSortLabel, TableHead, TableCell, TableRow, Paper, TableBody, Collapse, IconButton, Typography } from "@mui/material";
-import { useState, useEffect, useRef } from "react";
+import { Typography } from "@mui/material";
+import { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import { StyledEngineProvider } from "@mui/material/styles";
 import React from "react";
 import "../HospitalVisits/HospitalVisits.css";
 import BChart from "../../components/charts/BChart";
-
+import { LoadingContext } from "../../context";
 const AreaCharts = () => {
+  const loading = useContext(LoadingContext);
+
+  let token = "";
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
+  if (highStoredData) {
+    token = highStoredData.token;
+  }
+  const storedData = JSON.parse(localStorage.getItem("userData"));
   const [a, setA] = useState([]);
   const [hospitalVisits, setHospitalVisits] = useState([]);
 
@@ -17,6 +25,7 @@ const AreaCharts = () => {
   useEffect(() => {
     const surgeriesMonth = async () => {
       try {
+        loading.setIsLoading(true);
         const response = await axios.get(process.env.REACT_APP_URL + `/analytics/months/surgery/:2022`);
         data = await response.data;
       } catch (err) {
@@ -32,6 +41,7 @@ const AreaCharts = () => {
     };
     const hospitalMonths = async () => {
       try {
+        loading.setIsLoading(true);
         const response = await axios.get(process.env.REACT_APP_URL + `/analytics/months/hospitalVisit/:2022`);
         data = await response.data;
       } catch (err) {
@@ -44,6 +54,7 @@ const AreaCharts = () => {
         obj1.current["Hospital-Visits"] = data[month];
         setHospitalVisits((prev) => [...prev, obj1.current]);
       });
+      loading.setIsLoading(false);
     };
     hospitalMonths();
     surgeriesMonth();
