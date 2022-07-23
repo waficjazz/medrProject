@@ -10,7 +10,7 @@ const auth = (req, res, next) => {
       if (err) {
         return next(new Error("You are not authorized to perform this action"));
       }
-      if (decodedToken.type === "doctor") {
+      if (decodedToken.type === "doctor" || decodedToken.type === "hospital") {
         next();
       }
     });

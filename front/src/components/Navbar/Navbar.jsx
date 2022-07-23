@@ -12,21 +12,56 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ReplayIcon from "@mui/icons-material/Replay";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-
+import Notification from "../Notification/Notification";
 import PatientUpdate from "../PatientUpdate/PatientUpdate";
 import DoctorUpdate from "../DoctorUpdate/DoctorUpdate";
-
+import { useEffect } from "react";
+import axios from "axios";
 const Navbar = () => {
+  let patientId = 0;
+  const storedData = JSON.parse(localStorage.getItem("userData"));
+  if (storedData) {
+    patientId = storedData.uid;
+  }
+  const [notfications, setNotifications] = useState([]);
+  const [computedNot, setComputedNot] = useState([]);
   let token = "";
   let type = "";
+  let uid = " ";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
     type = highStoredData.type;
+    uid = highStoredData.uid;
   }
+  useEffect(() => {
+    const getNotifications = async () => {
+      try {
+        const response = await axios.get(process.env.REACT_APP_URL + `/notifications/${patientId}`);
+        setNotifications(response.data);
+        console.log(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
+    getNotifications();
+  }, []);
+
+  useEffect(() => {
+    let inter = [];
+    let arr = [...notfications];
+    console.log(notfications);
+    inter = arr.filter((a) => {
+      return a.issuerId != uid;
+    });
+    console.log(inter);
+    setComputedNot([...inter]);
+  }, [notfications]);
+
   const navigate = useNavigate();
   const patient = useSelector((state) => state.patient.value);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState("");
   const { show, setShow } = useContext(ShowContext);
   const [openPatient, setOpenPatient] = useState(false);
   const [openDoctor, setOpenDoctor] = useState(false);
@@ -51,19 +86,49 @@ const Navbar = () => {
                 <InputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} sx={{ marginLeft: "10px", width: "80%" }} />
               </div>
               <div className="toolsicon">
-                <IconButton>
-                  <Badge className="badge" badgeContent={1} color="error" overlap="circular" />
+                <IconButton
+                  onClick={() => {
+                    if (open === "notfications") {
+                      setOpen("");
+                    } else {
+                      setOpen("notfications");
+                    }
+                  }}>
+                  <Badge className="badge" badgeContent={computedNot.length} color="error" overlap="circular" />
                   <NotificationsIcon />
                 </IconButton>
+                <Collapse in={open === "notfications"}>
+                  <div className="notifications">
+                    <Typography variant="h5" fontWeight="bold" sx={{ marginLeft: "5px", marginTop: "5px" }}>
+                      Notifications
+                    </Typography>
+                    <hr />
+                    <div className="ntfContainer">
+                      {notfications.map((notf) => {
+                        return (
+                          <>
+                            <Notification issuer={notf.issuer} action={notf.action} date={notf.createdAt} item={notf.item} />
+                          </>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </Collapse>
                 <IconButton
                   // onClick={() => {
                   //   auth.logout();
                   //   navigate("/s");
                   // }}
-                  onClick={() => setOpen(!open)}>
+                  onClick={() => {
+                    if (open === "actions") {
+                      setOpen("");
+                    } else {
+                      setOpen("actions");
+                    }
+                  }}>
                   <PersonIcon />
                 </IconButton>
-                <Collapse in={open}>
+                <Collapse in={open === "actions"}>
                   <div className="userAction">
                     <List>
                       {token !== "" && (

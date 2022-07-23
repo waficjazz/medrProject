@@ -7,11 +7,14 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { addInfo } from "../../reducers/patientReducer";
+import { addDoctor } from "../../reducers/doctorReducer";
+import { addHospital } from "../../reducers/hospitalReducer";
 import { useParams } from "react-router-dom";
 import { ShowContext, RegContext, LoadingContext } from "../../context";
 import MiniForm from "../../components/MiniForm/MiniForm";
 import Loading from "../../components/Loading";
 const PersonalInfo = () => {
+  const highStoredData = JSON.parse(localStorage.getItem("high"));
   const { id } = useParams();
   const [openMini, setOpenMini] = useState(false);
   const { show, setShow } = useContext(ShowContext);
@@ -26,7 +29,6 @@ const PersonalInfo = () => {
   const [localPatient, setLocalPatient] = useState("");
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_URL);
     let uid;
     if (!show) {
       const storedData = JSON.parse(localStorage.getItem("userData"));
@@ -48,6 +50,7 @@ const PersonalInfo = () => {
           console.log(err.message);
         }
       };
+
       getPatientInfo();
     }
   }, [show, openMini]);

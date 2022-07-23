@@ -6,8 +6,13 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { LoadingContext } from "../../context";
+import { useSelector, useDispatch } from "react-redux";
 
 const ClinicalVisitForm = (props) => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   const testNames = (name) => {
     return /[A-Za-z]{3,}/.test(name);
   };
@@ -17,7 +22,16 @@ const ClinicalVisitForm = (props) => {
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
+
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
   const [tabValue, setTabValue] = useState("0");
@@ -162,7 +176,16 @@ const ClinicalVisitForm = (props) => {
         clinicAddress,
         doctorName,
       };
+      let notfi = {
+        patientId,
+        action: "Add",
+        item: "clinical visit",
+        issuer,
+        issuerId,
+      };
       const resp = await axios.post(process.env.REACT_APP_URL + "/clinical/visits/add", visit, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
+
       if (resp.statusText === "Created") {
         props.close();
         loadingc.setIsLoading(false);

@@ -155,7 +155,7 @@ const SignUp = () => {
     } catch (err) {
       loading.setIsLoading(false);
       setIsError(true);
-      setError(err.response.data.message);
+      // setError(err.response.data.message);
     }
   };
 

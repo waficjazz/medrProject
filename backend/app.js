@@ -13,6 +13,7 @@ const labTestRoutes = require("./routes/labTest-routes");
 const surgeryRoutes = require("./routes/surgery-routes");
 const prescriptionRoutes = require("./routes/prescription-routes");
 const analyticsRoutes = require("./routes/analytics-routes");
+const notficationsRoutes = require("./routes/notifications-routes");
 const app = express();
 
 app.use(bodyParser.json());
@@ -35,6 +36,7 @@ app.use("/api/labtest", labTestRoutes);
 app.use("/api/surgery", surgeryRoutes);
 app.use("/api/prescription", prescriptionRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/notifications", notficationsRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);

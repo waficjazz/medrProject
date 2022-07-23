@@ -38,7 +38,7 @@ const verifyCode = async (req, res, next) => {
     const error = new HttpError("could not verify email id", 500);
     return next(error);
   }
-  token = jwt.sign({ userId: hospital.id, email: hospital.email, type: "doctor" }, "JazzPriavteKey", { expiresIn: "9999 years" });
+  token = jwt.sign({ userId: hospital.id, email: hospital.email, type: "hospital" }, "JazzPriavteKey", { expiresIn: "9999 years" });
   res.status(201).json({ user: hospital, token: token });
 };
 

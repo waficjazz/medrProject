@@ -47,6 +47,7 @@ const addClinicalVisit = async (req, res, next) => {
     cause,
     clinicAddress,
   });
+
   try {
     await clinicalVisit.save();
   } catch (err) {
