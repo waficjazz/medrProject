@@ -33,7 +33,7 @@ const Notification = (props) => {
           {props.not.issuer} has {props.not.action} {props.not.item}
         </Typography>
         <Typography color={props.not.seenBy.includes(id) || seen ? "var(--main-grey)" : "var(--third-blue)"} sx={{ alignSelf: "flex-end", fontSize: "0.88rem" }} fontWeight="bold">
-          {props.not.date?.toString().slice(0, 10)}
+          {props.not.createdAt?.toString().slice(0, 10)}
         </Typography>
       </div>
     </>

@@ -5,7 +5,7 @@ const getNotifications = async (req, res, next) => {
   let info;
   const $regex = req.params.id;
   try {
-    info = await Notifications.find({ patientId: $regex });
+    info = await Notifications.find({ patientId: $regex }).sort({ createdAt: -1 }).limit(10);
   } catch (err) {
     if (!info || info.length === 0) {
       return next(new HttpError("Could not find notifications ", 404));
