@@ -7,12 +7,26 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { TextField, Button, Autocomplete, IconButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { LoadingContext } from "../../context";
+import { useSelector } from "react-redux";
+
 const ImagingForm = (props) => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const [date, setDate] = useState("");
@@ -107,6 +121,13 @@ const ImagingForm = (props) => {
 
   const submit = async () => {
     // let imaging = { name, date, location, patientId };
+    let notfi = {
+      patientId,
+      action: "added",
+      item: "an imaging",
+      issuer,
+      issuerId,
+    };
     try {
       loadingc.setIsLoading(true);
       const formData = new FormData();
@@ -123,7 +144,7 @@ const ImagingForm = (props) => {
           authorization: `Bearer ${token}`,
         },
       });
-
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
       if (res.statusText === "Created") {
         props.close();
         loadingc.setIsLoading(false);

@@ -17,7 +17,12 @@ import VisitImagings from "../../components/VisitImagings/VisitImagings";
 import { LoadingContext } from "../../context";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
 const HospitalVisits = () => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   const loading = useContext(LoadingContext);
   const [input, setInput] = useState("");
   const [openFilter, setOpenFilter] = useState(false);
@@ -25,6 +30,15 @@ const HospitalVisits = () => {
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -71,10 +85,17 @@ const HospitalVisits = () => {
   };
 
   const handleDelete = async (id) => {
+    let notfi = {
+      patientId,
+      action: "updated",
+      item: "a hospital visit",
+      issuer,
+      issuerId,
+    };
     try {
       loading.setIsLoading(true);
       const response = await axios.delete(process.env.REACT_APP_URL + `/hospital/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
-
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
       loading.setIsLoading(false);
       setReload(!reload);
     } catch (err) {

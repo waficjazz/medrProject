@@ -10,13 +10,26 @@ import Description from "@mui/icons-material/Description";
 import MiniForm from "../MiniForm/MiniForm";
 import ClearIcon from "@mui/icons-material/Clear";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import { useSelector } from "react-redux";
 const PrescForm = (props) => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuern;
+  let issuerId;
   const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+
+    if (highStoredData.type === "doctor") {
+      issuern = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuern = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -135,9 +148,18 @@ const PrescForm = (props) => {
       labs,
       hospitalVisit: visitId.current,
     };
+    let notfi = {
+      patientId,
+      action: "added",
+      item: "a prescription ",
+      issuer: issuern,
+      issuerId,
+    };
     try {
       loadingc.setIsLoading(true);
       const res = await axios.post(process.env.REACT_APP_URL + "/prescription/add", presc, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
+
       if (res.statusText === "Created") {
         props.close();
         loadingc.setIsLoading(false);
@@ -167,9 +189,17 @@ const PrescForm = (props) => {
       hospitalVisit: visitId.current,
       id: props.id,
     };
+    let notfi = {
+      patientId,
+      action: "updated",
+      item: "a prescription ",
+      issuer: issuern,
+      issuerId,
+    };
     try {
       loadingc.setIsLoading(true);
       const res = await axios.post(process.env.REACT_APP_URL + "/prescription/update", presc, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
       if (res.statusText === "OK") {
         props.close();
         loadingc.setIsLoading(false);

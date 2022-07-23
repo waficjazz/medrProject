@@ -14,13 +14,26 @@ import Surgery from "../../components/Surgery/Surgery";
 import { LoadingContext } from "../../context";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
 const SurgicalHistory = () => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   const [openFilter, setOpenFilter] = useState(false);
   const loadingc = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const [input, setInput] = useState("");
   const storedData = JSON.parse(localStorage.getItem("userData"));
@@ -34,23 +47,6 @@ const SurgicalHistory = () => {
   const [surgeryId, setSurgeryId] = useState("");
   const [formType, setFormType] = useState("add");
 
-  // useEffect(() => {
-  //   const fileterSurgeries = () => {
-  //     let arr = [...surgeries];
-
-  //     arr = arr.filter((surgery) => {
-  //       return surgery.name == input;
-  //     });
-
-  //     // if (arr.length === 0) {
-  //     //   setSurgeries([...backup]);
-  //     // } else {
-  //     console.log(arr);
-  //     setSurgeries([...arr]);
-  //     // }
-  //   };
-  //   fileterSurgeries(input);
-  // }, [input]);
   const sortByName = (prop) => {
     setDirection(direction === "desc" ? "asc" : "desc");
     if (prop === "date") {
@@ -83,9 +79,17 @@ const SurgicalHistory = () => {
   };
 
   const handleDelete = async (id) => {
+    let notfi = {
+      patientId,
+      action: "deleted",
+      item: "a surgery",
+      issuer,
+      issuerId,
+    };
     try {
       loadingc.setIsLoading(true);
       const response = await axios.delete(process.env.REACT_APP_URL + `/surgery/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
 
       setReload(!reload);
       loadingc.setIsLoading(false);

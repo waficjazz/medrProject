@@ -12,7 +12,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
+
 const Vaccines = () => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   const [input, setInput] = useState("");
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -21,6 +27,14 @@ const Vaccines = () => {
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -54,9 +68,17 @@ const Vaccines = () => {
   };
 
   const handleDelete = async (id) => {
+    let notfi = {
+      patientId,
+      action: "deleted",
+      item: "a vaccination ",
+      issuer,
+      issuerId,
+    };
     try {
       loading.setIsLoading(true);
       const response = await axios.delete(process.env.REACT_APP_URL + `/vaccination/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
 
       setReload(!reload);
     } catch (err) {

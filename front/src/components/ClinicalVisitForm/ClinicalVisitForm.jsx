@@ -178,8 +178,8 @@ const ClinicalVisitForm = (props) => {
       };
       let notfi = {
         patientId,
-        action: "Add",
-        item: "clinical visit",
+        action: "Added",
+        item: "a clinical visit",
         issuer,
         issuerId,
       };
@@ -214,7 +214,15 @@ const ClinicalVisitForm = (props) => {
     console.log(visit.doctorId);
     try {
       loadingc.setIsLoading(true);
+      let notfi = {
+        patientId,
+        action: "Updated",
+        item: "a clinical visit",
+        issuer,
+        issuerId,
+      };
       const res = await axios.post(process.env.REACT_APP_URL + "/clinical/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
       if (tabValue === "1") {
         let doctor = { id: doctorId.current, clinicAddress: clinicAddress, email: email, name: doctorName, phoneNumber: phoneNumber, proficiency: proficiency };
         const res1 = await axios.post(process.env.REACT_APP_URL + "/doctor/update", doctor, { headers: { authorization: `Bearer ${token}` } });

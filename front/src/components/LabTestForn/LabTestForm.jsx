@@ -7,13 +7,26 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import DownloadIcon from "@mui/icons-material/Download";
 import { LoadingContext } from "../../context";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton, Typography } from "@mui/material";
-import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
+
+import { useSelector } from "react-redux";
 
 const LabTestForm = (props) => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -138,8 +151,13 @@ const LabTestForm = (props) => {
   };
 
   const submit = async () => {
-    // let imaging = { name, date, location, patientId };
-
+    let notfi = {
+      patientId,
+      action: "added",
+      item: "a lab test",
+      issuer,
+      issuerId,
+    };
     try {
       loadingc.setIsLoading(true);
       const formData = new FormData();
@@ -157,6 +175,7 @@ const LabTestForm = (props) => {
           authorization: `Bearer ${token}`,
         },
       });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
 
       if (res.statusText === "Created") {
         loadingc.setIsLoading(false);
@@ -178,9 +197,17 @@ const LabTestForm = (props) => {
       csv,
       id: props.id,
     };
+    let notfi = {
+      patientId,
+      action: "updated",
+      item: "a lab test",
+      issuer,
+      issuerId,
+    };
     try {
       loadingc.setIsLoading(true);
       const res = await axios.post(process.env.REACT_APP_URL + "/labtest/update", lab, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
 
       if (res.statusText === "OK") {
         props.close();

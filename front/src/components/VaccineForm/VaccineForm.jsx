@@ -5,13 +5,26 @@ import CloseIcon from "@mui/icons-material/Close";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { LoadingContext } from "../../context";
 import { Tab, Tabs, TextField, Button, Autocomplete, InputAdornment, IconButton, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const VaccineForm = (props) => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   const loading = useContext(LoadingContext);
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -70,9 +83,17 @@ const VaccineForm = (props) => {
       date,
       location,
     };
+    let notfi = {
+      patientId,
+      action: "added",
+      item: "a vaccination",
+      issuer,
+      issuerId,
+    };
     try {
       loading.setIsLoading(true);
       const res = await axios.post(process.env.REACT_APP_URL + "/vaccination/add", vaccination, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
       if (res.statusText === "Created") {
         props.close();
         loading.setIsLoading(false);
@@ -94,9 +115,18 @@ const VaccineForm = (props) => {
       location,
       id: props.id,
     };
+    let notfi = {
+      patientId,
+      action: "updated",
+      item: "a vaccination",
+      issuer,
+      issuerId,
+    };
     try {
       loading.setIsLoading(true);
       const res = await axios.post(process.env.REACT_APP_URL + "/vaccination/update", vaccination, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
+
       if (res.statusText === "OK") {
         props.close();
         loading.setIsLoading(false);

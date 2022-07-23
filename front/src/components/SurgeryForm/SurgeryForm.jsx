@@ -6,12 +6,25 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { Tab, Tabs, TextField, Button, Autocomplete, IconButton } from "@mui/material";
 import { LoadingContext } from "../../context";
+import { useSelector } from "react-redux";
 
 const SurgeryForm = (props) => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const loadingc = useContext(LoadingContext);
   const storedData = JSON.parse(localStorage.getItem("userData"));
@@ -53,6 +66,13 @@ const SurgeryForm = (props) => {
   }, [hospitalEmail]);
 
   const handleEdit = async () => {
+    let notfi = {
+      patientId,
+      action: "updated",
+      item: "a surgery",
+      issuer,
+      issuerId,
+    };
     let surgery = {
       patientId,
       verifiedHospital,
@@ -67,6 +87,7 @@ const SurgeryForm = (props) => {
     try {
       loadingc.setIsLoading(true);
       const res = await axios.post(process.env.REACT_APP_URL + "/surgery/update", surgery, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
       if (tabValue === "1") {
         let hospital = { hospitalName: hospitalName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber, id: hospitalId.current };
         const res1 = await axios.post(process.env.REACT_APP_URL + "/hospital/update", hospital, { headers: { authorization: `Bearer ${token}` } });
@@ -209,6 +230,13 @@ const SurgeryForm = (props) => {
   };
 
   const submit = async () => {
+    let notfi = {
+      patientId,
+      action: "added",
+      item: "a surgery",
+      issuer,
+      issuerId,
+    };
     let hospital = { hospitalName: hospitalName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber };
     try {
       loadingc.setIsLoading(true);
@@ -229,6 +257,8 @@ const SurgeryForm = (props) => {
       };
 
       const resp = await axios.post(process.env.REACT_APP_URL + "/surgery/add", surgery, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
+
       if (resp.statusText === "Created") {
         props.close();
         loadingc.setIsLoading(false);

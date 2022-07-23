@@ -30,7 +30,7 @@ const Notification = (props) => {
     <>
       <div className="ntf" onClick={update}>
         <Typography color={props.not.seenBy.includes(id) || seen ? "var(--main-grey)" : "var(--third-blue)"} noWrap={false} sx={{ fontSize: "0.94rem" }} fontWeight="bold">
-          {props.not.issuer} has {props.not.action} {props.not.item}
+          {props.not.issuer} {props.not.action} {props.not.item}
         </Typography>
         <Typography color={props.not.seenBy.includes(id) || seen ? "var(--main-grey)" : "var(--third-blue)"} sx={{ alignSelf: "flex-end", fontSize: "0.88rem" }} fontWeight="bold">
           {props.not.createdAt?.toString().slice(0, 10)}

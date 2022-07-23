@@ -9,16 +9,28 @@ import { LoadingContext } from "../../context";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-
+import { useSelector } from "react-redux";
 const Imaging = () => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   const [input, setInput] = useState("");
-  const loadingc = useContext(LoadingContext);
   const [openFilter, setOpenFilter] = useState(false);
+  const loadingc = useContext(LoadingContext);
   const storedData = JSON.parse(localStorage.getItem("userData"));
   let token = "";
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const patientId = storedData.uid;
   const [empty, setEmpty] = useState(false);
@@ -74,9 +86,17 @@ const Imaging = () => {
   }, [reload]);
 
   const handleDelete = async (id) => {
+    let notfi = {
+      patientId,
+      action: "deleted",
+      item: "an imaging",
+      issuer,
+      issuerId,
+    };
     try {
       loadingc.setIsLoading(true);
       const response = await axios.delete(process.env.REACT_APP_URL + `/imaging/delete/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
 
       setReload(!reload);
       loadingc.setIsLoading(false);

@@ -15,7 +15,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import { LoadingContext } from "../../context";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
+import { useSelector, useDispatch } from "react-redux";
 const ClinicalVisits = () => {
+  let issuer;
+  let issuerId;
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
   const [input, setInput] = useState("");
   const [openFilter, setOpenFilter] = useState(false);
   const loading = useContext(LoadingContext);
@@ -23,6 +28,14 @@ const ClinicalVisits = () => {
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -45,8 +58,16 @@ const ClinicalVisits = () => {
 
   const handleDelete = async (id) => {
     try {
+      let notfi = {
+        patientId,
+        action: "Deleted",
+        item: "a clinical visit",
+        issuer,
+        issuerId,
+      };
       loading.setIsLoading(true);
       const response = await axios.delete(process.env.REACT_APP_URL + `/clinical/delete/visit/${id}`, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
 
       loading.setIsLoading(false);
       setReload(!reload);
@@ -242,7 +263,6 @@ const ClinicalVisits = () => {
                           val.doctorId.includes(input.toLowerCase())
                         );
                       })
-
                       .map((item, index) => {
                         return <DataModel key={index} row={item} />;
                       })}

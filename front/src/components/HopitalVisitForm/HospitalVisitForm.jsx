@@ -9,6 +9,10 @@ import { LoadingContext } from "../../context";
 
 import { Tab, Tabs, Button, Autocomplete, InputAdornment, IconButton, TextField } from "@mui/material";
 const HospitalVisitForm = (props) => {
+  const doctorState = useSelector((state) => state.doctor.value);
+  const hospitalState = useSelector((state) => state.hospital.value);
+  let issuer;
+  let issuerId;
   const [input, setInput] = useState("");
   const [openFilter, setOpenFilter] = useState(false);
   const loadingc = useContext(LoadingContext);
@@ -16,6 +20,14 @@ const HospitalVisitForm = (props) => {
   const highStoredData = JSON.parse(localStorage.getItem("high"));
   if (highStoredData) {
     token = highStoredData.token;
+    if (highStoredData.type === "doctor") {
+      issuer = doctorState.firstName;
+      issuerId = doctorState._id;
+    }
+    if (highStoredData.type === "hospital") {
+      issuer = hospitalState.hospitalName;
+      issuerId = hospitalState._id;
+    }
   }
   const storedData = JSON.parse(localStorage.getItem("userData"));
   const patientId = storedData.uid;
@@ -148,9 +160,18 @@ const HospitalVisitForm = (props) => {
       description: visitDescription,
       id: props.id,
     };
+    let notfi = {
+      patientId,
+      action: "updated",
+      item: "a hospital visit",
+      issuer,
+      issuerId,
+    };
     try {
       loadingc.setIsLoading(true);
       const res = await axios.post(process.env.REACT_APP_URL + "/hospital/visit/update", visit, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
+
       if (tabValue === "1") {
         let hospital = { hospitalName: hName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber, id: hospitalId.current };
         const res1 = await axios.post(process.env.REACT_APP_URL + "/hospital/update", hospital, { headers: { authorization: `Bearer ${token}` } });
@@ -170,12 +191,17 @@ const HospitalVisitForm = (props) => {
 
   const submit = async () => {
     let hospital = { hospitalName: hName, address: hospitalAddress, email: hospitalEmail, phoneNumber: phoneNumber };
-
+    let notfi = {
+      patientId,
+      action: "Added",
+      item: "a hospital visit",
+      issuer,
+      issuerId,
+    };
     try {
       if (tabValue === "1") {
         loadingc.setIsLoading(true);
         const res = await axios.post(process.env.REACT_APP_URL + "/hospital/add", hospital, { headers: { authorization: `Bearer ${token}` } });
-        console.log(res.data);
         let id = await res.data._id;
         hospitalId.current = id;
         loadingc.setIsLoading(false);
@@ -193,6 +219,7 @@ const HospitalVisitForm = (props) => {
 
       loadingc.setIsLoading(true);
       const resp = await axios.post(process.env.REACT_APP_URL + "/hospital/visits/add", visit, { headers: { authorization: `Bearer ${token}` } });
+      const notificatin = await axios.post(process.env.REACT_APP_URL + "/notifications/add", notfi);
       if (resp.statusText === "Created") {
         loadingc.setIsLoading(false);
         props.close();
